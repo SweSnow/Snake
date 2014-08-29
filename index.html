@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Snake</title>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/values.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript" src="js/game.js"></script>
+<script type="text/javascript" src="js/render.js"></script>
+<script type="text/javascript" src="js/entities.js"></script>
+
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+
+</head>
+
+<body>
+
+	<div class="game-container">
+	
+		<div class="canvas-container">
+
+			<div id="start-overlay">
+				
+				<div class="jumpatron">SNAKE</div>
+
+				<div class="game-button" data-game-mode="normal" id="start-game">Start Normal</div>
+
+				<div class="game-button" data-game-mode="obstacle" id="start-obstacles">Start Obstacles</div>
+
+			</div>
+
+			<canvas width="500px" height="500px" id="canvas"></canvas>
+
+		</div>
+
+		<section class="panel">
+
+			<div id="log">
+				
+			</div>
+			
+			<div id="score"></div>
+
+		</section>
+
+	</div>
+
+</body>
+</html>
