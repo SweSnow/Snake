@@ -24,48 +24,24 @@ function initialize(gameMode) {
 	gameOptions.gameMode = gameModes[gameMode];
 	gameOptions.gameMode.init();
 
-
-	/*
-
-	switch (gameMode) {
-		case gameOptions.modeNormal: 
-
-			spawnRandomFood();
-			updateScoreDisplay(null, null);
-
-			foodSpawnLoop = setInterval(spawnRandomFood, 5000);
-			bugSpawnLoop = setInterval(determineSpawnRandomBug, 12000);
-
-		break;
-		
-		case gameOptions.modeObstacles:
-
-			spawnRandomFood();
-			updateScoreDisplay(null, null);
-
-			foodSpawnLoop = setInterval(spawnRandomFood, 5000);
-			bugSpawnLoop = setInterval(determineSpawnRandomBug, 12000);
-
-		break;
-
-		default: 
-			spawnRandomFood();
-			updateScoreDisplay(null, null);
-
-			foodSpawnLoop = setInterval(spawnRandomFood, 5000);
-			bugSpawnLoop = setInterval(determineSpawnRandomBug, 12000);
-
-		break;
-
-	}
-
-	*/
-
-	
 }
 
 function end() {
+	isRunning = false;
+	clearInterval(updateLoop);
 
+	$('#game-over-overlay').css('display', 'block');
+
+	foodArray.splice(0, foodArray.length);
+	bugArray.splice(0, bugArray.length);
+	obstacleArray.splice(0, obstacleArray.length);
+
+	tailArray.splice(0, tailArray.length)
+	tailLength = 1;
+
+	score = 0;
+
+	updateScoreDisplay(Date.now(), null);
 }
 
 function canTurn(from, to) {
@@ -88,8 +64,4 @@ function canTurn(from, to) {
 	}
 
 	return canTurn;
-}
-
-function die() {
-	alert("DIE");
 }

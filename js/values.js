@@ -31,11 +31,18 @@ var gameModes = {
 			updateScoreDisplay(null, null);
 		},
 		level: 1
+	},
+	createmap: {
+		init: function() {
+			alert('CREATE');
+		}
 	}
-}
+};
 
 var modeNormal = 1,
 	modeObstacles = 2;
+
+var isRunning = false;
 
 var bugMaxScore = 7000;
 
@@ -46,6 +53,7 @@ var foodPoints = 10;
 var foodArray = [];
 var bugArray = [];
 var obstacleArray = [];
+var createArray = [];
 
 var tailArray = [];
 //We set the tail length to 1 initially to match the size of the snake itself
@@ -77,6 +85,22 @@ var foodSpawnLoop;
 
 var canvas;
 var context;
+
+
+var level1 = [
+	[1,1,1,1,1,1,1,1,1,1,1,1],
+	[1,0,0,0,0,0,0,0,0,0,0,1],
+	[1,0,0,2,0,0,0,0,0,2,2,1],
+	[1,0,0,2,0,2,2,2,0,0,0,1],
+	[1,0,0,2,0,0,0,0,0,0,2,1],
+	[1,0,0,0,0,0,0,0,0,0,2,1],
+	[1,0,0,0,0,0,0,2,0,0,0,1],
+	[1,0,0,0,2,0,0,0,0,0,0,1],
+	[1,0,2,2,2,2,0,0,0,0,0,1],
+	[1,0,0,2,0,0,2,0,0,2,0,1],
+	[1,0,0,0,0,0,0,0,0,0,0,1],
+	[1,1,1,1,1,1,1,1,1,1,1,1]
+];
 
 var rgbColorFormatter = format('rgb({0},{0},{0})');
 

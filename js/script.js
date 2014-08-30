@@ -15,6 +15,11 @@ $(document).ready(function() {
 		initialize($this.data('game-mode'));
 	});
 
+	$('#game-over-restart').click(function() {
+		$('#start-overlay').css('display', 'block');
+		$('#game-over-overlay').css('display', 'none');
+	});
+
 });
 
 function updateScoreDisplay(timeMs, points) {

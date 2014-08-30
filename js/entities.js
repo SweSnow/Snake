@@ -56,7 +56,7 @@ function determineSpawnRandomBug() {
 		var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / 10) * 10;
 		var proposedY = Math.floor(Math.random() * gameOptions.canvasWidth / 10) * 10;
 
-		var canSpawn == true;
+		var canSpawn = true;
 
 		for (var i = 0; i < tailLenght; i++) {
 			if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
