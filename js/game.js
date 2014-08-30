@@ -24,23 +24,7 @@ function initialize(gameMode) {
 }
 
 function end() {
-	isRunning = false;
-	clearInterval(updateLoop);
-
-	$('#game-over-overlay').css('display', 'block');
-
-	timeAttackTimeElement.text('');
-
-	foodArray.splice(0, foodArray.length);
-	bugArray.splice(0, bugArray.length);
-	obstacleArray.splice(0, obstacleArray.length);
-
-	tailArray.splice(0, tailArray.length)
-	tailLength = 1;
-
-	score = 0;
-
-	updateScoreDisplay(Date.now(), null);
+	resetVariables();
 }
 
 function canTurn(from, to) {

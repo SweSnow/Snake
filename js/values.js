@@ -17,6 +17,32 @@ var player = {
 	y: 240
 };
 
+function resetVariables() {
+	isRunning = false;
+	clearInterval(updateLoop);
+
+	$('#game-over-overlay').css('display', 'block');
+
+	timeAttackTimeElement.text('');
+
+	foodArray.splice(0, foodArray.length);
+	bugArray.splice(0, bugArray.length);
+	obstacleArray.splice(0, obstacleArray.length);
+
+	tailArray.splice(0, tailArray.length)
+	tailLength = 1;
+
+	player.x = 10;
+	player.y = 240;
+
+	lastFoodSpawn = Date.now(),
+	lastBugSpawn = Date.now();
+
+	score = 0;
+
+	updateScoreDisplay(Date.now(), null);
+}
+
 var gameModes = {
 	normal: {
 		init: function() {
