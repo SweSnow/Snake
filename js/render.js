@@ -1,6 +1,8 @@
 function update() {
 
 	isRunning = true;
+	//Date.now() is kinda epensive so we cache it
+	var now = Date.now();
 
 	if (gameOptions.gameMode != gameModes['create']) {
 
@@ -46,7 +48,7 @@ function update() {
 
 				score += foodPoints;
 				tailLenght++;
-				updateScoreDisplay(Date.now(), foodPoints);
+				updateScoreDisplay(now, foodPoints);
 
 				if (foodArray.length == 0) {
 					spawnRandomFood();
@@ -61,12 +63,12 @@ function update() {
 
 				var scorePlus = 
 					maxBugScore - 
-					(Math.floor((Date.now() - 
+					(Math.floor((now - 
 					bugArray[i].time) * 
 					(maxBugScore / bugMaxScore)));
 
 				score += scorePlus;
-				updateScoreDisplay(Date.now(), scorePlus);
+				updateScoreDisplay(now, scorePlus);
 				tailLenght++;
 
 				bugArray.splice(i, 1);
@@ -82,12 +84,17 @@ function update() {
 			}
 		}
 
-		if (Date.now() - lastFoodSpawn > gameOptions.foodSpawnRate) {
+		if (now - lastFoodSpawn > gameOptions.foodSpawnRate) {
 			spawnRandomFood();
 		}
 
-		if (Date.now() - lastBugSpawn > gameOptions.bugSpawnRate) {
+		if (now - lastBugSpawn > gameOptions.bugSpawnRate) {
 			determineSpawnRandomBug();
+		}
+
+		if (gameOptions.gameMode == gameModes['normal']) {
+			//User is playing time attack, let's display the time
+			timeAttackTimeElement.text(Math.floor((now - timeAttackStartTime) / 1000) + 's');
 		}
 	}
 }
@@ -117,7 +124,6 @@ function draw() {
 		for (var i = 0; i < tailLenght; i++) {
 
 			ctx.fillStyle = rgbColorFormatter(Math.floor(snakeMaxColor - (i * step)));
-
 			ctx.fillRect(tailArray[tailArray.length - i - 1].x, tailArray[tailArray.length - i - 1].y, player.size, player.size);
 		}
 	} else {

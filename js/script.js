@@ -20,6 +20,8 @@ $(document).ready(function() {
 		$('#game-over-overlay').css('display', 'none');
 	});
 
+	timeAttackTimeElement = $('#time-attack-time');
+
 });
 
 function updateScoreDisplay(timeMs, points) {

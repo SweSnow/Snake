@@ -1,10 +1,5 @@
 function initialize(gameMode) {
 
-	update();
-
-	updateLoop = setInterval(update, gameOptions.refreshRate);
-	requestAnimationFrame(draw);
-
 	document.onkeydown = checkKey;
 	function checkKey(e) {
 
@@ -24,6 +19,8 @@ function initialize(gameMode) {
 	gameOptions.gameMode = gameModes[gameMode];
 	gameOptions.gameMode.init();
 
+	requestAnimationFrame(draw);
+
 }
 
 function end() {
@@ -31,6 +28,8 @@ function end() {
 	clearInterval(updateLoop);
 
 	$('#game-over-overlay').css('display', 'block');
+
+	timeAttackTimeElement.text('');
 
 	foodArray.splice(0, foodArray.length);
 	bugArray.splice(0, bugArray.length);

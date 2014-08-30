@@ -20,12 +20,20 @@ var player = {
 var gameModes = {
 	normal: {
 		init: function() {
+			timeAttackStartTime = Date.now();
+
+			update();
+			updateLoop = setInterval(update, gameOptions.refreshRate);
+
 			spawnRandomFood();
 			updateScoreDisplay(null, null);
 		}
 	},
 	obstacle: {
 		init: function() {
+			update();
+			updateLoop = setInterval(update, gameOptions.refreshRate);
+
 			spawnRandomFood();
 			spawnObstacles();
 			updateScoreDisplay(null, null);
@@ -34,7 +42,8 @@ var gameModes = {
 	},
 	createmap: {
 		init: function() {
-			alert('CREATE');
+			update();
+			updateLoop = setInterval(update, gameOptions.refreshRate);
 		}
 	}
 };
@@ -86,6 +95,8 @@ var foodSpawnLoop;
 var canvas;
 var context;
 
+var timeAttackTimeElement;
+var timeAttackStartTime;
 
 var level1 = [
 	[1,1,1,1,1,1,1,1,1,1,1,1],
