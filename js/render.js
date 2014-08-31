@@ -94,7 +94,12 @@ function update() {
 
 		if (gameOptions.gameMode == gameModes['normal']) {
 			//User is playing time attack, let's display the time
-			timeAttackTimeElement.text(Math.floor((now - timeAttackStartTime) / 1000) + 's');
+			var timeRemaining = timeAttackTimeLimit - (now - timeAttackStartTime);
+			if (timeRemaining > 0) {
+				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
+			} else {
+				end();
+			}
 		}
 	}
 }
@@ -128,6 +133,18 @@ function draw() {
 		}
 	} else {
 		//Map stuff
+	}
+
+	if (gameOptions.gameMode == gameModes['obstacle']) {
+		ctx.fillStyle = tileColor;
+
+		for (var yi = 0; yi < 50; yi++) {
+			for (var xi = 0; xi < 50; xi++) {
+				if (level1[yi][xi] == 1) {
+					ctx.fillRect(yi * 10, xi * 10, 10, 10);
+				}
+			}
+		}
 	}
 
 	requestAnimationFrame(draw);

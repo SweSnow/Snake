@@ -107,6 +107,7 @@ var score = 0;
 var maxBugScore = 70;
 
 var backgroundColor = "#000000";
+var tileColor = '#00ff00';
 var snakeColor = "#ffffff";
 var foodColor = "#ff0000";
 var bugColor = "#0000ff";
@@ -121,6 +122,8 @@ var foodSpawnLoop;
 var canvas;
 var context;
 
+//60 sec
+var timeAttackTimeLimit = 60000;
 var timeAttackTimeElement;
 var timeAttackStartTime;
 
