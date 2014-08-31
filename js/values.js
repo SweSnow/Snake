@@ -1,4 +1,8 @@
-
+/*
+	GameOptions are configurable but theese should
+	be considerd the default configuration. 
+	The variable gameMode is stored here
+	*/
 var gameOptions = {
 	canvasWidth: 0,
 	canvasHeight: 0,
@@ -7,8 +11,8 @@ var gameOptions = {
 	refreshRate: 50
 };
 
-var lastFoodSpawn = Date.now(),
-	lastBugSpawn = Date.now();
+var lastFoodSpawn = null,
+	lastBugSpawn = null;
 
 var player = {
 	moveDistance: 10,
@@ -18,6 +22,12 @@ var player = {
 };
 
 function resetVariables() {
+	writeLogMessage('===================');
+	writeLogMessage('Reset all variables');
+	writeLogMessage('===================');
+
+	var now = Date.now()
+
 	isRunning = false;
 	clearInterval(updateLoop);
 
@@ -27,7 +37,6 @@ function resetVariables() {
 
 	foodArray.splice(0, foodArray.length);
 	bugArray.splice(0, bugArray.length);
-	obstacleArray.splice(0, obstacleArray.length);
 
 	tailArray.splice(0, tailArray.length)
 	tailLength = 1;
@@ -35,12 +44,12 @@ function resetVariables() {
 	player.x = 10;
 	player.y = 240;
 
-	lastFoodSpawn = Date.now(),
-	lastBugSpawn = Date.now();
-
 	score = 0;
 
-	updateScoreDisplay(Date.now(), null);
+	lastFoodSpawn = null,
+	lastBugSpawn = null;
+
+	updateScoreDisplay(now, null);
 }
 
 var gameModes = {
@@ -51,7 +60,6 @@ var gameModes = {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 
-			spawnRandomFood();
 			updateScoreDisplay(null, null);
 		}
 	},
@@ -60,22 +68,21 @@ var gameModes = {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 
-			spawnRandomFood();
 			spawnObstacles();
 			updateScoreDisplay(null, null);
 		},
-		level: 1
+		level: baseLevel
 	},
 	createmap: {
 		init: function() {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
-		}
+			
+			canvas.addEventListener('mousedown', mouseDownEvent, false);
+		},
+		level: baseLevel
 	}
 };
-
-var modeNormal = 1,
-	modeObstacles = 2;
 
 var isRunning = false;
 
@@ -87,7 +94,6 @@ var foodPoints = 10;
 
 var foodArray = [];
 var bugArray = [];
-var obstacleArray = [];
 var createArray = [];
 
 var tailArray = [];

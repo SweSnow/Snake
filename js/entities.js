@@ -19,9 +19,14 @@ function spawnRandomFood() {
 		}
 	}
 
-	for (var i = 0; i < obstacleArray.length; i++) {
-		if (obstacleArray[i].x == proposedX && obstacleArray[i].y == proposedY) {
-			canSpawn = false;
+
+	if (gameOptions.gameMode == gameModes['obstacle']) {
+		for (var yi = 0; yi < 50; yi++) {
+			for (var xi = 0; xi < 50; xi++) {
+				if (proposedX == xi && proposedY == yi) {
+					canSpawn = false;
+				}
+			}
 		}
 	}
 
@@ -70,9 +75,13 @@ function determineSpawnRandomBug() {
 			}
 		}
 
-		for (var i = 0; i < obstacleArray.length; i++) {
-			if (obstacleArray[i].x == proposedX && obstacleArray[i].y == proposedY) {
-				canSpawn = false;
+		if (gameOptions.gameMode == gameModes['obstacle']) {
+			for (var yi = 0; yi < 50; yi++) {
+				for (var xi = 0; xi < 50; xi++) {
+					if (proposedX == xi && proposedY == yi) {
+						canSpawn = false;
+					}
+				}
 			}
 		}
 	

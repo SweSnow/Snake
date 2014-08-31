@@ -40,4 +40,3 @@ function writeLogMessage(text) {
 	logNormal.scrollTop = logNormal.scrollHeight;
 
 }
-

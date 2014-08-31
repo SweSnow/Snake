@@ -1,11 +1,13 @@
 function update() {
 
 	isRunning = true;
-	//Date.now() is kinda epensive so we cache it
+	//Date.now() is kinda expensive so we cache it
 	var now = Date.now();
 
-	if (gameOptions.gameMode != gameModes['create']) {
+	//If we're not creating a map do all the player, food and bug work
+	if (gameOptions.gameMode != gameModes['createmap']) {
 
+		//Logic for not turning 180 deg
 		if (directionCurrent == directionLeft) {
 			player.x -= player.moveDistance;
 			if (player.x < 0) {
@@ -79,17 +81,35 @@ function update() {
 		for (var i = 0; i < tailLenght; i++) {
 			if (
 				player.x == tailArray[tailArray.length - i - 1].x &&
-				player.y == tailArray[tailArray.length - i - 1].y && i != 0) {
+				player.y == tailArray[tailArray.length - i - 1].y &&
+				i != 0) {
 				end();
 			}
 		}
 
-		if (now - lastFoodSpawn > gameOptions.foodSpawnRate) {
+		//Checking tile collision
+		if (gameOptions.gameMode == gameModes['obstacle']) {
+
+			for (var yi = 0; yi < 50; yi++) {
+				for (var xi = 0; xi < 50; xi++) {
+					if (player.x == xi && player.y == yi) {
+						end();
+					}
+				}
+			}
+		}
+
+
+		if (now - lastFoodSpawn > gameOptions.foodSpawnRate || lastFoodSpawn == null) {
 			spawnRandomFood();
 		}
 
-		if (now - lastBugSpawn > gameOptions.bugSpawnRate) {
-			determineSpawnRandomBug();
+		if (lastBugSpawn == null) {
+			lastBugSpawn = now;
+		} else {
+			if (now - lastBugSpawn > gameOptions.bugSpawnRate) {
+				determineSpawnRandomBug();
+			}	
 		}
 
 		if (gameOptions.gameMode == gameModes['normal']) {
@@ -109,7 +129,7 @@ function draw() {
 
 	if(!isRunning) return;
 
-	if (gameOptions.gameMode != gameModes['create']) {
+	if (gameOptions.gameMode != gameModes['createmap']) {
 
 		//Food
 		ctx.fillStyle = foodColor;
@@ -135,12 +155,12 @@ function draw() {
 		//Map stuff
 	}
 
-	if (gameOptions.gameMode == gameModes['obstacle']) {
+	if (gameOptions.gameMode == gameModes['obstacle'] || gameOptions.gameMode == gameModes['createmap']) {
 		ctx.fillStyle = tileColor;
 
 		for (var yi = 0; yi < 50; yi++) {
 			for (var xi = 0; xi < 50; xi++) {
-				if (level1[yi][xi] == 1) {
+				if (gameOptions.gameMode.level[yi][xi] == 1) {
 					ctx.fillRect(yi * 10, xi * 10, 10, 10);
 				}
 			}

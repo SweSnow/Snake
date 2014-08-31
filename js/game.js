@@ -48,3 +48,15 @@ function canTurn(from, to) {
 
 	return canTurn;
 }
+
+function mouseDownEvent(event) {
+
+	var x = Math.round((event.pageX - canvasX) / 10);
+	var y = Math.round((event.pageY - canvasY) / 10);
+
+	if (gameOptions.gameMode.level[x][y] == 1) {
+		gameOptions.gameMode.level[x][y] = 0;
+	} else {
+		gameOptions.gameMode.level[x][y] = 1;
+	}
+}
