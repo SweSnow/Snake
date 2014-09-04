@@ -15,9 +15,9 @@ var lastFoodSpawn = null,
 	lastBugSpawn = null;
 
 var player = {
-	moveDistance: 10,
-	size: 10,
-	x: 10,
+	moveDistance: 20,
+	size: 20,
+	x: 20,
 	y: 240
 };
 
@@ -41,7 +41,7 @@ function resetVariables() {
 	tailArray.splice(0, tailArray.length)
 	tailLength = 1;
 
-	player.x = 10;
+	player.x = 20;
 	player.y = 240;
 
 	score = 0;
@@ -77,8 +77,7 @@ var gameModes = {
 		init: function() {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
-			
-			canvas.addEventListener('mousedown', mouseDownEvent, false);
+			$(canvas).click(mouseDownEvent);
 		},
 		level: baseLevel
 	}
@@ -88,7 +87,7 @@ var isRunning = false;
 
 var bugMaxScore = 7000;
 
-var foodSize = 10;
+var foodSize = 20;
 
 var foodPoints = 10;
 
