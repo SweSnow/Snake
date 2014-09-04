@@ -158,10 +158,10 @@ function draw() {
 	if (gameOptions.gameMode == gameModes['obstacle'] || gameOptions.gameMode == gameModes['createmap']) {
 		ctx.fillStyle = tileColor;
 
-		for (var yi = 0; yi < 50; yi++) {
-			for (var xi = 0; xi < 50; xi++) {
+		for (var yi = 0; yi < gameOptions.canvasWidth / player.size; yi++) {
+			for (var xi = 0; xi < gameOptions.canvasHeight / player.size; xi++) {
 				if (gameOptions.gameMode.level[yi][xi] == 1) {
-					ctx.fillRect(yi * 10, xi * 10, 10, 10);
+					ctx.fillRect(yi * player.size, xi * player.size, player.size, player.size);
 				}
 			}
 		}

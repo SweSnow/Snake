@@ -51,8 +51,8 @@ function canTurn(from, to) {
 
 function mouseDownEvent(event) {
 
-	var x = Math.floor((event.offsetX) / 20);
-	var y = Math.floor((event.offsetY) / 20);
+	var x = Math.floor((event.offsetX) / player.size);
+	var y = Math.floor((event.offsetY) / player.size);
 
 	if (gameOptions.gameMode.level[x][y] == 1) {
 		gameOptions.gameMode.level[x][y] = 0;

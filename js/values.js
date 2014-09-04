@@ -18,7 +18,7 @@ var player = {
 	moveDistance: 20,
 	size: 20,
 	x: 20,
-	y: 240
+	y: 300
 };
 
 function resetVariables() {
@@ -42,7 +42,7 @@ function resetVariables() {
 	tailLength = 1;
 
 	player.x = 20;
-	player.y = 240;
+	player.y = 300;
 
 	score = 0;
 
