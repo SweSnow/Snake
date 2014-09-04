@@ -10,8 +10,8 @@ function spawnRandomFood(logLastSpawn) {
 	//We come up with a X and Y coordinate and
 	//checks if it works. If it doesn't we try
 	//again
-	var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / 10) * 10;
-	var proposedY = Math.floor(Math.random() * gameOptions.canvasHeight / 10) * 10;
+	var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
+	var proposedY = Math.floor(Math.random() * gameOptions.canvasHeight / foodSize) * foodSize;
 
 	var canSpawn = true;
 
@@ -75,8 +75,8 @@ function determineSpawnRandomBug() {
 	if (Math.random() > 0.5) {
 		//50% chance
 
-		var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / 10) * 10;
-		var proposedY = Math.floor(Math.random() * gameOptions.canvasWidth / 10) * 10;
+		var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
+		var proposedY = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
 
 		var canSpawn = true;
 
