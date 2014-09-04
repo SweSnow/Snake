@@ -53,7 +53,7 @@ function update() {
 				updateScoreDisplay(now, foodPoints);
 
 				if (foodArray.length == 0) {
-					spawnRandomFood();
+					spawnRandomFood(false);
 					writeLogMessage('No food on canvas, spawn new');
 				}
 			}
@@ -101,7 +101,7 @@ function update() {
 
 
 		if (now - lastFoodSpawn > gameOptions.foodSpawnRate || lastFoodSpawn == null) {
-			spawnRandomFood();
+			spawnRandomFood(true);
 		}
 
 		if (lastBugSpawn == null) {

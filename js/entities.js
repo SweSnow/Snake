@@ -1,25 +1,42 @@
-function spawnRandomFood() {
+function spawnRandomFood(logLastSpawn) {
 
-	lastFoodSpawn = Date.now();
+	//We don't want the delta timer to reset
+	//when a forced (ie. picked up last food)
+	//happends. 
+	if (logLastSpawn) {
+		lastFoodSpawn = Date.now();
+	}
 
+	//We come up with a X and Y coordinate and
+	//checks if it works. If it doesn't we try
+	//again
 	var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / 10) * 10;
 	var proposedY = Math.floor(Math.random() * gameOptions.canvasHeight / 10) * 10;
 
 	var canSpawn = true;
 
-	for (var i = 0; i < tailLenght; i++) {
-		if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
+	//Collides with other food?
+	for (var i = 0; i < foodArray.length; i++) {
+		if (foodArray[i].x == proposedX && foodArray[i].y == proposedY) {
 			canSpawn = false;
 		}
 	}
 
+	//Collides with bug?
 	for (var i = 0; i < bugArray.length; i++) {
 		if (bugArray[i].x == proposedX && bugArray[i].y == proposedY) {
 			canSpawn = false;
 		}
 	}
 
+	//Collides with tail?
+	for (var i = 0; i < tailLenght; i++) {
+		if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
+			canSpawn = false;
+		}
+	}
 
+	//Collides with obstacles set by the level?
 	if (gameOptions.gameMode == gameModes['obstacle']) {
 		for (var yi = 0; yi < 50; yi++) {
 			for (var xi = 0; xi < 50; xi++) {
@@ -34,7 +51,7 @@ function spawnRandomFood() {
 
 		var food = {
 			x: proposedX,
-			y: proposedY,
+			y: proposedY
 		}
 
 		foodArray.push(food);
@@ -50,7 +67,7 @@ function spawnRandomFood() {
 		writeLogMessage('Spawned food at (' + proposedX + ', ' + proposedY + ')');
 
 	} else {
-		spawnRandomFood();
+		spawnRandomFood(logLastSpawn);
 	}
 }
 
@@ -63,14 +80,22 @@ function determineSpawnRandomBug() {
 
 		var canSpawn = true;
 
-		for (var i = 0; i < tailLenght; i++) {
-			if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
+
+
+		for (var i = 0; i < foodArray.length; i++) {
+			if (foodArray[i].x == proposedX && foodArray[i].y == proposedY) {
+				canSpawn = false;
+			}
+		}
+		
+		for (var i = 0; i < bugArray.length; i++) {
+			if (bugArray[i].x == proposedX && bugArray[i].y == proposedY) {
 				canSpawn = false;
 			}
 		}
 
-		for (var i = 0; i < foodArray.length; i++) {
-			if (foodArray[i].x == proposedX && foodArray[i].y == proposedY) {
+		for (var i = 0; i < tailLenght; i++) {
+			if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
 				canSpawn = false;
 			}
 		}
