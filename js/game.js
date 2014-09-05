@@ -6,9 +6,19 @@ function initialize(gameMode) {
 	    e = e || window.event;
 	   	var code = (e.keyCode ? e.keyCode : e.which);
 
+	   	if (code == 32 || code == 13) {
+	   		if (gameOptions.gameMode == gameModes['createmap']) {
+	    		placeBlock();
+	    	}
+	   	}
+
 	    if (code > 36 && code < 41) {
 
 	    	e.preventDefault();
+
+	    	if (gameOptions.gameMode == gameModes['createmap']) {
+	    		movePointer(code);
+	    	}
 
 	    	if (canTurn(code, directionLastUsed)) {
 	    		directionCurrent = code;
@@ -47,6 +57,22 @@ function canTurn(from, to) {
 	}
 
 	return canTurn;
+}
+
+function movePointer(code) {
+
+}
+
+function placeBlock() {
+
+	var pointerX = gameOptions.gameMode.pointer.x / player.size;
+	var pointerY = gameOptions.gameMode.pointer.y / player.size;
+
+	if (gameOptions.gameMode.level[pointerX][pointerY] == 0) {
+		gameOptions.gameMode.level[pointerX][pointerY] = 1;
+	} else {
+		gameOptions.gameMode.level[pointerX][pointerY] = 0;
+	}
 }
 
 function mouseDownEvent(event) {

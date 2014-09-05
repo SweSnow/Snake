@@ -79,7 +79,12 @@ var gameModes = {
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 			$(canvas).click(mouseDownEvent);
 		},
-		level: baseLevel
+		level: baseLevel,
+		pointer: {
+			x: 100,
+			y: 100
+		},
+		lastBlink: Date.now()
 	}
 };
 
