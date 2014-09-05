@@ -20,6 +20,15 @@ $(document).ready(function() {
 		$('#game-over-overlay').css('display', 'none');
 	});
 
+	$('#reset-button').click(function() {
+		end();
+	});
+
+	$('#clear-button').click(function() {
+		gameOptions.gameMode.level = defaultLevel;
+	});
+ 	
+	//We cache the document lookup
 	timeAttackTimeElement = $('#time-attack-time');
 
 });

@@ -89,13 +89,8 @@ function update() {
 
 		//Checking tile collision
 		if (gameOptions.gameMode == gameModes['obstacle']) {
-
-			for (var yi = 0; yi < 50; yi++) {
-				for (var xi = 0; xi < 50; xi++) {
-					if (player.x == xi && player.y == yi) {
-						end();
-					}
-				}
+			if (gameOptions.gameMode.level[player.x / player.size][player.y / player.size] == 1) {
+				end();
 			}
 		}
 
@@ -156,13 +151,20 @@ function draw() {
 		}
 	} else {
 		//Map stuff
-		if (now - gameOptions.gameMode.lastBlink > 1000) {
-			lastBlink = now - 250;
+		if (now - gameOptions.gameMode.lastBlink > 1000 || true) {
+		//	lastBlink = now - 250;
+			ctx.beginPath();
+
 			ctx.rect(
 				gameOptions.gameMode.pointer.x,
 				gameOptions.gameMode.pointer.y,
 				player.size,
 				player.size);
+
+		    ctx.lineWidth = 1;
+		    ctx.strokeStyle = '#ffffff';
+		    ctx.stroke();
+
 		}
 	}
 
@@ -173,10 +175,6 @@ function draw() {
 			for (var xi = 0; xi < gameOptions.canvasHeight / player.size; xi++) {
 				if (gameOptions.gameMode.level[yi][xi] == 1) {
 					ctx.fillRect(yi * player.size, xi * player.size, player.size, player.size);
-<<<<<<< HEAD
-					ctx.stroke();
-=======
->>>>>>> origin/master
 				}
 			}
 		}

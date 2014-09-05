@@ -123,6 +123,46 @@ canvas {
 	border: 1px solid #fff;
 }
 
+#reset-button {
+	display: none;
+	font-size: 17px;
+	text-align: center;
+	padding: 8px;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background-color: #000;
+	border: 1px solid #fff;
+	cursor: pointer;
+}
+
+#reset-button:hover {
+	transition: all 0.2s;
+	background-color: #fff;
+	color: #000;
+}
+
+#clear-button {
+	display: none;
+	font-size: 17px;
+	text-align: center;
+	padding: 8px;
+	width: 150px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background-color: #000;
+	border: 1px solid #fff;
+	cursor: pointer;
+}
+
+#clear-button:hover {
+	transition: all 0.2s;
+	background-color: #fff;
+	color: #000;
+}
+
 ::-webkit-scrollbar {
     height: 12px;
     width: 12px;

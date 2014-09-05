@@ -1,5 +1,7 @@
 function spawnRandomFood(logLastSpawn) {
 
+//	if (!isRunning) return;
+
 	//We don't want the delta timer to reset
 	//when a forced (ie. picked up last food)
 	//happends. 

@@ -26,6 +26,8 @@ function initialize(gameMode) {
 	  	}
 	}
 
+	$('#reset-button').css('display', 'block');
+
 	gameOptions.gameMode = gameModes[gameMode];
 	gameOptions.gameMode.init();
 
@@ -34,6 +36,9 @@ function initialize(gameMode) {
 }
 
 function end() {
+	$('#start-overlay').css('display', 'none');
+	$('#reset-button').css('display', 'none');
+	$('#clear-button').css('display', 'none');
 	resetVariables();
 }
 
@@ -61,6 +66,28 @@ function canTurn(from, to) {
 
 function movePointer(code) {
 
+	switch(code) {
+		case directionLeft:
+			if (gameOptions.gameMode.pointer.x != 0)
+				gameOptions.gameMode.pointer.x -= player.size;
+
+		break
+		case directionRight:
+			if (gameOptions.gameMode.pointer.x != gameOptions.canvasWidth - player.size)
+				gameOptions.gameMode.pointer.x += player.size;
+
+		break
+		case directionUp:
+			if (gameOptions.gameMode.pointer.y != 0)
+				gameOptions.gameMode.pointer.y -= player.size;
+
+		break
+		case directionDown:
+			if (gameOptions.gameMode.pointer.y != gameOptions.canvasHeight - player.size)
+				gameOptions.gameMode.pointer.y += player.size;
+
+		break
+	}
 }
 
 function placeBlock() {
@@ -76,6 +103,9 @@ function placeBlock() {
 }
 
 function mouseDownEvent(event) {
+
+	if (gameOptions.gameMode != gameModes['createmap'])
+		return;
 
 	var x = Math.floor((event.offsetX) / player.size);
 	var y = Math.floor((event.offsetY) / player.size);

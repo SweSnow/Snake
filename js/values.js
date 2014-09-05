@@ -8,7 +8,8 @@ var gameOptions = {
 	canvasHeight: 0,
 	foodSpawnRate: 5000,
 	bugSpawnRate: 12000,
-	refreshRate: 50
+	refreshRate: 50,
+
 };
 
 var lastFoodSpawn = null,
@@ -38,8 +39,9 @@ function resetVariables() {
 	foodArray.splice(0, foodArray.length);
 	bugArray.splice(0, bugArray.length);
 
-	tailArray.splice(0, tailArray.length)
 	tailLength = 1;
+	tailArray = [];
+
 
 	player.x = 20;
 	player.y = 300;
@@ -48,6 +50,9 @@ function resetVariables() {
 
 	lastFoodSpawn = null,
 	lastBugSpawn = null;
+
+	directionCurrent = directionRight;
+	$(canvas).click(null);
 
 	updateScoreDisplay(now, null);
 }
@@ -78,6 +83,8 @@ var gameModes = {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 			$(canvas).click(mouseDownEvent);
+
+			$('#clear-button').css('display', 'block');
 		},
 		level: baseLevel,
 		pointer: {
