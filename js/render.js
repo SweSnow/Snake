@@ -53,7 +53,7 @@ function update() {
 				updateScoreDisplay(now, foodPoints);
 
 				if (foodArray.length == 0) {
-					spawnRandomFood();
+					spawnRandomFood(false);
 					writeLogMessage('No food on canvas, spawn new');
 				}
 			}
@@ -101,7 +101,7 @@ function update() {
 
 
 		if (now - lastFoodSpawn > gameOptions.foodSpawnRate || lastFoodSpawn == null) {
-			spawnRandomFood();
+			spawnRandomFood(true);
 		}
 
 		if (lastBugSpawn == null) {
@@ -173,7 +173,10 @@ function draw() {
 			for (var xi = 0; xi < gameOptions.canvasHeight / player.size; xi++) {
 				if (gameOptions.gameMode.level[yi][xi] == 1) {
 					ctx.fillRect(yi * player.size, xi * player.size, player.size, player.size);
+<<<<<<< HEAD
 					ctx.stroke();
+=======
+>>>>>>> origin/master
 				}
 			}
 		}
