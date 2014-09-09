@@ -8,6 +8,8 @@ function initialize(gameMode) {
 
 	   	if (code == 32 || code == 13) {
 	   		if (gameOptions.gameMode == gameModes['createmap']) {
+	   			e.preventDefault();
+
 	    		placeBlock();
 	    	}
 	   	}
