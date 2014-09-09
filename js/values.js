@@ -109,7 +109,7 @@ var createArray = [];
 
 var tailArray = [];
 //We set the tail length to 1 initially to match the size of the snake itself
-var tailLenght = 1;
+var tailLength = 1;
 
 //39 is right which is our default
 var directionCurrent = 39;

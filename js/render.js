@@ -41,7 +41,7 @@ function update() {
 		tailArray.push(tailCoordinates);
 
 		//Let's splice the tailArray so it doesn't always get longer
-		tailArray.splice(0, tailArray.length - tailLenght - 1);
+		tailArray.splice(0, tailArray.length - tailLength - 1);
 
 		//Calculating food
 		for (var i = 0; i < foodArray.length; i++) {
@@ -49,7 +49,7 @@ function update() {
 				foodArray.splice(i, 1);
 
 				score += foodPoints;
-				tailLenght++;
+				tailLength++;
 				updateScoreDisplay(now, foodPoints);
 
 				if (foodArray.length == 0) {
@@ -71,14 +71,14 @@ function update() {
 
 				score += scorePlus;
 				updateScoreDisplay(now, scorePlus);
-				tailLenght++;
+				tailLength++;
 
 				bugArray.splice(i, 1);
 			}
 		}
 
 		//Checking tail collision
-		for (var i = 0; i < tailLenght; i++) {
+		for (var i = 0; i < tailLength; i++) {
 			if (
 				player.x == tailArray[tailArray.length - i - 1].x &&
 				player.y == tailArray[tailArray.length - i - 1].y &&
@@ -141,10 +141,10 @@ function draw() {
 			ctx.fillRect(bugArray[i].x, bugArray[i].y, foodSize, foodSize);
 		}
 
-		var step = (snakeMaxColor - snakeMinColor) / tailLenght;
+		var step = (snakeMaxColor - snakeMinColor) / tailLength;
 
 		//Snake
-		for (var i = 0; i < tailLenght; i++) {
+		for (var i = 0; i < tailLength; i++) {
 
 			ctx.fillStyle = rgbColorFormatter(Math.floor(snakeMaxColor - (i * step)));
 			ctx.fillRect(tailArray[tailArray.length - i - 1].x, tailArray[tailArray.length - i - 1].y, player.size, player.size);

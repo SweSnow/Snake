@@ -32,7 +32,7 @@ function spawnRandomFood(logLastSpawn) {
 	}
 
 	//Collides with tail?
-	for (var i = 0; i < tailLenght; i++) {
+	for (var i = 0; i < tailLength; i++) {
 		if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
 			canSpawn = false;
 		}
@@ -96,7 +96,7 @@ function determineSpawnRandomBug() {
 			}
 		}
 
-		for (var i = 0; i < tailLenght; i++) {
+		for (var i = 0; i < tailLength; i++) {
 			if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
 				canSpawn = false;
 			}
