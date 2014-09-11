@@ -94,16 +94,6 @@ var gameModes = {
 
 var isRunning = false;
 
-var bugMaxScore = 7000;
-
-var foodSize = 20;
-
-var foodPoints = 10;
-
-var foodArray = [];
-var bugArray = [];
-var createArray = [];
-
 var tailArray = [];
 //We set the tail length to 1 initially to match the size of the snake itself
 var tailLength = 1;
@@ -118,13 +108,6 @@ var directionRight = 39;
 var directionDown = 40;
 
 var score = 0;
-var maxBugScore = 70;
-
-var backgroundColor = "#000000";
-var tileColor = '#00ff00';
-var snakeColor = "#ffffff";
-var foodColor = "#ff0000";
-var bugColor = "#0000ff";
 
 var snakeMaxColor = 255;
 var snakeMinColor = 80;
@@ -133,8 +116,7 @@ var updateLoop;
 var bugSpawnLoop;
 var foodSpawnLoop;
 
-var canvas;
-var context;
+var htmlCanvas;
 
 //60 sec
 var timeAttackTimeLimit = 60000;

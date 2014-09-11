@@ -1,47 +1,92 @@
-function spawnRandomFood(logLastSpawn) {
+function Food(x, y, spawnDate){
+	this.x = x;
+	this.y = y;
+	this.spawnDate = spawnDate || Date.now();
 
-	if (!isRunning) return;
+	this.element = this.template.copy();
+	this.css('top', y + 'px');
+	this.css('left', x + 'px');
 
-	//We don't want the delta timer to reset
-	//when a forced (ie. picked up last food)
-	//happends. 
-	if (logLastSpawn) {
-		lastFoodSpawn = Date.now();
-	}
-
-	var food = getEmptySpot();
-
-	foodArray.push(food);
-
-	setTimeout(function() {
-		for (var i = 0; i < foodArray.length; i++) {
-			if (foodArray[i] == food) {
-				foodArray.splice(i, 1);
-			}
-		}
-	}, 10000);
-
-	writeLogMessage('Spawned food at (' + food.x + ', ' + food.y + ')');
+	htmlCanvas.appendChild(this.element);
 }
 
-function spawnRandomBug() {
+Food.prototype = {
+	update: function(time) {
+	 	if(time - this.spawnDate > this.duration) {
+	 		this.die();
+	 	}
+	},
+	duration: 5000,
+	die: function() {
+		this.$element.remove();
+	},
+	eat: function() {
+		score += value;
+		this.die();
+	},
+	template: $('<div class="g_food"></div>'),
+	value: 10
+}
 
-	var now = Date.now();
-	lastBugSpawn = now;
+function Bug(x, y, spawnDate) {
+	this.x = x;
+	this.y = y;
+	this.spawnDate = spawnDate || Date.now();
 
-	// #perfmatters http://jsperf.com/sdsdgsdfg
-	var bug = getEmptySpot();
-	bug.time = now;
+	this.element = this.template.copy();
+	this.css('top', y + 'px');
+	this.css('left', x + 'px');
 
-	bugArray.push(bug);
+	htmlCanvas.appendChild(this.element);
+}
 
-	setTimeout(function() {
-		for (var i = 0; i < bugArray.length; i++) {
-			if (bugArray[i] == bug) {
-				bugArray.splice(i, 1);
-			}
-		}
-	}, 7000);
+Bug.prototype = {
+	update: function(time) {
+	 	if(time - this.spawnDate > this.duration) {
+	 		this.die();
+	 	}
+	},
+	duration: 7000,
+	die: function() {
+		this.$element.remove();
+	},
+	eat: function() {
+		score += maxValue - (Math.floor((Date.now() - spawnDate)
+		 * 100));
 
-	writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
+		this.die();
+	},
+	template: $('<div class="g_bug"></div>'),
+	maxValue: 70
+}
+
+function Player(x, y) {
+	this.x = x;
+	this.y = y;
+
+	this.element = this.template.copy();
+	this.css('top', y + 'px');
+	this.css('left', x + 'px');
+
+	htmlCanvas.appendChild(this.element);
+}
+
+Bug.prototype = {
+	update: function(time) {
+	 	if(time - this.spawnDate > this.duration) {
+	 		this.die();
+	 	}
+	},
+	duration: 7000,
+	die: function() {
+		this.$element.remove();
+	},
+	eat: function() {
+		score += maxValue - (Math.floor((Date.now() - spawnDate)
+		 * 100));
+
+		this.die();
+	},
+	template: $('<div class="g_bug"></div>'),
+	maxValue: 70
 }

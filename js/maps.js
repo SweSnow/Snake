@@ -13,6 +13,26 @@ Level.prototype = {
 	},
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
+	},
+	entities: [],
+	spawnRandomFood: function(logLastSpawn) {
+
+		if (logLastSpawn) {
+			lastFoodSpawn = Date.now();
+		}
+
+		var spot = getEmptySpot();
+		var food = new Food(spot.x, spot.y, Date.now());
+
+		entities.push(food);
+
+		writeLogMessage('Spawned food at (' + food.x + ', ' + food.y + ')');
+	},
+	spawnRandomBug: function() {
+		var spot = getEmptySpot();
+		var food = new Food(spot.x, spot.y, Date.now());
+
+		writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
 	}
 };
 

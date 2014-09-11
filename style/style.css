@@ -13,6 +13,22 @@ body {
     -webkit-user-drag: none;
 }
 
+.g_food {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background-color: #ff0000;
+}
+
+.g_bug {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background-color: #0000ff;
+}
+
+
+
 .game-container {
 	width: 850px;
 	margin-top: 25px;
@@ -21,16 +37,15 @@ body {
 }
 
 .canvas-container {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
 	position: relative;
+	background-color: #000;
 	float: left;
 	width: 600px;
 	height: 600px;
+	border: 1px solid #fff;
 }
 
-canvas {
+#html-canvas {
 	border: 1px solid #fff;
 	position: absolute;
 	top: 0;

@@ -121,8 +121,6 @@ function draw() {
 
 	var now = Date.now();
 
-	ctx.clearRect(0, 0, gameOptions.canvasWidth, gameOptions.canvasHeight);
-
 	if(!isRunning) return;
 
 	if (gameOptions.gameMode != gameModes['createmap']) {

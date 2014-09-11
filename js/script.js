@@ -1,10 +1,9 @@
 $(document).ready(function() {
 	
-	canvas = document.getElementById('canvas');
-	ctx = canvas.getContext('2d');
+	htmlCanvas = $('#html-canvas');
 
-	gameOptions.canvasHeight = canvas.height;
-	gameOptions.canvasWidth = canvas.width;
+	gameOptions.canvasHeight = htmlCanvas.height;
+	gameOptions.canvasWidth = htmlCanvas.width;
 
 	writeLogMessage('Hello World!');
 
