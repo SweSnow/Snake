@@ -63,11 +63,8 @@ function update() {
 		for (var i = 0; i < bugArray.length; i++) {
 			if (player.x == bugArray[i].x && player.y == bugArray[i].y) {
 
-				var scorePlus = 
-					maxBugScore - 
-					(Math.floor((now - 
-					bugArray[i].time) * 
-					(maxBugScore / bugMaxScore)));
+				var scorePlus = maxBugScore - (Math.floor((now - bugArray[i].time)
+					* (maxBugScore / bugMaxScore)));
 
 				score += scorePlus;
 				updateScoreDisplay(now, scorePlus);
@@ -83,17 +80,18 @@ function update() {
 				player.x == tailArray[tailArray.length - i - 1].x &&
 				player.y == tailArray[tailArray.length - i - 1].y &&
 				i != 0) {
-				end();
+				end('Collided with tail');
 			}
 		}
 
 		//Checking tile collision
 		if (gameOptions.gameMode == gameModes['obstacle']) {
-			if (gameOptions.gameMode.level[player.x / player.size][player.y / player.size] == 1) {
-				end();
+			if (gameOptions.gameMode.level.get(
+					player.x / player.size,
+					player.y / player.size) == 1) {
+				end('Collided with obstacle');
 			}
 		}
-
 
 		if (now - lastFoodSpawn > gameOptions.foodSpawnRate || lastFoodSpawn == null) {
 			spawnRandomFood(true);
@@ -103,7 +101,7 @@ function update() {
 			lastBugSpawn = now;
 		} else {
 			if (now - lastBugSpawn > gameOptions.bugSpawnRate) {
-				determineSpawnRandomBug();
+				spawnRandomBug();
 			}	
 		}
 
@@ -113,7 +111,7 @@ function update() {
 			if (timeRemaining > 0) {
 				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
 			} else {
-				end();
+				end('Time ran out :(');
 			}
 		}
 	}
@@ -150,22 +148,17 @@ function draw() {
 			ctx.fillRect(tailArray[tailArray.length - i - 1].x, tailArray[tailArray.length - i - 1].y, player.size, player.size);
 		}
 	} else {
-		//Map stuff
-		if (now - gameOptions.gameMode.lastBlink > 1000 || true) {
-		//	lastBlink = now - 250;
-			ctx.beginPath();
+		ctx.beginPath();
 
-			ctx.rect(
-				gameOptions.gameMode.pointer.x,
-				gameOptions.gameMode.pointer.y,
-				player.size,
-				player.size);
+		ctx.rect(
+			gameOptions.gameMode.pointer.x,
+			gameOptions.gameMode.pointer.y,
+			player.size,
+			player.size);
 
-		    ctx.lineWidth = 1;
-		    ctx.strokeStyle = '#ffffff';
-		    ctx.stroke();
-
-		}
+	    ctx.lineWidth = 1;
+	    ctx.strokeStyle = '#ffffff';
+	    ctx.stroke();
 	}
 
 	if (gameOptions.gameMode == gameModes['obstacle'] || gameOptions.gameMode == gameModes['createmap']) {
@@ -173,8 +166,8 @@ function draw() {
 
 		for (var yi = 0; yi < gameOptions.canvasWidth / player.size; yi++) {
 			for (var xi = 0; xi < gameOptions.canvasHeight / player.size; xi++) {
-				if (gameOptions.gameMode.level[yi][xi] == 1) {
-					ctx.fillRect(yi * player.size, xi * player.size, player.size, player.size);
+				if (gameOptions.gameMode.level.get(xi, yi) == 1) {
+					ctx.fillRect(xi * player.size, yi * player.size, player.size, player.size);
 				}
 			}
 		}

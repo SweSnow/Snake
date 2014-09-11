@@ -123,6 +123,14 @@ canvas {
 	border: 1px solid #fff;
 }
 
+.game-over-text {
+
+}
+
+#game-over-score {
+
+}
+
 #reset-button {
 	display: none;
 	font-size: 17px;

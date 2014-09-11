@@ -31,16 +31,28 @@ function initialize(gameMode) {
 	$('#reset-button').css('display', 'block');
 
 	gameOptions.gameMode = gameModes[gameMode];
+
+	gameOptions.gameMode.level = defaultLevel.copy();
 	gameOptions.gameMode.init();
 
 	requestAnimationFrame(draw);
 
 }
 
-function end() {
-	$('#start-overlay').css('display', 'none');
+function end(text) {
+	if (text) {
+		$('#start-overlay').css('display', 'none');
+		$('#game-over-overlay').css('display', 'block');
+	} else {
+		$('#start-overlay').css('display', 'block');
+		$('#game-over-overlay').css('display', 'nonw');
+	}
+
 	$('#reset-button').css('display', 'none');
 	$('#clear-button').css('display', 'none');
+	$('#game-over-text').text(text);
+	$('#game-over-score').text(score);
+
 	resetVariables();
 }
 
@@ -97,10 +109,10 @@ function placeBlock() {
 	var pointerX = gameOptions.gameMode.pointer.x / player.size;
 	var pointerY = gameOptions.gameMode.pointer.y / player.size;
 
-	if (gameOptions.gameMode.level[pointerX][pointerY] == 0) {
-		gameOptions.gameMode.level[pointerX][pointerY] = 1;
+	if (gameOptions.gameMode.level.get(pointerX, pointerY) == 0) {
+		gameOptions.gameMode.level.set(pointerX, pointerY, 1);
 	} else {
-		gameOptions.gameMode.level[pointerX][pointerY] = 0;
+		gameOptions.gameMode.level.set(pointerX, pointerY, 0);
 	}
 }
 
@@ -112,9 +124,56 @@ function mouseDownEvent(event) {
 	var x = Math.floor((event.offsetX) / player.size);
 	var y = Math.floor((event.offsetY) / player.size);
 
-	if (gameOptions.gameMode.level[x][y] == 1) {
-		gameOptions.gameMode.level[x][y] = 0;
+	if (gameOptions.gameMode.level.get(x, y) == 1) {
+		gameOptions.gameMode.level.set(x, y, 0);
 	} else {
-		gameOptions.gameMode.level[x][y] = 1;
+		gameOptions.gameMode.level.set(x, y, 1);
 	}
+}
+
+function getEmptySpot() {
+	while(true) {
+		var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
+		var proposedY = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
+
+		if (isEmptySpot(proposedX, proposedY)) {
+			return {
+				x: proposedX,
+				y: proposedY
+			}
+		}
+	}
+}
+
+function isEmptySpot(proposedX, proposedY) {
+
+	for (var i = 0; i < foodArray.length; i++) {
+		if (foodArray[i].x == proposedX && foodArray[i].y == proposedY) {
+			return false;
+		}
+	}
+	
+	for (var i = 0; i < bugArray.length; i++) {
+		if (bugArray[i].x == proposedX && bugArray[i].y == proposedY) {
+			return false;
+		}
+	}
+
+	for (var i = 0; i < tailLength; i++) {
+		if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
+			return false;
+		}
+	}
+
+	if (gameOptions.gameMode == gameModes['obstacle']) {
+		for (var yi = 0; yi < 50; yi++) {
+			for (var xi = 0; xi < 50; xi++) {
+				if (proposedX == xi && proposedY == yi) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
 }

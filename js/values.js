@@ -4,8 +4,8 @@
 	The variable gameMode is stored here
 	*/
 var gameOptions = {
-	canvasWidth: 0,
-	canvasHeight: 0,
+	canvasWidth: 600,
+	canvasHeight: 600,
 	foodSpawnRate: 5000,
 	bugSpawnRate: 12000,
 	refreshRate: 50,
@@ -32,8 +32,6 @@ function resetVariables() {
 	isRunning = false;
 	clearInterval(updateLoop);
 
-	$('#game-over-overlay').css('display', 'block');
-
 	timeAttackTimeElement.text('');
 
 	foodArray.splice(0, foodArray.length);
@@ -41,7 +39,6 @@ function resetVariables() {
 
 	tailLength = 1;
 	tailArray = [];
-
 
 	player.x = 20;
 	player.y = 300;
@@ -61,6 +58,8 @@ var gameModes = {
 	normal: {
 		init: function() {
 			timeAttackStartTime = Date.now();
+			lastBugSpawn = null;
+			lastFoodSpawn = null;
 
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
@@ -70,13 +69,13 @@ var gameModes = {
 	},
 	obstacle: {
 		init: function() {
+			lastBugSpawn = null;
+			lastFoodSpawn = null;
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 
-			spawnObstacles();
 			updateScoreDisplay(null, null);
 		},
-		level: baseLevel
 	},
 	createmap: {
 		init: function() {
@@ -86,12 +85,10 @@ var gameModes = {
 
 			$('#clear-button').css('display', 'block');
 		},
-		level: baseLevel,
 		pointer: {
 			x: 100,
 			y: 100
-		},
-		lastBlink: Date.now()
+		}
 	}
 };
 
