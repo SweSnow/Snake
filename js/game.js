@@ -177,3 +177,35 @@ function isEmptySpot(proposedX, proposedY) {
 
 	return true;
 }
+
+function resetVariables() {
+	writeLogMessage('===================');
+	writeLogMessage('Reset all variables');
+	writeLogMessage('===================');
+
+	var now = Date.now()
+
+	isRunning = false;
+	clearInterval(updateLoop);
+
+	timeAttackTimeElement.text('');
+
+	foodArray.splice(0, foodArray.length);
+	bugArray.splice(0, bugArray.length);
+
+	tailLength = 1;
+	tailArray = [];
+
+	player.x = 20;
+	player.y = 300;
+
+	score = 0;
+
+	lastFoodSpawn = null,
+	lastBugSpawn = null;
+
+	directionCurrent = directionRight;
+	$(canvas).click(null);
+
+	updateScoreDisplay(now, null);
+}

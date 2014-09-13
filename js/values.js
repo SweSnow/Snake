@@ -4,12 +4,7 @@
 	The variable gameMode is stored here
 	*/
 var gameOptions = {
-	canvasWidth: 600,
-	canvasHeight: 600,
-	foodSpawnRate: 5000,
-	bugSpawnRate: 12000,
-	refreshRate: 50,
-
+	refreshRate: 50
 };
 
 var lastFoodSpawn = null,
@@ -22,55 +17,20 @@ var player = {
 	y: 300
 };
 
-function resetVariables() {
-	writeLogMessage('===================');
-	writeLogMessage('Reset all variables');
-	writeLogMessage('===================');
-
-	var now = Date.now()
-
-	isRunning = false;
-	clearInterval(updateLoop);
-
-	timeAttackTimeElement.text('');
-
-	foodArray.splice(0, foodArray.length);
-	bugArray.splice(0, bugArray.length);
-
-	tailLength = 1;
-	tailArray = [];
-
-	player.x = 20;
-	player.y = 300;
-
-	score = 0;
-
-	lastFoodSpawn = null,
-	lastBugSpawn = null;
-
-	directionCurrent = directionRight;
-	$(canvas).click(null);
-
-	updateScoreDisplay(now, null);
-}
-
 var gameModes = {
 	normal: {
 		init: function() {
 			timeAttackStartTime = Date.now();
-			lastBugSpawn = null;
-			lastFoodSpawn = null;
-
+			
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 
 			updateScoreDisplay(null, null);
-		}
+		},
+		maxTime: 60000
 	},
 	obstacle: {
 		init: function() {
-			lastBugSpawn = null;
-			lastFoodSpawn = null;
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 
@@ -113,8 +73,6 @@ var snakeMaxColor = 255;
 var snakeMinColor = 80;
 
 var updateLoop;
-var bugSpawnLoop;
-var foodSpawnLoop;
 
 var htmlCanvas;
 
