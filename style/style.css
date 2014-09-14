@@ -33,8 +33,10 @@ body {
 	background-color: #ffffff;
 }
 
-
-
+.g_tail {
+	position: absolute;
+	background-color: #aaaaaa;
+}
 
 .game-container {
 	width: 850px;

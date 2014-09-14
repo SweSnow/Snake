@@ -1,8 +1,7 @@
 /*
-	GameOptions are configurable but theese should
-	be considerd the default configuration. 
-	The variable gameMode is stored here
-	*/
+	values.js contains values used by all the other classes
+*/
+
 var gameOptions = {
 	refreshRate: 50
 };
@@ -10,20 +9,16 @@ var gameOptions = {
 var lastFoodSpawn = null,
 	lastBugSpawn = null;
 
-var player = {
-	moveDistance: 20,
-	size: 20,
-	x: 20,
-	y: 300
-};
-
 var gameModes = {
 	normal: {
 		init: function() {
-			timeAttackStartTime = Date.now();
+
+			var level = new Level(
+				defaultLevel(600, 600, 20), 30, 600, 600,
+				Date.now(), this, new Player(20, 300, 20, 20));
 			
-			update();
-			updateLoop = setInterval(update, gameOptions.refreshRate);
+			level.update();
+			updateLoop = setInterval(level.update, gameOptions.refreshRate);
 
 			updateScoreDisplay(null, null);
 		},
@@ -41,7 +36,7 @@ var gameModes = {
 		init: function() {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
-			$(canvas).click(mouseDownEvent);
+			htmlCanvas.click(mouseDownEvent);
 
 			$('#clear-button').css('display', 'block');
 		},
@@ -54,18 +49,8 @@ var gameModes = {
 
 var isRunning = false;
 
-var tailArray = [];
-//We set the tail length to 1 initially to match the size of the snake itself
-var tailLength = 1;
-
 //39 is right which is our default
-var directionCurrent = 39;
-var directionLastUsed = 39;
 
-var directionLeft = 37;
-var directionUp = 38;
-var directionRight = 39;
-var directionDown = 40;
 
 var score = 0;
 

@@ -1,29 +1,31 @@
+/*
+	entities.js contains all entities in the
+	game (food, bug, obstacle, playerand tail).
+*/
+
 function Food(x, y, width, height, spawnDate){
 	this.x = x;
 	this.y = y;
 	this.spawnDate = spawnDate || Date.now();
 
 	this.element = this.template.copy();
-	this.css('top', y + 'px');
-	this.css('left', x + 'px');
-	this.css('width', width + 'px');
-	this.css('height', height + 'px');
+	this.element.css('top', y + 'px');
+	this.element.css('left', x + 'px');
+	this.element.css('width', width + 'px');
+	this.element.css('height', height + 'px');
 
-	htmlCanvas.appendChild(this.element);
+	htmlCanvas.append(this.element);
 }
 
 Food.prototype = {
 	update: function(time, level) {
-	 	if (time - this.spawnDate > this.duration) {
+	 	if (time - this.spawnDate > this.duration) 
 	 		this.die();
-	 	}
-
+	 	
 	 	if (level.player.x == this.x && level.player.y == this.y) 
 	 		this.eat(level);
-		}
 
 	},
-	duration: 5000,
 	die: function(level) {
 		level.entities.remove(this);
 		this.$element.remove();
@@ -52,6 +54,7 @@ Food.prototype = {
 		}
 
 	},
+	duration: 5000,
 	template: $('<div class="g_food"></div>'),
 	value: 10
 }
@@ -63,12 +66,12 @@ function Obstacle(x, y, width, height) {
 	this.y = y;
 
 	this.element = this.template.copy();
-	this.css('top', y + 'px');
-	this.css('left', x + 'px');
-	this.css('width', width + 'px');
-	this.css('height', height + 'px');
+	this.element.css('top', y + 'px');
+	this.element.css('left', x + 'px');
+	this.element.css('width', width + 'px');
+	this.element.css('height', height + 'px');
 
-	htmlCanvas.appendChild(this.element);
+	htmlCanvas.append(this.element);
 }
 
 Obstacle.prototype = {
@@ -94,35 +97,38 @@ function Bug(x, y, width, height, spawnTime) {
 	this.spawnTime = spawnTime || Date.now();
 
 	this.element = this.template.copy();
-	this.css('top', y + 'px');
-	this.css('left', x + 'px');
-	this.css('width', width + 'px');
-	this.css('height', height + 'px');
+	this.element.css('top', y + 'px');
+	this.element.css('left', x + 'px');
+	this.element.css('width', width + 'px');
+	this.element.css('height', height + 'px');
 
-	htmlCanvas.appendChild(this.element);
+	htmlCanvas.append(this.element);
 }
 
 Bug.prototype = {
 	update: function(time, level) {
-	 	if(time - this.spawnDate > this.duration) {
+	 	if (time - this.spawnDate > this.duration) {
 	 		this.die();
-	 	}
+	 	} else if (this.x == level.player.x && this.y == level.player.y) {
+	 		this.eat(time, level);
 
-			score += scorePlus;
-			updateScoreDisplay(now, scorePlus);
-			tailLength++;
+			
 
-			bugArray.splice(i, 1);
 		}
 
 	},
 	duration: 7000,
-	die: function() {
+	die: function(level) {
+		level.entities.remove(this);
 		this.$element.remove();
 	},
-	eat: function() {
-		score += maxValue - (Math.floor((Date.now() - spawnTime)
-		 * 100));
+	eat: function(time, level) {
+		var scorePlus = this.maxValue -
+			(Math.floor((time - this.spawnTime) * 100));
+		score += scorePlus;
+
+		updateScoreDisplay(now, scorePlus);
+		level.player.tailLength++;
 
 		this.die();
 	},
@@ -135,14 +141,16 @@ Bug.prototype = {
 function Player(x, y, width, height) {
 	this.x = x;
 	this.y = y;
+	this.width = width;
+	this.height = height;
 
-	this.element = this.template.copy();
-	this.css('top', y + 'px');
-	this.css('left', x + 'px');
-	this.css('width', width + 'px');
-	this.css('height', height + 'px');
+	this.element = Player.prototype.template;
+	this.element.css('top', y + 'px');
+	this.element.css('left', x + 'px');
+	this.element.css('width', width + 'px');
+	this.element.css('height', height + 'px');
 
-	htmlCanvas.appendChild(this.element);
+	htmlCanvas.append(this.element);
 
 	this.tailLength = 0;
 }
@@ -150,53 +158,85 @@ function Player(x, y, width, height) {
 Player.prototype = {
 	update: function(time, level) {
 		//Logic for not turning 180 deg
-		if (directionCurrent == directionLeft) {
-			this.x -= this.moveDistance;
+		if (this.directionCurrent == this.directionLeft) {
+			this.x -= level.tileSize;
 			if (this.x < 0) {
-				this.x = gameOptions.canvasWidth - Level.tileSize;
+				this.x = level.width - level.tileSize;
 			}
-		} else if (directionCurrent == directionUp) {
-			this.y -= this.moveDistance;
+		} else if (this.directionCurrent == this.directionUp) {
+			this.y -= level.tileSize;
 			if (this.y < 0) {
-				this.y = gameOptions.canvasHeight - this.tileSize;
+				this.y = level.height - level.tileSize;
 			}
-		} else if (directionCurrent == directionRight) {
-			this.x += this.moveDistance;
-			if (this.x >= gameOptions.canvasWidth) {
+		} else if (this.directionCurrent == this.directionRight) {
+			this.x += level.tileSize;
+			if (this.x >= level.width) {
 				this.x = 0;
 			}
-		} else if (directionCurrent == directionDown) {
-			this.y += this.moveDistance;
-			if (this.y >= gameOptions.canvasHeight) {
+		} else if (this.directionCurrent == this.directionDown) {
+			this.y += level.tileSize;
+			if (this.y >= level.height) {
 				this.y = 0 ;
 			}
 		}
+		this.directionLastUsed = this.directionCurrent;
 
-		directionLastUsed = directionCurrent;
+		var tail = Tail(this.x, this.y, this.width, this.height);
 
-		var tailCoordinates = {
-			x: this.x,
-			y: this.y
-		}
+		this.tailArray.push(tail);
 
-		this.tailArray.push(tailCoordinates);
-
-		//Let's splice the tailArray so it doesn't always get longer
-		this.tailArray.splice(0, this.tailArray.length - this.tailLength - 1);
+		//if tailLength isn't the same as the actual length
+		//we ate som food on the last food update
+		//meaning we shouldn't splice te array
+		if (this.tailLength <= this.tailArray.length)
+			this.tailArray.splice(0, 1);
 
 		//Checking tail collision
-		for (var i = 0; i < tailLength; i++) {
-			if (
-				this.x == this.tailArray[this.tailArray.length - i - 1].x &&
-				this.y == this.tailArray[this.tailArray.length - i - 1].y) {
-				end('Collided with tail');
-			}
-		}
+		this.tailArray.forEach(function(index) {
+			this.tailArray[index].update();
+		});
 
 	},
 	die: function() {
 		end();
 	},
 	tailArray: [],
-	template: $('<div class="g_player"></div>')
+	template: $('<div class="g_player"></div>'),
+	directionCurrent: 39,
+	directionLastUsed: 39,
+	directionLeft: 37,
+	directionUp: 38,
+	directionRight: 39,
+	directionDown: 40
+
+}
+
+
+
+function Tail(x, y, width, height) {
+	this.x = x;
+	this.y = y;
+
+	this.element = Tail.prototype.template;
+	this.element.css('top', y + 'px');
+	this.element.css('left', x + 'px');
+	this.element.css('width', width + 'px');
+	this.element.css('height', height + 'px');
+
+	htmlCanvas.append(this.element);
+}
+
+Tail.prototype = {
+	update: function(player, level) {
+	 	//Checking tile collision
+		if (level.player.x == this.x &&
+			level.player.y == this.y) {
+			end('Collided with obstacle');
+		}
+	},
+	die: function() {
+		this.$element.remove();
+	},
+	template: $('<div class="g_tail"></div>'),
+	value: 10
 }

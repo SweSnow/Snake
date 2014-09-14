@@ -1,3 +1,8 @@
+/*
+	game.js is primarily a utility file
+	with functions unbound from classes.
+*/
+
 function initialize(gameMode) {
 
 	document.onkeydown = checkKey;
@@ -32,7 +37,6 @@ function initialize(gameMode) {
 
 	gameOptions.gameMode = gameModes[gameMode];
 
-	gameOptions.gameMode.level = defaultLevel.copy();
 	gameOptions.gameMode.init();
 
 	requestAnimationFrame(draw);
@@ -190,22 +194,9 @@ function resetVariables() {
 
 	timeAttackTimeElement.text('');
 
-	foodArray.splice(0, foodArray.length);
-	bugArray.splice(0, bugArray.length);
-
-	tailLength = 1;
-	tailArray = [];
-
-	player.x = 20;
-	player.y = 300;
-
 	score = 0;
 
-	lastFoodSpawn = null,
-	lastBugSpawn = null;
-
-	directionCurrent = directionRight;
-	$(canvas).click(null);
+	$(htmlCanvas).click(null);
 
 	updateScoreDisplay(now, null);
 }

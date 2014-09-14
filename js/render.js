@@ -1,5 +1,12 @@
-function draw() {
+/*
+	renderer.js handles all rendering and
+	contains only the function draw() for
+	now. Rendering utility functions
+	are welcome.
+*/
 
+function draw() {
+	/*
 	var now = Date.now();
 
 	if(!isRunning) return;
@@ -53,4 +60,5 @@ function draw() {
 	}
 
 	requestAnimationFrame(draw);
+	*/
 }

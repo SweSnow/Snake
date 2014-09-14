@@ -1,3 +1,9 @@
+/*
+	level.js contains the master level objects
+	which houses all entities all children. It
+	manages maps.
+*/
+
 function Level(grid, tiles, width, height, startTime, gameMode, player) {
 	this.grid = grid;
 	this.tiles = tiles;
@@ -7,6 +13,7 @@ function Level(grid, tiles, width, height, startTime, gameMode, player) {
 	this.gameMode = gameMode;
 	this.player = player;
 
+	this.entities = [];
 	this.tileSize = width / tiles;
 }
 
@@ -16,7 +23,7 @@ Level.prototype = {
 
 		if (this.gameMode == gameModes['normal']) {
 
-			var timeRemaining = this.maxTim - (now - this.startTime);
+			var timeRemaining = this.gameMode.maxTime - (now - this.startTime);
 			if (timeRemaining > 0) {
 				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
 			} else {
@@ -24,21 +31,24 @@ Level.prototype = {
 			}
 		}
 
-		//Update all entites (player, food, bug, obstacles)
-		entities.foreach(function(entity) {
+		//We update player first separately
+		this.player.update(now, this);
+
+		//Update all entites (food, bug, obstacles)
+		this.entities.foreach(function(entity) {
 			entity.update(now, this);
 		});
 
 		//Manage bug and food spawn
 		if (now - this.lastFoodSpawn > Food.prototype.duration || this.lastFoodSpawn == null) {
-			spawnRandomFood(true);
+			this.spawnRandomFood(true);
 		}
 
 		if (this.lastBugSpawn == null) {
 			this.lastBugSpawn = now;
 		} else {
 			if (now - this.lastBugSpawn > Bug.prototype.duration) {
-				spawnRandomBug();
+				this.spawnRandomBug();
 			}	
 		}
 	},
@@ -50,8 +60,7 @@ Level.prototype = {
 	},
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
-	}
-	entities: [],
+	},
 	spawnRandomFood: function(logLastSpawn) {
 
 		if (logLastSpawn) {
@@ -61,7 +70,7 @@ Level.prototype = {
 		var spot = getEmptySpot();
 		var food = new Food(spot.x, spot.y, Date.now());
 
-		entities.push(food);
+		this.entities.push(food);
 
 		writeLogMessage('Spawned food at (' + food.x + ', ' + food.y + ')');
 	},
@@ -75,22 +84,21 @@ Level.prototype = {
 	lastBugSpawn: null
 };
 
-var defaultLevel = new Level(
-	(function() {
+//This is the base levels which only contains zeroes
+function defaultLevel(_width, _height, tileSize) {
+	return (function() {
 		var array = [];
 
-		var width = gameOptions.canvasWidth / player.size;
-		var height = gameOptions.canvasHeight / player.size;
+		var width = _width / tileSize;
+		var height = _height / tileSize;
 
 		var max = width * height;
 
 		for (var i = 0; i < max; i++) {
 			array[i] = 0;
-		}	
+		}
 
 		return array;
 
-	})(),
-	gameOptions.canvasWidth / player.size,
-	gameOptions.canvasHeight / player.size
-);
+	})();
+}
