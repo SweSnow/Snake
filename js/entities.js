@@ -8,7 +8,7 @@ function Food(x, y, width, height, spawnDate){
 	this.y = y;
 	this.spawnDate = spawnDate || Date.now();
 
-	this.element = this.template.copy();
+	this.element = Food.prototype.template;
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', width + 'px');
@@ -111,9 +111,6 @@ Bug.prototype = {
 	 		this.die();
 	 	} else if (this.x == level.player.x && this.y == level.player.y) {
 	 		this.eat(time, level);
-
-			
-
 		}
 
 	},

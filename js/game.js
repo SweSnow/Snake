@@ -135,12 +135,12 @@ function mouseDownEvent(event) {
 	}
 }
 
-function getEmptySpot() {
+function getEmptySpot(level) {
 	while(true) {
-		var proposedX = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
-		var proposedY = Math.floor(Math.random() * gameOptions.canvasWidth / foodSize) * foodSize;
+		var proposedX = Math.floor(Math.random() * level.width / level.tileSize) * level.tileSize;
+		var proposedY = Math.floor(Math.random() * level.height / level.tileSize) * level.tileSize;
 
-		if (isEmptySpot(proposedX, proposedY)) {
+		if (isEmptySpot(proposedX, proposedY, level)) {
 			return {
 				x: proposedX,
 				y: proposedY
@@ -149,22 +149,19 @@ function getEmptySpot() {
 	}
 }
 
-function isEmptySpot(proposedX, proposedY) {
+function isEmptySpot(proposedX, proposedY, level) {
 
-	for (var i = 0; i < foodArray.length; i++) {
-		if (foodArray[i].x == proposedX && foodArray[i].y == proposedY) {
+	for (var i = 0; i < level.entities.length; i++) {
+		if (level.entities[i].x == proposedX && level.entities[i].y == proposedY) {
 			return false;
 		}
 	}
 	
-	for (var i = 0; i < bugArray.length; i++) {
-		if (bugArray[i].x == proposedX && bugArray[i].y == proposedY) {
-			return false;
-		}
-	}
+	if (level.player.x == proposedX && level.player.y == proposedY)
+		return false;
 
-	for (var i = 0; i < tailLength; i++) {
-		if (tailArray[tailArray.length - i - 1].x == proposedX && tailArray[tailArray.length - i - 1].y == proposedY) {
+	for (var i = 0; i < level.player.tailArray.length; i++) {
+		if (level.player.tailArray[i].x == proposedX && level.player.tailArray[i].y == proposedY) {
 			return false;
 		}
 	}

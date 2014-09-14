@@ -35,13 +35,12 @@ Level.prototype = {
 		this.player.update(now, this);
 
 		//Update all entites (food, bug, obstacles)
-		this.entities.foreach(function(entity) {
-			entity.update(now, this);
-		});
+		for (entity in this.entities)
+			entity.update(now, this)
 
 		//Manage bug and food spawn
 		if (now - this.lastFoodSpawn > Food.prototype.duration || this.lastFoodSpawn == null) {
-			this.spawnRandomFood(true);
+			this.spawnRandomFood(true, this);
 		}
 
 		if (this.lastBugSpawn == null) {
@@ -61,21 +60,21 @@ Level.prototype = {
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
 	},
-	spawnRandomFood: function(logLastSpawn) {
+	spawnRandomFood: function(logLastSpawn, level) {
 
 		if (logLastSpawn) {
 			lastFoodSpawn = Date.now();
 		}
 
-		var spot = getEmptySpot();
+		var spot = getEmptySpot(level);
 		var food = new Food(spot.x, spot.y, Date.now());
 
 		this.entities.push(food);
 
 		writeLogMessage('Spawned food at (' + food.x + ', ' + food.y + ')');
 	},
-	spawnRandomBug: function() {
-		var spot = getEmptySpot();
+	spawnRandomBug: function(level) {
+		var spot = getEmptySpot(level);
 		var food = new Food(spot.x, spot.y, Date.now());
 
 		writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
