@@ -1,8 +1,8 @@
 var express = require('express'),
-app = express(),
-server = require('http').createServer(app);
+	app = express();
 
 app.use(express.static(__dirname));
 
-server.listen(8080);
-console.log('SERVER UP AND RUNNING');
+app.listen(8088, function() {
+	console.log('Server up on port 8088.')
+});

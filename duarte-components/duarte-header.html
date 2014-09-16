@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 <polymer-element name="duarte-header" attributes="smaller">
+=======
+<link rel="import" href="../components/paper-dialog/paper-dialog.html">
+<link rel="import" href="duarte-login.html">
+<link rel="import" href="duarte-register.html">
+
+<polymer-element name="duarte-header">
+>>>>>>> origin/master
   <template>
 	<style>
 
@@ -59,8 +67,8 @@
 		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
 			<paper-icon-button icon="arrow-back" hidden?="{{!smaller}}"></paper-icon-button>
 			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
-			<paper-item on-tap="{{signUp}}" label="Sign up"></paper-item>
-			<paper-item on-tap="{{logIn}}" label="Log in"></paper-item>
+			<paper-item on-tap="{{openModal}}" data-modal-id="registerModal" label="Sign up"></paper-item>
+			<paper-item on-tap="{{openModal}}" data-modal-id="loginModal" label="Log in"></paper-item>
 
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
@@ -77,13 +85,17 @@
 
 		</core-toolbar>
 	</div>
+	<paper-dialog id="registerModal">
+		<duarte-register></duarte-register>
+	</paper-dialog>
+	<paper-dialog id="loginModal">
+		<duarte-login></duarte-login>
+	</paper-dialog>
 
-	<!--<div id="label"><content></content></div>
-	Value: <span id="counterVal">{{counter}}</span><br>
-	<button on-tap="{{increment}}">Increment</button>-->
   </template>
   <script>
 	Polymer('duarte-header', {
+<<<<<<< HEAD
 		smaller: true,
 		ready: function() {
 			this.headerHeight = this.smaller ? '72px' : '142px';
@@ -93,6 +105,10 @@
 		},
 		signUp: function() {
 			alert("sign up");
+=======
+		openModal: function(event, wtf, button) {
+			this.$[button.dataset.modalId].toggle();
+>>>>>>> origin/master
 		}
 	});
   </script>

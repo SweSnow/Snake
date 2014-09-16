@@ -1,0 +1,40 @@
+<link rel="import" href="../components/paper-input/paper-input.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<script type="text/javascript" src="../js/user.js"></script>
+
+<polymer-element name="duarte-login">
+	<template>
+		<style>
+		</style>
+
+		Username <paper-input value="{{username}}"></paper-input>
+		Password <paper-input type="password" value="{{password}}"></paper-input>
+		<paper-button on-tap="{{submit}}" label="Log in"></paper-button>
+
+
+		<core-ajax
+			id="submit"
+			method="post"
+			url="http://192.168.0.187:8080/user/login"
+			on-core-response="{{onResponse}}"
+			headers='{"Content-Type": "application/json"}'
+			></core-ajax>
+	</template>
+	<script>
+		Polymer('duarte-login', {
+			submit: function() {
+				var submit = this.$.submit;
+				submit.body = JSON.stringify({
+					username: this.username,
+					hash: user.generatePassword(this.username, this.password)
+				});
+				submit.go();
+			},
+			onResponse: function() {
+
+			}
+		});
+	</script>
+</polymer-element>
