@@ -1,10 +1,8 @@
-<polymer-element name="duarte-header" attributes="smaller">
-
 <link rel="import" href="../components/paper-dialog/paper-dialog.html">
 <link rel="import" href="duarte-login.html">
 <link rel="import" href="duarte-register.html">
 
-<polymer-element name="duarte-header">
+<polymer-element name="duarte-header" attributes="smaller">
   <template>
 	<style>
 
@@ -97,11 +95,6 @@
 		ready: function() {
 			this.headerHeight = this.smaller ? '72px' : '142px';
 		},
-		logIn: function() {
-			alert("log in");
-		},
-		signUp: function() {
-			alert("sign up");
 		openModal: function(event, wtf, button) {
 			this.$[button.dataset.modalId].toggle();
 		}
