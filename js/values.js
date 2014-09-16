@@ -17,10 +17,8 @@ var gameModes = {
 				defaultLevel(600, 600, 20), 30, 600, 600,
 				Date.now(), this, new Player(20, 300, 20, 20));
 			
-			level.update();
+			level.update(Date.now());
 			updateLoop = setInterval(level.update, gameOptions.refreshRate);
-
-			updateScoreDisplay(null, null);
 		},
 		maxTime: 60000
 	},

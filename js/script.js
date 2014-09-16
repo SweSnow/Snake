@@ -3,7 +3,7 @@
 	javascript and generally is disconnected from
 	the game.
 */
-
+/*
 $(document).ready(function() {
 	
 	htmlCanvas = $('#html-canvas');
@@ -14,4 +14,4 @@ $(document).ready(function() {
 	//We cache the document lookup
 	timeAttackTimeElement = $('#time-attack-time');
 
-});
+});*/

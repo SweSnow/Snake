@@ -70,8 +70,6 @@ Level.prototype = {
 		var food = new Food(spot.x, spot.y, Date.now());
 
 		this.entities.push(food);
-
-		writeLogMessage('Spawned food at (' + food.x + ', ' + food.y + ')');
 	},
 	spawnRandomBug: function(level) {
 		var spot = getEmptySpot(level);

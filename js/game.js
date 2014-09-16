@@ -3,7 +3,7 @@
 	with functions unbound from classes.
 */
 
-function initialize(gameMode) {
+function Game(container, gameMode) {
 
 	document.onkeydown = checkKey;
 	function checkKey(e) {
@@ -42,6 +42,8 @@ function initialize(gameMode) {
 	requestAnimationFrame(draw);
 
 }
+
+
 
 function end(text) {
 	if (text) {
@@ -180,9 +182,6 @@ function isEmptySpot(proposedX, proposedY, level) {
 }
 
 function resetVariables() {
-	writeLogMessage('===================');
-	writeLogMessage('Reset all variables');
-	writeLogMessage('===================');
 
 	var now = Date.now()
 
