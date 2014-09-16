@@ -1,0 +1,59 @@
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+<link rel="import" href="../duarte-components/duarte-game.html">
+
+<polymer-element name="duarte-game-manager">
+	<template>
+
+	<link rel="stylesheet" type="text/css" href="../style/game_style.css"/>
+
+	<div class="game-container">
+
+		<paper-shadow z="5"></paper-shadow>
+	
+		<div id="start-overlay" hidden?="{{playing}}">
+			
+			<div class="jumpatron"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
+
+			<p id="game-overlay-text">
+				For the love of Duarte and all that is L you need to win this Snake game.
+				<br><strong>FUCK SAMSHIT!</strong>
+			</p>
+
+			<paper-button raisedButton label="Play Now!" id="play-now" on-tap="{{startGame}}"></paper-button>
+
+			<div id="duarte"></div>
+
+		</div>
+
+		<div id="game-over-overlay">
+			<div class="jumpatron">GAME OVER</div>
+			<div id="game-over-text"></div>
+			<div id="game-over-score"></div>
+
+			<div on-tap="{{gameOverRestart}}" id="game-over-restart">Go Back</div>
+
+		</div>
+
+	</div>
+
+	</template>
+	<script>
+	Polymer('duarte-game-manager', {
+		playing: false,
+		ready: function() {
+
+		},
+		startGame: function(event, wtf, button) {
+			var game = document.createElement('duarte-game');
+			this.appendChild(game);
+			this.playing = true;
+		},
+		gameOverRestart: function() {
+			$('#start-overlay').css('display', 'block');
+			$('#game-over-overlay').css('display', 'none');
+		}
+	});
+
+
+  </script>
+</polymer-element>
