@@ -1,4 +1,4 @@
-<polymer-element name="duarte-header">
+<polymer-element name="duarte-header" attributes="smaller">
   <template>
 	<style>
 
@@ -30,6 +30,10 @@
 			font-size: 1.8em;
 		}
 
+		.header-bottom {
+			height: 48px;
+		}
+
 		paper-tab {
 			text-transform: uppercase;
 		}
@@ -50,14 +54,15 @@
 
 	</style>
 
-	<div id="header-container">
+	<div id="header-container" style="height: {{headerHeight}}">
 		<paper-shadow z="1"></paper-shadow>
-		<core-toolbar id="header" class="medium-tall">
+		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
+			<paper-icon-button icon="arrow-back" hidden?="{{!smaller}}"></paper-icon-button>
 			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
 			<paper-item on-tap="{{signUp}}" label="Sign up"></paper-item>
 			<paper-item on-tap="{{logIn}}" label="Log in"></paper-item>
 
-			<div class="bottom fit" horizontal layout>
+			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
 				<paper-tabs selected="0" flex>
 				
@@ -79,6 +84,10 @@
   </template>
   <script>
 	Polymer('duarte-header', {
+		smaller: true,
+		ready: function() {
+			this.headerHeight = this.smaller ? '72px' : '142px';
+		},
 		logIn: function() {
 			alert("log in");
 		},
