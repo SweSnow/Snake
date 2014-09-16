@@ -1,0 +1,236 @@
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<polymer-element name="duarte-game">
+	<template>
+
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/values.js"></script>
+	<script type="text/javascript" src="../js/level.js"></script>
+	<script type="text/javascript" src="../js/script.js"></script>
+	<script type="text/javascript" src="../js/game.js"></script>
+	<script type="text/javascript" src="../js/render.js"></script>
+	<script type="text/javascript" src="../js/entities.js"></script>
+
+	<style>
+
+	.game-container {
+		background-color: #ffffff;
+		position: relative;
+		width: 600px;
+		height: 600px;
+		margin-top: 42px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 0;
+		color: #000000;
+		user-select: none;
+	    -ms-user-select: none;
+	    -webkit-user-select: none;
+	    -khtml-user-select: none;
+	    -moz-user-select: none;
+	    -webkit-touch-callout: none;
+	    -webkit-user-drag: none;
+	}
+
+	.canvas-container {
+		position: relative;
+	}
+
+	#html-canvas {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+	}
+
+	#start-overlay {
+		width: 600px;
+		height: 600px;
+		position: absolute;
+		color: #000;
+		top: 0;
+		left: 0;
+		z-index: 2;
+	}
+
+	.jumpatron {
+		font-size: 50px;
+		font-weight: 800;
+		margin-top: 50px;
+		text-align: center;
+	}
+
+	.game-button {
+		box-sizing: border-box;
+		padding-top: 14px;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 20px;
+		font-size: 20px;
+		cursor: pointer;
+		width: 240px;
+		border: 1px solid #fff;
+		height: 50px;
+	}
+
+	.game-button:hover {
+		background-color: #000;
+		color: #000;
+		border: 1px solid #fff;
+	}
+
+	#game-over-overlay {
+		z-index: 2;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 600px;
+		height: 600px;
+		display: none;
+	}
+
+	#game-over-restart {
+		box-sizing: border-box;
+		padding-top: 14px;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 20px;
+		font-size: 20px;
+		cursor: pointer;
+		width: 240px;
+		border: 1px solid #fff;
+		height: 50px;
+	}
+
+	#game-over-restart:hover {
+		background-color: #000;
+		color: #000;
+		border: 1px solid #fff;
+	}
+
+	.game-over-text {
+
+	}
+
+	#game-over-score {
+
+	}
+
+	#reset-button {
+		display: none;
+		font-size: 17px;
+		text-align: center;
+		padding: 8px;
+		width: 100px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 20px;
+		background-color: #000;
+		border: 1px solid #fff;
+		cursor: pointer;
+	}
+
+	#reset-button:hover {
+		transition: all 0.2s;
+		background-color: #000;
+		color: #000;
+	}
+
+	#clear-button {
+		display: none;
+		font-size: 17px;
+		text-align: center;
+		padding: 8px;
+		width: 150px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 20px;
+		background-color: #000;
+		border: 1px solid #fff;
+		cursor: pointer;
+	}
+
+	#clear-button:hover {
+		transition: all 0.2s;
+		background-color: #000;
+		color: #000;
+	}
+
+	.g_food {
+		position: absolute;
+		background-color: #ff0000;
+	}
+
+	.g_obstacle {
+		position: absolute;
+		background-color: #00ff00;
+	}
+
+	.g_bug {
+		position: absolute;
+		background-color: #0000ff;
+	}
+
+	.g_player {
+		position: absolute;
+		background-color: #000000;
+	}
+
+	.g_tail {
+		position: absolute;
+		background-color: #aaaaaa;
+	}
+
+	</style>
+
+	<div class="game-container">
+	
+		<div id="start-overlay" ?hide="">
+			
+			<div class="jumpatron">Snake</div>
+
+			<div class="game-button" on-tap="{{gameButton}}" data-game-mode="normal" id="start-game">Time Attack!</div>
+
+			<div class="game-button" on-tap="{{gameButton}}" data-game-mode="obstacle" id="start-obstacles">Levels</div>
+
+			<div class="game-button" on-tap="{{gameButton}}" data-game-mode="createmap" id="start-map">Create Map</div>
+
+		</div>
+
+		<div id="game-over-overlay">
+			<div class="jumpatron">GAME OVER</div>
+			<div id="game-over-text"></div>
+			<div id="game-over-score"></div>
+
+			<div on-tap="{{gameOverRestart}}" id="game-over-restart">Go Back</div>
+
+		</div>
+
+		<div id="html-canvas"></div>
+
+	</div>
+
+  </template>
+  <script>
+	Polymer('duarte-game', {
+		mode: false,
+		gameButton: function() {
+			mode = true;
+
+			initialize(this.dataset['game-mode']);
+		},
+		gameOverRestart: function() {
+
+
+			$('#start-overlay').css('display', 'block');
+			$('#game-over-overlay').css('display', 'none');
+		}
+	});
+
+
+  </script>
+</polymer-element>

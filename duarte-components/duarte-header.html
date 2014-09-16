@@ -1,0 +1,90 @@
+<polymer-element name="duarte-header">
+  <template>
+	<style>
+
+		body {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		#header-container {
+			background-color: #009688;
+			color: #fff;
+			fill: #fff;
+		}
+
+		#header {
+			margin: auto;
+			max-width: 1400px;
+			background-color: #009688;
+		}
+
+		#header-title {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			font-weight: 300;
+			font-size: 1.8em;
+		}
+
+		paper-tab {
+			text-transform: uppercase;
+		}
+
+		paper-tabs {
+			max-width: 700px;
+		}
+
+		#title-duarte {
+			font-weight: 700;
+		}
+
+		#title-snake {
+			padding-left: 5px;
+			font-weight: 100;
+			font-size: 0.8em;
+		}
+
+	</style>
+
+	<div id="header-container">
+		<paper-shadow z="1"></paper-shadow>
+		<core-toolbar id="header" class="medium-tall">
+			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
+			<paper-item on-tap="{{signUp}}" label="Sign up"></paper-item>
+			<paper-item on-tap="{{logIn}}" label="Log in"></paper-item>
+
+			<div class="bottom fit" horizontal layout>
+		
+				<paper-tabs selected="0" flex>
+				
+					<paper-tab>About</paper-tab>
+					<paper-tab>Browse maps</paper-tab>
+					<paper-tab>My profile</paper-tab>
+					<paper-tab>Create map</paper-tab>
+			
+				</paper-tabs>
+		  
+			</div>
+
+		</core-toolbar>
+	</div>
+
+	<!--<div id="label"><content></content></div>
+	Value: <span id="counterVal">{{counter}}</span><br>
+	<button on-tap="{{increment}}">Increment</button>-->
+  </template>
+  <script>
+	Polymer('duarte-header', {
+		logIn: function() {
+			alert("log in");
+		},
+		signUp: function() {
+			alert("sign up");
+		}
+	});
+  </script>
+</polymer-element>

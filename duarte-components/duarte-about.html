@@ -1,0 +1,68 @@
+<polymer-element name="duarte-about">
+  <template>
+	<style>
+
+		.presentation {
+			padding-top: 20px;
+			display: flex;
+			max-width: 900px;
+			margin: auto;
+		}
+
+		.presentation-left ul li {
+			font-size: 1.3em;
+		}
+
+		.jumpatron {
+			margin: 0;
+			padding: 0;
+			text-align: center;
+			font-weight: 100;
+			font-size: 5em;
+		}
+
+		paper-button[raisedButton].colored {
+			margin-top: 20px;
+			background-color: #009688;
+			color: #ffffff;
+			font-weight: 300;
+			font-size: 1.7em;
+		}
+
+		.duarte {
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			height: 400px;
+			width: 400px;
+			background-image: url('../media/duarte.png');
+		}
+
+	</style>
+	
+	<h1 class="jumpatron">Duarte Snake</h1>
+
+	<p>
+
+	</p>
+
+	<ul>
+		<li>Cool effects</li>
+		<li>Duarte</li>
+		<li>acj</li>
+	</ul>
+
+	<a href="../game/index.html">
+		<paper-button raisedButton class="colored" label="Play Now!"></paper-button>
+	</a>
+
+
+	<div class="duarte"></div>
+
+  </template>
+  <script>
+	Polymer('duarte-about', {
+	  
+	});
+  </script>
+</polymer-element>

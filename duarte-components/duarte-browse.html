@@ -1,0 +1,109 @@
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+<link rel="import" href="../components/paper-ripple/paper-ripple.html">
+
+
+<polymer-element name="duarte-browse">
+  <template>
+
+	<style>
+
+		:host {
+			display: block;
+			background-color: #efefef;
+		}
+
+		#header-container {
+			background-color: #00695c;
+			color: #fff;
+			fill: #fff;
+		}
+
+		#header {
+			margin: auto;
+			max-width: 1400px;
+			background-color: #00695c;
+		}
+
+		#maps-container {
+			max-width: 1400px;
+			margin-top: 32px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.map {
+			border-radius: 4px;
+			background-color: #ffffff;
+			width: 350px;
+			height: 410px;
+			position: relative;
+      		display: inline-block;
+			transition: background-color 0.4s;
+		}
+
+		.map:active {
+			background-color: #ddd;
+		}
+
+		.map-title {
+			padding: 16px;
+			font-weight: 300;
+			color: #444;
+			font-size: 1.7em;
+		}
+
+		.map-ripple {
+			color: #009688;
+		}
+
+		.duarte-thumbnail {
+			width: 350px;
+			height: 350px;
+			background-image: url('../media/duarte.png');
+		}
+		
+	</style>
+	
+	<div id="header-container">
+		<paper-shadow z="1"></paper-shadow>
+		<core-toolbar id="header">
+
+			<div class="bottom fit" horizontal layout>
+		
+				
+		  
+			</div>
+
+		</core-toolbar>
+	</div>
+
+	<div id="maps-container">
+	<!--	<core-ajax
+			auto
+			url="http://192.168.0.187:8080/levels/interval"
+			params='{"from":"0", "length":"10"}'
+			handleAs="json"
+			on-core-response="{{handleResponse}}"></core-ajax>-->
+
+	<!--	<template reapeat="map in maps">-->
+			<div vertical layout class="map">
+				<paper-shadow z="1"></paper-shadow>
+				<div class="duarte-thumbnail">
+					<paper-ripple fit class="map-ripple"></paper-ripple>
+				</div>
+
+				<div class="map-title">Hello Duarte</div>
+			</div>
+
+	<!--	</template>-->
+	</div>
+
+  </template>
+  <script>
+	Polymer('duarte-browse', {
+	  handleResponse: function() {
+	  	console.log(arguments);
+	  }
+	});
+  </script>
+</polymer-element>

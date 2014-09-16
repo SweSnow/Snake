@@ -10,47 +10,8 @@ $(document).ready(function() {
 
 	gameOptions.canvasHeight = htmlCanvas.height;
 	gameOptions.canvasWidth = htmlCanvas.width;
-
-	writeLogMessage('Hello World!');
-
-	$(".game-button").click(function() {
-		$('#start-overlay').css('display', 'none');
-
-		var $this = $(this);
-		initialize($this.data('game-mode'));
-	});
-
-	$('#game-over-restart').click(function() {
-		$('#start-overlay').css('display', 'block');
-		$('#game-over-overlay').css('display', 'none');
-	});
-
-	$('#reset-button').click(function() {
-		end();
-	});
-
-	$('#clear-button').click(function() {
-		gameOptions.gameMode.level = defaultLevel;
-	});
  	
 	//We cache the document lookup
 	timeAttackTimeElement = $('#time-attack-time');
 
 });
-
-function updateScoreDisplay(timeMs, points) {
-	$('#score').text('SCORE: ' + score.toString());
-	if (points != null) {
-		writeLogMessage('+' + points + ' Score!')
-	}
-}
-
-function writeLogMessage(text) {
-
-	var log = $('#log');
-	log.append($('<div>' + ' - ' + text + '</div>'));
-
-	var logNormal = document.querySelector('#log')
-	logNormal.scrollTop = logNormal.scrollHeight;
-
-}
