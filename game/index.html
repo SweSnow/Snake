@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>Snake</title>
+
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/values.js"></script>
+<script type="text/javascript" src="../js/level.js"></script>
+<script type="text/javascript" src="../js/script.js"></script>
+<script type="text/javascript" src="../js/game.js"></script>
+<script type="text/javascript" src="../js/render.js"></script>
+<script type="text/javascript" src="../js/entities.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../style/game_style.css"/>
+
+</head>
+
+<body>
+
+	<div class="game-container">
+	
+		<div class="canvas-container">
+
+			<div id="start-overlay">
+				
+				<div class="jumpatron">SNAKE</div>
+
+				<div class="game-button" data-game-mode="normal" id="start-game">Time Attack!</div>
+
+				<div class="game-button" data-game-mode="obstacle" id="start-obstacles">Levels</div>
+
+				<div class="game-button" data-game-mode="createmap" id="start-map">Create Map</div>
+
+			</div>
+
+			<div id="game-over-overlay">
+				<div class="jumpatron">GAME OVER</div>
+				<div id="game-over-text"></div>
+				<div id="game-over-score"></div>
+
+				<div id="game-over-restart">Go Back</div>
+
+			</div>
+
+			<div id="html-canvas"></div>
+
+			<!--<canvas width="600px" height="600px" id="canvas"></canvas>-->
+
+		</div>
+
+		<section class="panel">
+
+			<div id="log">
+				
+			</div>
+			
+			<div id="score"></div>
+			<div id="time-attack-time"></div>
+
+			<div id="reset-button">Give up</div>
+
+			<div id="clear-button">Clear map</div>
+
+		</section>
+
+	</div>
+
+</body>
+</html>
