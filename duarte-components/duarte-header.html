@@ -2,7 +2,7 @@
 <link rel="import" href="duarte-login.html">
 <link rel="import" href="duarte-register.html">
 
-<polymer-element name="duarte-header" attributes="smaller selected">
+<polymer-element name="duarte-header" attributes="smaller selected loggedin">
   <template>
 	<style>
 
@@ -73,8 +73,8 @@
 		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
 			<paper-icon-button icon="arrow-back" hidden?="{{!smaller}}"></paper-icon-button>
 			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
-			<paper-item on-tap="{{openModal}}" data-modal-id="registerModal" label="Sign up"></paper-item>
-			<paper-item on-tap="{{openModal}}" data-modal-id="loginModal" label="Log in"></paper-item>
+			<paper-item hidden?="{{loggedin}}" on-tap="{{openModal}}" data-modal-id="registerModal" label="Sign up"></paper-item>
+			<paper-item hidden?="{{loggedin}}" on-tap="{{openModal}}" data-modal-id="loginModal" label="Log in"></paper-item>
 
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
@@ -91,10 +91,10 @@
 
 		</core-toolbar>
 	</div>
-	<paper-dialog id="registerModal">
+	<paper-dialog id="registerModal" heading="Sign up">
 		<duarte-register></duarte-register>
 	</paper-dialog>
-	<paper-dialog id="loginModal">
+	<paper-dialog id="loginModal" heading="Log in">
 		<duarte-login></duarte-login>
 	</paper-dialog>
 
@@ -102,6 +102,7 @@
   <script>
 	Polymer('duarte-header', {
 		smaller: true,
+		loggedin: false,
 		ready: function() {
 			this.headerHeight = this.smaller ? '72px' : '142px';
 		},
