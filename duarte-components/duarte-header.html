@@ -2,7 +2,7 @@
 <link rel="import" href="duarte-login.html">
 <link rel="import" href="duarte-register.html">
 
-<polymer-element name="duarte-header" attributes="smaller">
+<polymer-element name="duarte-header" attributes="smaller selected">
   <template>
 	<style>
 
@@ -78,12 +78,12 @@
 
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
-				<paper-tabs selected="0" flex>
+				<paper-tabs id="tabs" selected="{{selected}}" flex>
 				
-					<paper-tab>About</paper-tab>
-					<paper-tab>Browse maps</paper-tab>
-					<paper-tab>My profile</paper-tab>
-					<paper-tab>Create map</paper-tab>
+					<paper-tab name="about">About</paper-tab>
+					<paper-tab name="browse">Browse maps</paper-tab>
+					<paper-tab name="profile">My profile</paper-tab>
+					<paper-tab name="create">Create map</paper-tab>
 			
 				</paper-tabs>
 		  
