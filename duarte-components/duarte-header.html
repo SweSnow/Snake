@@ -78,7 +78,7 @@
 
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
-				<paper-tabs id="tabs" selected="{{selected}}" flex>
+				<paper-tabs id="tabs" on-core-activate="{{onSelect}}" selected="{{selected}}" flex>
 				
 					<paper-tab name="about">About</paper-tab>
 					<paper-tab name="browse">Browse maps</paper-tab>
@@ -105,8 +105,11 @@
 		ready: function() {
 			this.headerHeight = this.smaller ? '72px' : '142px';
 		},
-		openModal: function(event, wtf, button) {
+		openModal: function(event, detail, button) {
 			this.$[button.dataset.modalId].toggle();
+		},
+		onSelect: function(event, detail) {
+			this.fire('selected');
 		}
 	});
   </script>

@@ -48,9 +48,9 @@
 
 			</style>
 
-			<duarte-header selected="{{selected}}" smaller="false"></duarte-header>
+			<duarte-header selected="{{selected}}" on-selected="{{onSelect}}" smaller="false"></duarte-header>
 			
-			<div id="about" class="page">ABAOT</div>
+			<div id="about" class="page">{{1234567891234567 | prettify}}</div>
 			<duarte-browse id="browse" class="page"></duarte-browse>
 			<duarte-profile id="profile" class="page"></duarte-profile>
 			<duarte-game-manager id="create" class="page"></duarte-game-manager>
@@ -63,21 +63,30 @@
 				defaultPage: 'about',
 				attached: function() {
 					this.router();
+
 					var self = this;
 					window.addEventListener('popstate', function() {
-						self.router.call(self);						
+						self.router.call(self);
 					});
 				},
 				router: function() {
 					var page = location.pathname.substring(1);
 					this.selected = this.$[page] ? page : this.defaultPage;
 				},
+				onSelect: function(event) {
+					history.pushState(null, null, this.selected);
+				},
 				selectedChanged: function(oldValue, newValue) {
 					if(oldValue) {
 						this.$[oldValue].removeAttribute('selected');
-						history.pushState(null, null, '/' + newValue);
 					}
-					this.$[newValue].setAttribute('selected', true);
+					this.$[newValue].setAttribute('selected', '');
+				},
+				prettify: function(value) {
+					return value.toString()
+					  .split('').reverse().join('')
+					  .replace(/\d{3}(?!$)/g, '$&,')
+					  .split('').reverse().join('');
 				}
 			});
 		</script>
