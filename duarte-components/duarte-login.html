@@ -7,11 +7,21 @@
 <polymer-element name="duarte-login">
 	<template>
 		<style>
+
+			paper-input {
+				font-size: 1.1em;
+			}
+
+			.right {
+				float: right;
+			}
+
 		</style>
 
-		Username <paper-input value="{{username}}"></paper-input>
-		Password <paper-input type="password" value="{{password}}"></paper-input>
-		<paper-button on-tap="{{submit}}" label="Log in"></paper-button>
+		<paper-input floatingLabel label="Username" value="{{username}}"></paper-input>
+		<paper-input floatingLabel label="Password" type="password" value="{{password}}"></paper-input>
+
+		<paper-button on-tap="{{submit}}" class="right" label="Log in"></paper-button>
 
 
 		<core-ajax
