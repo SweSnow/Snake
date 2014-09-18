@@ -36,7 +36,7 @@
 
 <body unresolved>
 
-	<polymer-element name="duarte-page">
+	<polymer-element name="duarte-app">
 		<template>
 			<style>
 				.page {
@@ -59,7 +59,7 @@
 
 
 		<script type="text/javascript">
-			Polymer('duarte-page', {
+			Polymer('duarte-app', {
 				defaultPage: 'about',
 				attached: function() {
 					this.router();
@@ -85,13 +85,13 @@
 				prettify: function(value) {
 					return value.toString()
 					  .split('').reverse().join('')
-					  .replace(/\d{3}(?!$)/g, '$&,')
+					  .replace(/\d{3}(?!$)/g, '$& ')
 					  .split('').reverse().join('');
 				}
 			});
 		</script>
 	</polymer-element>
 
-	<duarte-page></duarte-page>
+	<duarte-app></duarte-app>
 </body>
 </html>
