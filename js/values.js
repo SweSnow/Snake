@@ -18,7 +18,7 @@ var gameModes = {
 				Date.now(), this, new Player(20, 300, 20, 20));
 			
 			level.update(Date.now());
-			updateLoop = setInterval(level.update, gameOptions.refreshRate);
+			updateLoop = setInterval(level.update(Date.now(), 100));
 		},
 		maxTime: 60000
 	},

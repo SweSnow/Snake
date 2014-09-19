@@ -46,11 +46,16 @@
 					display: block;
 				}
 
+				::selection {
+					background-color: #009688;
+					color: #fff;
+				}
+
 			</style>
 
 			<duarte-header selected="{{selected}}" on-selected="{{onSelect}}" smaller="false" loggedin="false"></duarte-header>
 			
-			<div id="about" class="page">{{1234567891234567 | prettify}}</div>
+			<duarte-about id="about" class="page"></duarte-about>
 			<duarte-browse id="browse" class="page"></duarte-browse>
 			<duarte-profile id="profile" class="page"></duarte-profile>
 			<duarte-game-manager id="create" class="page"></duarte-game-manager>
@@ -81,13 +86,13 @@
 						this.$[oldValue].removeAttribute('selected');
 					}
 					this.$[newValue].setAttribute('selected', '');
-				},
+				}/*,
 				prettify: function(value) {
 					return value.toString()
 					  .split('').reverse().join('')
 					  .replace(/\d{3}(?!$)/g, '$& ')
 					  .split('').reverse().join('');
-				}
+				}*/
 			});
 		</script>
 	</polymer-element>

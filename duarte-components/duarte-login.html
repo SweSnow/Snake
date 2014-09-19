@@ -16,10 +16,14 @@
 				float: right;
 			}
 
+			#password-input {
+				margin-top: -18px;
+			}
+
 		</style>
 
 		<paper-input floatingLabel label="Username" value="{{username}}"></paper-input>
-		<paper-input floatingLabel label="Password" type="password" value="{{password}}"></paper-input>
+		<paper-input id="password-input" floatingLabel label="Password" type="password" value="{{password}}"></paper-input>
 
 		<paper-button affirmitive on-tap="{{submit}}" class="right" label="Log in"></paper-button>
 

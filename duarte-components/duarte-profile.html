@@ -1,17 +1,99 @@
 <polymer-element name="duarte-profile">
-  <template>
-	<style>
+	<template>
+		<style>
 
-		
-		
-	</style>
-	
-	
+			.container {
+				max-width: 900px;
+				margin-top: 28px;
+				margin-left: auto;
+				margin-right: auto;
+				padding-left: 32px;
+				padding-right: 32px;
+			}
 
-  </template>
-  <script>
-	Polymer('duarte-profile', {
-	  
-	});
+			.profile-name {
+				font-weight: 100;
+				font-size: 3em;
+			}
+
+			.heading {
+				text-transform: uppercase;
+				font-weight: 700;
+				color: #777;
+			}
+
+			#maps-container {
+				padding-left: 32px;
+				padding-right: 32px;
+				max-width: 1100px;
+				margin-top: 32px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.map {
+				cursor: pointer;
+				border-radius: 4px;
+				background-color: #ffffff;
+				width: 350px;
+				height: 410px;
+				position: relative;
+				display: inline-block;
+				transition: background-color 0.4s;
+			}
+
+			.map:active {
+				background-color: #ddd;
+			}
+
+			.map-title {
+				padding: 16px;
+				font-weight: 300;
+				color: #444;
+				font-size: 1.7em;
+			}
+
+			.map-ripple {
+				color: #009688;
+			}
+			
+		</style>
+
+			<div class="container">
+				<div class="profile-name">{{name}}</div>
+
+				<div class="heading">My maps</div>
+
+				<div id="maps-container">
+				<!--	<core-ajax
+						auto
+						url="http://192.168.0.187:8080/levels/interval"
+						params='{"from":"0", "length":"10"}'
+						handleAs="json"
+						on-core-response="{{handleResponse}}"></core-ajax>-->
+
+				<!--	<template reapeat="map in maps">-->
+						<div vertical layout class="map" on-tap="{{mapClick}}">
+							<paper-shadow z="1"></paper-shadow>
+							<duarte-game-preview class="duarte-thumbnail">
+								<paper-ripple fit class="map-ripple"></paper-ripple>
+							</duarte-game-preview>
+
+							<div class="map-title">map.title</div>
+						</div>
+
+				<!--	</template>-->
+	</div>
+
+			</div>
+
+	</template>
+	<script>
+		Polymer('duarte-profile', {
+			name: "Lorem Ipsum",
+			mapClick: function() {
+
+			}
+		});
   </script>
 </polymer-element>

@@ -154,6 +154,7 @@ function Player(x, y, width, height) {
 
 Player.prototype = {
 	update: function(time, level) {
+
 		//Logic for not turning 180 deg
 		if (this.directionCurrent == this.directionLeft) {
 			this.x -= level.tileSize;
