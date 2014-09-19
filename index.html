@@ -23,6 +23,7 @@
 	<link rel="import" href="components/core-toolbar/core-toolbar.html">
 	<link rel="import" href="components/core-icons/core-icons.html">
 	<link rel="import" href="components/core-icons/core-icons.html">
+	<link rel="import" href="components/core-animated-pages/core-animated-pages.html">
 
 	<link rel="import" href="duarte-components/duarte-header.html">
 	<link rel="import" href="duarte-components/duarte-about.html">
@@ -55,10 +56,14 @@
 
 			<duarte-header selected="{{selected}}" on-selected="{{onSelect}}" smaller="false" loggedin="false"></duarte-header>
 			
-			<duarte-about id="about" class="page"></duarte-about>
-			<duarte-browse id="browse" class="page"></duarte-browse>
-			<duarte-profile id="profile" class="page"></duarte-profile>
-			<duarte-game-manager id="create" class="page"></duarte-game-manager>
+			<core-animated-pages id="pages" selected="{{selected}}">
+				<duarte-about name="about"></duarte-about>
+				<duarte-browse name="browse"></duarte-browse>
+				<duarte-profile name="profile"></duarte-profile>
+				<duarte-game-manager name="create"></duarte-game-manager>
+			</core-animated-pages>
+
+			
 			
 		</template>	
 
@@ -67,6 +72,12 @@
 			Polymer('duarte-app', {
 				defaultPage: 'about',
 				attached: function() {
+					this.pages = [].map.call(this.$.pages.querySelectorAll('[name]'),
+						function(element) {
+							return element.getAttribute('name');
+						}
+					);
+
 					this.router();
 
 					var self = this;
@@ -76,16 +87,11 @@
 				},
 				router: function() {
 					var page = location.pathname.substring(1);
-					this.selected = this.$[page] ? page : this.defaultPage;
+
+					this.selected = this.pages.indexOf(page) === -1 ? this.defaultPage : page;
 				},
 				onSelect: function(event) {
 					history.pushState(null, null, this.selected);
-				},
-				selectedChanged: function(oldValue, newValue) {
-					if(oldValue) {
-						this.$[oldValue].removeAttribute('selected');
-					}
-					this.$[newValue].setAttribute('selected', '');
 				}/*,
 				prettify: function(value) {
 					return value.toString()
