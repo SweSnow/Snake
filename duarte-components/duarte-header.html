@@ -84,6 +84,7 @@
 					<paper-tab name="browse">Browse maps</paper-tab>
 					<paper-tab name="profile">My profile</paper-tab>
 					<paper-tab name="create">Create map</paper-tab>
+					<paper-tab name="play">Play</paper-tab>
 			
 				</paper-tabs>
 		  
@@ -101,7 +102,7 @@
   </template>
   <script>
 	Polymer('duarte-header', {
-		smaller: true,
+		smaller: false,
 		loggedin: false,
 		ready: function() {
 			this.headerHeight = this.smaller ? '72px' : '142px';
