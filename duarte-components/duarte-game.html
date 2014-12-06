@@ -12,12 +12,26 @@
 	<template>
 
 	<style type="text/css">
+
+		:host {
+			display: block;
+			position: relative;
+			width: 600px;
+			height: 600px;
+			margin-top: 42px;
+			margin-left: auto;
+			margin-right: auto;
+			padding: 0;
+		}
+
 		#container {
+			display: block;
 			width: 600px;
 			height: 700px;
 		}
 
 		#htmlCanvas {
+			display: block;
 			width: 100%;
 			height: calc(100%-100px);
 			position: absolute;
@@ -27,6 +41,7 @@
 		}
 
 		#gameOverlay {
+			display: block;
 			color: #333;
 			z-index: 2;
 			background-color: red;

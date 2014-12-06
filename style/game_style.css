@@ -22,6 +22,7 @@
 	}
 
 	#start-overlay {
+		display: block;
 		width: 600px;
 		height: 600px;
 		position: absolute;
