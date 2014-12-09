@@ -115,8 +115,7 @@
 
 	</style>
 	
-	<div id="header-container">
-		<paper-shadow z="1"></paper-shadow>
+	<paper-shadow z="1" id="header-container">
 		<core-toolbar id="header">
 
 			<div class="bottom fit" horizontal layout>
@@ -133,7 +132,7 @@
 			</div>
 
 		</core-toolbar>
-	</div>
+	</paper-shadow>
 
 	<div id="maps-container">
 	<!--	<core-ajax
@@ -144,14 +143,14 @@
 			on-core-response="{{handleResponse}}"></core-ajax>-->
 
 	<!--	<template reapeat="map in maps">-->
-			<div vertical layout class="map" on-tap="{{mapClick}}">
+			<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
 				<paper-shadow z="1"></paper-shadow>
 				<duarte-game-preview class="duarte-thumbnail">
 					<paper-ripple fit class="map-ripple"></paper-ripple>
 				</duarte-game-preview>
 
 				<div class="map-title">{{map.title}}</div>
-			</div>
+			</paper-shadow>
 
 	<!--	</template>-->
 	</div>

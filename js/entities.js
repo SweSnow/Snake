@@ -9,7 +9,7 @@ function Food(x, y, spawnDate){
 	this.y = y;
 	this.spawnDate = spawnDate || Date.now();
 
-	this.element = Food.prototype.template;
+	this.element = Food.prototype.template.clone();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
@@ -39,12 +39,10 @@ Food.prototype = {
 		this.element.remove();
 	},
 	eat: function(level) {
-		score += this.value;
 		this.die(level);
 
-		score += this.value;
+		level.score(this.value, false)
 		level.player.tailLength++;
-//		updateScoreDisplay(now, foodPoints);
 
 		var hasFoundFood = false;
 		var i = 0;
@@ -56,14 +54,14 @@ Food.prototype = {
 			i++;
 		}
 
-		if (hasFoundFood) {
+		if (!hasFoundFood) {
 			level.spawnRandomFood(false, level);
 			//writeLogMessage('No food on canvas, spawn new');
 		}
 
 	},
 	duration: 5000,
-	template: $('<div class="g_food"></div>'),
+	template: $('<paper-shadow z="1" class="g_food"></div>'),
 	value: 10,
 	width: 20,
 	height: 20,
@@ -76,7 +74,7 @@ function Obstacle(x, y) {
 	this.x = x;
 	this.y = y;
 
-	this.element = this.template.copy();
+	this.element = this.template.clone();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
@@ -102,7 +100,7 @@ Obstacle.prototype = {
 	die: function() {
 		this.$element.remove();
 	},
-	template: $('<div class="g_obstacle"></div>'),
+	template: $('<paper-shadow z="1" class="g_obstacle"></div>'),
 	value: 10,
 	width: 20,
 	height: 20,
@@ -111,12 +109,12 @@ Obstacle.prototype = {
 
 
 
-function Bug(x, y, width, height, spawnTime) {
+function Bug(x, y, spawnTime) {
 	this.x = x;
 	this.y = y;
 	this.spawnTime = spawnTime || Date.now();
 
-	this.element = this.template.copy();
+	this.element = this.template.clone();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
@@ -129,7 +127,7 @@ function Bug(x, y, width, height, spawnTime) {
 
 Bug.prototype = {
 	update: function(time, level) {
-	 	if (time - this.spawnDate > this.duration) {
+	 	if (time - this.spawnTime > this.duration) {
 	 		this.die(level);
 	 	} else if (this.x == level.player.x && this.y == level.player.y) {
 	 		this.eat(time, level);
@@ -141,20 +139,19 @@ Bug.prototype = {
 		this.element.css('left', this.x + 'px');
 	},
 	die: function(level) {
-		level.entities.remove(this);
-		this.$element.remove();
+		level.entities.splice(level.entities.indexOf(this), 1);
+		this.element.remove();
 	},
 	eat: function(time, level) {
 		var scorePlus = this.maxValue -
 			(Math.floor((time - this.spawnTime) * 100));
-		score += scorePlus;
+		level.score(scorePlus, false)
 
-		updateScoreDisplay(now, scorePlus);
 		level.player.tailLength++;
 
 		this.die(level);
 	},
-	template: $('<div class="g_bug"></div>'),
+	template: $('<paper-shadow z="1" class="g_bug"></div>'),
 	duration: 7000,
 	maxValue: 70,
 	width: 20,
@@ -170,7 +167,7 @@ function Player(x, y, width, height) {
 	this.width = width;
 	this.height = height;
 
-	this.element = Player.prototype.template;
+	this.element = Player.prototype.template.clone();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
@@ -185,6 +182,11 @@ function Player(x, y, width, height) {
 
 Player.prototype = {
 	update: function(time, level) {
+
+		if (this.tailLength != 0) {
+			var tail = new Tail(this.x, this.y);
+			this.tailArray.push(tail);
+		}
 
 		//Logic for not turning 180 deg
 		if (this.directionCurrent == this.directionLeft) {
@@ -210,10 +212,6 @@ Player.prototype = {
 		}
 		this.directionLastUsed = this.directionCurrent;
 
-		var tail = new Tail(this.x, this.y, this.width, this.height);
-
-		this.tailArray.push(tail);
-
 		//if tailLength isn't the same as the actual length
 		//we ate som food on the last food update
 		//meaning we shouldn't splice te array
@@ -234,7 +232,7 @@ Player.prototype = {
 		end();
 	},
 	tailArray: [],
-	template: $('<div class="g_player"></div>'),
+	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
 	directionCurrent: 39,
 	directionLastUsed: 39,
 	directionLeft: 37,
@@ -243,13 +241,13 @@ Player.prototype = {
 	directionDown: 40,
 	width: 20,
 	height: 20,
-	color: '#000000'
+	color: '#980284'
 
 }
 
 
 
-function Tail(x, y, width, height) {
+function Tail(x, y) {
 	this.x = x;
 	this.y = y;
 
@@ -278,7 +276,7 @@ Tail.prototype = {
 	die: function() {
 		this.$element.remove();
 	},
-	template: $('<div class="g_tail"></div>'),
+	template: $('<paper-shadow z="1" class="g_tail"></div>'),
 	value: 10,
 	width: 20,
 	height: 20,

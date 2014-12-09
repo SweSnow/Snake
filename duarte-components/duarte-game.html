@@ -23,44 +23,51 @@
 		}
 
 		#container {
+			background: #ffffff;
 			display: block;
 			width: 600px;
-			height: 700px;
+			height: 600px;
 		}
 
 		#htmlCanvas {
 			display: block;
-			width: 100%;
-			height: calc(100%-100px);
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 1;
+			width: 600px;
+			height: 500px;
 		}
 
 		#gameOverlay {
+			box-sizing: border-box;
+			padding: 16px;
 			display: block;
-			color: #333;
-			z-index: 2;
-			background-color: red;
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 100%;
+			color: #fff;
+			background: #009688;
+			width: 600px;
 			height: 100px;
 		}
+
+		#timeAttackText {
+			display: block;
+			float: right;
+		}
+
+		#scoreText {
+			display: block;
+			float: left;
+			font-size: 25px;
+		}
+
 	</style>
 
 	<div id="container">
 		
-		<div id="htmlCanvas"></div>
+		<paper-shadow z="3" id="htmlCanvas"></paper-shadow>
 
-		<div id="gameOverlay">
-			<paper-shadow z="1"></paper-shadow>
+		<paper-shadow z="5" id="gameOverlay">
 			
 			<div id="timeAttackText"></div>
+			<div id="scoreText"></div>
 
-		</div>
+		</paper-shadow>
 		
 	</div>
 		
@@ -73,16 +80,17 @@
 		mode: false,
 		ready: function() {
 			timeAttackTimeElement = $(this.$.timeAttackText);
+			scoreTextElement = $(this.$.scoreText);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
 			this.game = new Game($(this.$.htmlCanvas), 'normal');
 		},
 		onRouteEnter: function() {
-			console.log('time to start game');
+		//	console.log('time to start game');
 			this.game.resume();
 		},
 		onRouteLeave: function() {
-			console.log('time to pause game');
+		//	console.log('time to pause game');
 			this.game.pause();
 		}
 	});

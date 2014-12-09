@@ -16,6 +16,8 @@ function Level(grid, tiles, width, height, startTime, gameMode, player) {
 
 	this.entities = [];
 	this.tileSize = width / tiles;
+
+	this.score(0, true);
 }
 
 Level.prototype = {
@@ -38,8 +40,9 @@ Level.prototype = {
 
 		//Update all entites (food, bug, obstacles)
 		for (var i = 0; i < this.entities.length; i++) {
-			this.entities[i].update(now, this)
-			this.entities[i].render();
+			this.entities[i].update(now, this);
+			if (this.entities[i])
+				this.entities[i].render();
 		}
 
 		//Manage bug and food spawn
@@ -92,7 +95,7 @@ Level.prototype = {
 	spawnRandomFood: function(logLastSpawn, level) {
 
 		if (logLastSpawn) {
-			lastFoodSpawn = Date.now();
+			this.lastFoodSpawn = Date.now();
 		}
 
 		var spot = getEmptySpot(level);
@@ -101,13 +104,29 @@ Level.prototype = {
 		this.entities.push(food);
 	},
 	spawnRandomBug: function(level) {
+		
+		this.lastBugSpawn = Date.now();
+
 		var spot = getEmptySpot(level);
-		var food = new Food(spot.x, spot.y, Date.now());
+		var bug = new Bug(spot.x, spot.y, Date.now());
+
+		this.entities.push(bug);
+
 
 		//writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
 	},
 	lastFoodSpawn: null,
-	lastBugSpawn: null
+	lastBugSpawn: null,
+	scoreAmount: 0,
+	score: function(amount, override) {
+		if (override) {
+			this.scoreAmount = amount;
+		} else {
+			this.scoreAmount += amount;
+		}
+
+		scoreTextElement.text(this.scoreAmount + ' Points');
+	}
 };
 
 //This is the base levels which only contains zeroes
