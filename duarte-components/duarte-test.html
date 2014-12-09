@@ -42,6 +42,15 @@
 			withCredentials="true"
 			></core-ajax>
 
+		<core-ajax
+			id="remove"
+			method="delete"
+			url="http://192.168.0.189:8080/level/byid"
+			on-core-response="{{onRemoveResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></core-ajax>
+
 		<paper-button raised on-tap="{{randomize}}">Randomize</paper-button>
 		<paper-button raised on-tap="{{submit}}">Submit</paper-button>
 
@@ -52,7 +61,7 @@
 			<h1>Levels</h1>
 			<template repeat="{{level in levels}}">
 				<div class="map">
-					{{level.title}} by {{level.creator.username}}
+					{{level.title}} by {{level.creator.username}} <paper-button raised data-id="{{level._id}}" on-tap="{{remove}}">Remove</paper-button>
 					<div><duarte-map grid="{{level.grid}}"></duarte-map></div>
 				</div>
 				
@@ -80,6 +89,12 @@
 
 				this.$.get.go();
 			},
+			onRemoveResponse: function(e, detail) {
+				var response = JSON.parse(detail.response);
+				console.log(response);
+
+				this.$.get.go();
+			},
 			randomize: function() {
 				var grid = new Array(this.gridSize);
 				for(var i = 0; i < this.gridSize; i++) {
@@ -97,6 +112,11 @@
 				});
 
 				submit.go();
+			},
+			remove: function(e, detail, button) {
+				var remove = this.$.remove;
+				remove.body = JSON.stringify({id: button.dataset.id});
+				remove.go();
 			}
 		});
 	})();
