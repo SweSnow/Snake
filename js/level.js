@@ -1,21 +1,28 @@
 'use strict';
 /*
 	level.js contains the master level objects
-	which houses all entities all children. It
-	manages maps.
+	which houses all entities and children. It
+	alsomanages maps.
 */
 
-function Level(grid, tiles, width, height, startTime, gameMode, player, mode) {
+/* Constructor for level
+	@param grid 		Grid preferably created by Game.createDefaultLevel
+	@param tilesSize 	Pixel size of each tile in the grid
+	@param width 		Pixel width of game container
+	@param height 		Pixel height of game container
+	@param startTime 	Date in unix standard time
+	@param timeLimit 	Time limit for the game, set as -1 for infinite
+	@param player 		Player object, create this before initializing Level
+*/
+
+function Level(grid, tileSize, width, height, startTime, timeLimit, player) {
 	this.grid = grid;
-	this.tiles = tiles;
+	this.tileSize = tileSize;
 	this.width = width;
 	this.height = height;
 	this.startTime = startTime;
-	this.gameMode = gameMode;
+	this.timeLimit = timeLimit;
 	this.player = player;
-	this.mode = mode;
-
-	this.tileSize = width / tiles;
 
 	this.score(0, true);
 }
@@ -25,12 +32,15 @@ Level.prototype = {
 		isRunning = true;
 
 		//Time based
-		var timeRemaining = this.gameMode.maxTime - (now - this.startTime);
-		if (timeRemaining > 0) {
-			timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
-		} else {
-			end('Time ran out :(');
+		if (timeLimit != -1) {
+			var timeRemaining = this.gameMode.maxTime - (now - this.startTime);
+			if (timeRemaining > 0) {
+				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
+			} else {
+				end('Time ran out :(');
+			}
 		}
+		
 
 		//We update player first separately, it renders itself
 		this.player.update(now, this);
@@ -83,6 +93,18 @@ Level.prototype = {
 
 	    	e.preventDefault();
 
+	    	//Art
+			if (!(	to == player.directionLeft 
+					&& from == player.directionRight
+				||	to == player.directionUp 
+					&& from == player.directionDown
+				||	to == player.directionRight 
+					&& from == player.directionLeft
+				||	to == player.directionDown 
+					&& from == player.directionUp)) {
+				this.player.directionCurrent = code;
+			}
+
 	    	if (canTurn(code, this.player.directionLastUsed, this.player)) {
 	    		this.player.directionCurrent = code;
 	    	}
@@ -125,24 +147,8 @@ Level.prototype = {
 
 		scoreTextElement.text(this.scoreAmount + ' Points');
 		gameOverScore.text('Score: ' + this.scoreAmount + ' Points');
+	},
+	endL: function() {
+		//TODO implement callback here
 	}
 };
-
-//This is the base levels which only contains zeroes
-function defaultLevel(_width, _height, tileSize) {
-	return (function() {
-		var array = [];
-
-		var width = _width / tileSize;
-		var height = _height / tileSize;
-
-		var max = width * height;
-
-		for (var i = 0; i < max; i++) {
-			array[i] = 0;
-		}
-
-		return array;
-
-	})();
-}

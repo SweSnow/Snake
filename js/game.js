@@ -6,13 +6,33 @@
 
 function Game(container, gameMode) {
 
-	$('#reset-button').css('display', 'block');
+	if (gameMode == 'normal') {
 
-	gameOptions.gameMode = gameModes[gameMode];
+		this.level = new Level(
+				defaultLevel(600, 500, 20), 20, 600, 500,
+				Date.now(), 60000, new Player(20, 300, 20, 20));
+			
+			this.level.update(Date.now());
 
-	gameOptions.gameMode.init();
+			this.updateLoop = setInterval(function() {
+				level.update(Date.now());
+			}, 50);
 
-	document.onkeydown = gameOptions.gameMode.level.handleKeyDown.bind(gameOptions.gameMode.level);
+
+	} else if (gameMode == 'create') {
+
+		this.level = new LevelCreator(
+				defaultLevel(600, 500, 20), 30, 600, 500,
+				Date.now(), this);
+			
+			this.level.update(Date.now());
+
+			this.updateLoop = setInterval(function() {
+				level.update(Date.now());
+			}, 16);
+	}
+
+	document.onkeydown = this.level.handleKeyDown.bind(this.level);
 }
 
 Game.prototype = {
@@ -29,115 +49,26 @@ Game.prototype = {
 	},
 	pause: function() {
 
-	}
-};
+	},
+	end: function() {
+		this.resetVariables();
+	},
+	createDefaultLevel: function(_width, _height, tileSize) {
+	return (function() {
+		var array = [];
 
-function checkKey(e) {
+		var width = _width / tileSize;
+		var height = _height / tileSize;
 
-    e = e || window.event;
-   	var code = (e.keyCode ? e.keyCode : e.which);
+		var max = width * height;
 
-   	if (code == 32 || code == 13) {
-   		if (gameOptions.gameMode == gameModes['createmap']) {
-   			e.preventDefault();
+		for (var i = 0; i < max; i++) {
+			array[i] = 0;
+		}
 
-    		placeBlock();
-    	}
-   	}
+		return array;
 
-   	else player.checkKey(e);
-
-    if (code > 36 && code < 41) {
-
-    	e.preventDefault();
-
-    	if (gameOptions.gameMode == gameModes['createmap']) {
-    		movePointer(code);
-    	}
-
-    	if (canTurn(code, directionLastUsed)) {
-    		directionCurrent = code;
-    	}
-  	}
-}
-
-function end(level) {
-	/*
-	if (text) {
-		$('#start-overlay').css('display', 'none');
-		$('#game-over-overlay').css('display', 'block');
-	} else {
-		$('#start-overlay').css('display', 'block');
-		$('#game-over-overlay').css('display', 'nonw');
-	}
-
-	$('#reset-button').css('display', 'none');
-	$('#clear-button').css('display', 'none');
-	$('#game-over-text').text(text);
-	*/
-	//$('#game-over-score').text(score);
-
-	resetVariables();
-}
-
-function canTurn(from, to, player) {
-	var canTurn = true;
-	    	
-	if (to == player.directionLeft && from == player.directionRight) {
-		canTurn = false;
-	}
-
-	if (to == player.directionUp && from == player.directionDown) {
-		canTurn = false;
-	}
-
-	if (to == player.directionRight && from == player.directionLeft) {
-		canTurn = false;
-	}
-
-	if (to == player.directionDown && from == player.directionUp) {
-		canTurn = false;
-	}
-
-	return canTurn;
-}
-
-function movePointer(code) {
-
-	switch(code) {
-		case directionLeft:
-			if (gameOptions.gameMode.pointer.x != 0)
-				gameOptions.gameMode.pointer.x -= player.size;
-
-		break
-		case directionRight:
-			if (gameOptions.gameMode.pointer.x != gameOptions.canvasWidth - player.size)
-				gameOptions.gameMode.pointer.x += player.size;
-
-		break
-		case directionUp:
-			if (gameOptions.gameMode.pointer.y != 0)
-				gameOptions.gameMode.pointer.y -= player.size;
-
-		break
-		case directionDown:
-			if (gameOptions.gameMode.pointer.y != gameOptions.canvasHeight - player.size)
-				gameOptions.gameMode.pointer.y += player.size;
-
-		break
-	}
-}
-
-function placeBlock() {
-
-	var pointerX = gameOptions.gameMode.pointer.x / player.size;
-	var pointerY = gameOptions.gameMode.pointer.y / player.size;
-
-	if (gameOptions.gameMode.level.get(pointerX, pointerY) == 0) {
-		gameOptions.gameMode.level.set(pointerX, pointerY, 1);
-	} else {
-		gameOptions.gameMode.level.set(pointerX, pointerY, 0);
-	}
+	})();
 }
 
 function mouseDownEvent(event) {
@@ -202,7 +133,7 @@ function isEmptySpot(proposedX, proposedY, level) {
 function resetVariables() {
 
 	isRunning = false;
-	
+
 	clearInterval(updateLoop);
 
 	timeAttackTimeElement.text('');

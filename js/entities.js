@@ -91,9 +91,9 @@ function Obstacle(x, y) {
 Obstacle.prototype = {
 	update: function(player, level) {
 	 	//Checking tile collision
-		if (level.player.x == this.x &&
-			level.player.y == this.y) {
-			end('Collided with obstacle');
+		if (player.x == this.x &&
+			player.y == this.y) {
+			level.end('Collided with obstacle');
 		}
 	},
 	render: function() {
@@ -266,7 +266,8 @@ Player.prototype = {
 	directionRight: 39,
 	directionDown: 40,
 	width: 20,
-	height: 20
+	height: 20,
+	size: 20
 
 }
 
@@ -310,6 +311,30 @@ Tail.prototype = {
 	},
 	template: $('<paper-shadow z="1" class="g_tail"></div>'),
 	value: 10,
+	width: 20,
+	height: 20
+}
+
+
+
+function Pointer(x, y) {
+	this.x = x;
+	this.y = y;
+
+	this.element = Pointer.prototype.template.clone();
+	this.element.css('top', y + 'px');
+	this.element.css('left', x + 'px');
+	this.element.css('width', this.width + 'px');
+	this.element.css('height', this.height + 'px');
+	htmlCanvas.append(this.element);
+}
+
+Pointer.prototype = {
+	update: function() {
+		this.element.css('top', y + 'px');
+		this.element.css('left', x + 'px');
+	},
+	template: $('<paper-shadow z="1" class="g_pointer"></div>'),
 	width: 20,
 	height: 20
 }

@@ -54,6 +54,10 @@
 			z-index: 1;
 		}
 
+		.g_pointer {
+			
+		}
+
 		#container {
 			position: relative;
 			background: #ffffff;
@@ -162,8 +166,7 @@
 			gameOverScore = $(this.$.gameOverScore);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
-			// this.game = new Game(htmlCanvas, state);
-			this.game = new Game(htmlCanvas, 'normal');
+			this.game = new Game(htmlCanvas, gameMode);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},

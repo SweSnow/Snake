@@ -3,10 +3,6 @@
 	values.js contains values used by all the other classes
 */
 
-var gameOptions = {
-	refreshRate: 50
-};
-
 var gameModes = {
 	normal: {
 		init: function() {
@@ -23,14 +19,6 @@ var gameModes = {
 			}, 50);
 		},
 		maxTime: 60000
-	},
-	obstacle: {
-		init: function() {
-			update();
-			updateLoop = setInterval(update, gameOptions.refreshRate);
-
-			//updateScoreDisplay(null, null);
-		},
 	},
 	createmap: {
 		init: function() {
