@@ -17,10 +17,11 @@
 				var canvas = this.$.render, ctx = canvas.getContext('2d');
 
 				var width = canvas.width / this.gridWidth, height = canvas.height / this.gridHeight;
-				for(var i = 0; i < this.gridSize; i++) {
-					var x = i % this.gridWidth, y = i / this.gridHeight;
-					ctx.fillStyle = this.grid[i] ? '#000' : '#fff';
-					ctx.fillRect(x * width, y * height, width, height);
+				for(var y = 0, i = 0; y < this.gridHeight; y++) {
+					for(var x = 0; x < this.gridWidth; x++, i++) {
+						ctx.fillStyle = this.grid[i] ? '#000' : '#fff';
+						ctx.fillRect(x * width, y * height, width, height);
+					}
 				}
 			}
 		});

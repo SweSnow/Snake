@@ -1,7 +1,8 @@
-<link rel="import" href="../components/core-ajax/core-ajax.html">
-<link rel="import" href="../components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../components/paper-dropdown/paper-dropdown-menu.html">
+<link rel="import" href="../components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../components/core-ajax/core-ajax.html">
 
+<link rel="import" href="../duarte-components/duarte-map.html">
 
 <polymer-element name="duarte-browse">
   <template>
@@ -134,35 +135,37 @@
 		</core-toolbar>
 	</paper-shadow>
 
+	{{levels.length}}
 	<div id="maps-container">
-	<!--	<core-ajax
-			auto
-			url="http://192.168.0.189:8088/levels/interval"
-			params='{"from":"0", "length":"10"}'
-			handleAs="json"
-			on-core-response="{{handleResponse}}"></core-ajax>-->
+		<core-ajax
+			id="get"
+			auto="true"
+			method="get"
+			body='{"from": "0", "length": "10", "sort": "-time"}'
+			url="http://192.168.0.189:8080/level/interval"
+			on-core-response="{{onResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></core-ajax>
 
-	<!--	<template reapeat="map in maps">-->
+		<template repeat="{{map in levels}}">
 			<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
 				<paper-shadow z="1"></paper-shadow>
-				<duarte-game-preview class="duarte-thumbnail">
+				<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
 					<paper-ripple fit class="map-ripple"></paper-ripple>
-				</duarte-game-preview>
+				</duarte-map>
 
 				<div class="map-title">{{map.title}}</div>
 			</paper-shadow>
-
-	<!--	</template>-->
+		</template>
 	</div>
 
   </template>
   <script>
 	Polymer('duarte-browse', {
-		handleResponse: function() {
-			console.log(arguments);
-
-
-
+		onResponse: function(e, detail) {
+			this.levels = JSON.parse(detail.response);
+			console.log(this.levels);
 	  	},
 	  	mapClick: function() {
 

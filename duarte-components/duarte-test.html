@@ -85,7 +85,9 @@
 			onSubmitResponse: function(e, detail) {
 				var response = JSON.parse(detail.response);
 				console.log(response);
-				this.grid = response.grid;
+				if(!response.message) {
+					this.grid = response.grid;
+				}
 
 				this.$.get.go();
 			},
