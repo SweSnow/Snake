@@ -2,9 +2,19 @@
 	<template>
 	<style type="text/css">
 
+	:host {
+		display: block;
+		width: 300px;
+		height: 250px;
+	}
+
+	canvas {
+		width: 100%;
+		height: 100%;
+	}
 
 	</style>
-		<canvas id="render" width="200" height="200"></canvas>
+		<canvas id="render" width="300" height="250"></canvas>
 	</template>
 	<script>
 	(function() {'use strict';
@@ -16,11 +26,16 @@
 			gridChanged: function() {
 				var canvas = this.$.render, ctx = canvas.getContext('2d');
 
-				var width = canvas.width / this.gridWidth, height = canvas.height / this.gridHeight;
+				var width = canvas.width / this.gridWidth, height = canvas.height / this.gridHeight,
+					roundedWidth = Math.round(width), roundedHeight = Math.round(height);
 				for(var y = 0, i = 0; y < this.gridHeight; y++) {
 					for(var x = 0; x < this.gridWidth; x++, i++) {
 						ctx.fillStyle = this.grid[i] ? '#000' : '#fff';
-						ctx.fillRect(x * width, y * height, width, height);
+						ctx.fillRect(
+							Math.round(x * width),
+							Math.round(y * height),
+							roundedWidth,
+							roundedHeight);
 					}
 				}
 			}
