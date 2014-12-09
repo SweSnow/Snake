@@ -37,7 +37,7 @@ Level.prototype = {
 			if (timeRemaining > 0) {
 				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
 			} else {
-				end('Time ran out :(');
+				this.end('Time ran out :(');
 			}
 		}
 		

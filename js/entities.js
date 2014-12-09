@@ -278,7 +278,7 @@ Player.prototype = {
 		this.element.css('left', this.x + 'px');
 	},
 	die: function(level) {
-		end(level);
+		level.end(level);
 	},
 	tailArray: [],
 	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
@@ -313,7 +313,7 @@ Tail.prototype = {
 	 	//Checking tile collision
 		if (level.player.x == this.x &&
 			level.player.y == this.y) {
-			end('Collided with obstacle');
+			level.end('Collided with obstacle');
 		}
 	},
 	render: function() {
