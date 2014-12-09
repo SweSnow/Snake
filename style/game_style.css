@@ -1,175 +1,175 @@
 .game-container {
-		background-color: #ffffff;
-		position: relative;
-		width: 600px;
-		height: 600px;
-		margin-top: 42px;
-		margin-left: auto;
-		margin-right: auto;
-		padding: 0;
-		color: #000000;
-		user-select: none;
-	    -ms-user-select: none;
-	    -webkit-user-select: none;
-	    -khtml-user-select: none;
-	    -moz-user-select: none;
-	    -webkit-touch-callout: none;
-	    -webkit-user-drag: none;
-	}
+	background-color: #ffffff;
+	position: relative;
+	width: 600px;
+	height: 600px;
+	margin-top: 42px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0;
+	color: #000000;
+	user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+}
 
-	.canvas-container {
-		position: relative;
-	}
+.canvas-container {
+	position: relative;
+}
 
-	#start-overlay {
-		display: block;
-		width: 600px;
-		height: 600px;
-		position: absolute;
-		color: #000;
-		top: 0;
-		left: 0;
-		z-index: 2;
-		padding-left: 50px;
-	}
+#start-overlay {
+	display: block;
+	width: 600px;
+	height: 600px;
+	position: absolute;
+	color: #000;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	padding-left: 50px;
+}
 
-	.jumpatron {
-		font-size: 70px;
-		font-weight: 100;
-		margin-top: 140px;
-	}
+.jumpatron {
+	font-size: 70px;
+	font-weight: 100;
+	margin-top: 140px;
+}
 
-	#title-duarte {
-		font-weight: 700;
-	}
+#title-duarte {
+	font-weight: 700;
+}
 
-	#title-snake {
-		padding-left: 5px;
-		font-weight: 100;
-		font-size: 0.8em;
-	}
+#title-snake {
+	padding-left: 5px;
+	font-weight: 100;
+	font-size: 0.8em;
+}
 
-	#game-overlay-text {
-		font-size: 1.28em;
-		width: 300px;
-	}
+#game-overlay-text {
+	font-size: 1.28em;
+	width: 300px;
+}
 
-	#play-now {
-		background-color: #009688;
-		color: #fff;
-		font-size: 1.6em;
-	}
+#play-now {
+	background-color: #009688;
+	color: #fff;
+	font-size: 1.6em;
+}
 
-	#duarte {
-		z-index: -1;
-		background-size: cover;
-		position: absolute;
-		width: 350px;
-		height: 350px;
-		bottom: 0;
-		right: 50px;
-		background-image: url('../media/duarte.png');
-	}
+#duarte {
+	z-index: -1;
+	background-size: cover;
+	position: absolute;
+	width: 350px;
+	height: 350px;
+	bottom: 0;
+	right: 50px;
+	background-image: url('../media/duarte.png');
+}
 
-	#game-over-overlay {
-		z-index: 2;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 600px;
-		height: 600px;
-		display: none;
-	}
+#game-over-overlay {
+	z-index: 2;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 600px;
+	height: 600px;
+	display: none;
+}
 
-	#game-over-restart {
-		box-sizing: border-box;
-		padding-top: 14px;
-		text-align: center;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 20px;
-		font-size: 20px;
-		cursor: pointer;
-		width: 240px;
-		border: 1px solid #fff;
-		height: 50px;
-	}
+#game-over-restart {
+	box-sizing: border-box;
+	padding-top: 14px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	font-size: 20px;
+	cursor: pointer;
+	width: 240px;
+	border: 1px solid #fff;
+	height: 50px;
+}
 
-	#game-over-restart:hover {
-		background-color: #000;
-		color: #000;
-		border: 1px solid #fff;
-	}
+#game-over-restart:hover {
+	background-color: #000;
+	color: #000;
+	border: 1px solid #fff;
+}
 
-	.game-over-text {
+.game-over-text {
 
-	}
+}
 
-	#game-over-score {
+#game-over-score {
 
-	}
+}
 
-	#reset-button {
-		display: none;
-		font-size: 17px;
-		text-align: center;
-		padding: 8px;
-		width: 100px;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 20px;
-		background-color: #000;
-		border: 1px solid #fff;
-		cursor: pointer;
-	}
+#reset-button {
+	display: none;
+	font-size: 17px;
+	text-align: center;
+	padding: 8px;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background-color: #000;
+	border: 1px solid #fff;
+	cursor: pointer;
+}
 
-	#reset-button:hover {
-		transition: all 0.2s;
-		background-color: #000;
-		color: #000;
-	}
+#reset-button:hover {
+	transition: all 0.2s;
+	background-color: #000;
+	color: #000;
+}
 
-	#clear-button {
-		display: none;
-		font-size: 17px;
-		text-align: center;
-		padding: 8px;
-		width: 150px;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 20px;
-		background-color: #000;
-		border: 1px solid #fff;
-		cursor: pointer;
-	}
+#clear-button {
+	display: none;
+	font-size: 17px;
+	text-align: center;
+	padding: 8px;
+	width: 150px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background-color: #000;
+	border: 1px solid #fff;
+	cursor: pointer;
+}
 
-	#clear-button:hover {
-		transition: all 0.2s;
-		background-color: #000;
-		color: #000;
-	}
+#clear-button:hover {
+	transition: all 0.2s;
+	background-color: #000;
+	color: #000;
+}
 
-	.g_food {
-		position: absolute;
-		background-color: #ff0000;
-	}
+.g_food {
+	position: absolute;
+	background-color: #ff0000;
+}
 
-	.g_obstacle {
-		position: absolute;
-		background-color: #00ff00;
-	}
+.g_obstacle {
+	position: absolute;
+	background-color: #00ff00;
+}
 
-	.g_bug {
-		position: absolute;
-		background-color: #0000ff;
-	}
+.g_bug {
+	position: absolute;
+	background-color: #0000ff;
+}
 
-	.g_player {
-		position: absolute;
-		background-color: #000000;
-	}
+.g_player {
+	position: absolute;
+	background-color: #000000;
+}
 
-	.g_tail {
-		position: absolute;
-		background-color: #aaaaaa;
-	}
+.g_tail {
+	position: absolute;
+	background-color: #aaaaaa;
+}

@@ -17,7 +17,7 @@ Example:
     <paper-ripple></paper-ripple>
 
 `paper-ripple` listens to "down" and "up" events so it would display ripple
-effect when touches on it.  You can also defeat the default behavior and 
+effect when touches on it.  You can also defeat the default behavior and
 manually route the down and up actions to the ripple element.  Note that it is
 important if you call downAction() you will have to make sure to call upAction()
 so that `paper-ripple` would end the animation loop.
@@ -44,7 +44,8 @@ Styling ripple effect:
   Note that CSS color property is inherited so it is not required to set it on
   the `paper-ripple` element directly.
 
-Apply `recenteringTouch` class to make the recentering rippling effect.
+By default, the ripple is centered on the point of contact.  Apply `recenteringTouch` 
+class to have the ripple grow toward the center of its container.
 
     <paper-ripple class="recenteringTouch"></paper-ripple>
 
@@ -57,6 +58,15 @@ Apply `circle` class to make the rippling effect within a circle.
 @homepage github.io
 -->
 
+<!--
+Fired when the animation finishes. This is useful if you want to wait until the ripple
+animation finishes to perform some action.
+
+@event core-transitionend
+@param {Object} detail
+@param {Object} detail.node The animated node
+-->
+
 <link rel="import" href="../polymer/polymer.html" >
 
 <polymer-element name="paper-ripple" attributes="initialOpacity opacityDecayVelocity">
@@ -67,13 +77,15 @@ Apply `circle` class to make the rippling effect within a circle.
     :host {
       display: block;
       position: relative;
+      border-radius: inherit;
+      overflow: hidden;
     }
 
     :host-context([noink]) {
       pointer-events: none;
     }
 
-    #bg, #waves, .wave {
+    #bg, #waves, .wave-container, .wave {
       pointer-events: none;
       position: absolute;
       top: 0;
@@ -82,15 +94,16 @@ Apply `circle` class to make the rippling effect within a circle.
       height: 100%;
     }
 
-    #bg {
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
+    #bg, .wave {
       opacity: 0;
+    }
+
+    #waves, .wave {
       overflow: hidden;
     }
 
-    #waves {
-      overflow: hidden;
+    .wave-container, .wave {
+      border-radius: 50%;
     }
 
     :host(.circle) #bg,
@@ -98,27 +111,15 @@ Apply `circle` class to make the rippling effect within a circle.
       border-radius: 50%;
     }
 
-    .wave-container {
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
     :host(.circle) .wave-container {
-      border-radius: 50%;
       overflow: hidden;
-    }
-
-    .wave {
-      border-radius: 50%;
-      opacity: 0;
     }
 
   </style>
 
   <div id="bg"></div>
-  <div id="waves"></div>
+  <div id="waves">
+  </div>
 
 </template>
 <script>
@@ -130,7 +131,7 @@ Apply `circle` class to make the rippling effect within a circle.
     // INK EQUATIONS
     //
     function waveRadiusFn(touchDownMs, touchUpMs, anim) {
-      // Convert from ms to s.
+      // Convert from ms to s
       var touchDown = touchDownMs / 1000;
       var touchUp = touchUpMs / 1000;
       var totalElapsed = touchDown + touchUp;
@@ -200,7 +201,9 @@ Apply `circle` class to make the rippling effect within a circle.
       ctx.wc.style.webkitTransform = 'translate3d(' + dx + 'px,' + dy + 'px,0)';
       ctx.wc.style.transform = 'translate3d(' + dx + 'px,' + dy + 'px,0)';
 
-      ctx.wave.style.webkitTransform = 'scale3d(' + s + ',' + s + ',1)';
+      // 2d transform for safari because of border-radius and overflow:hidden clipping bug.
+      // https://bugs.webkit.org/show_bug.cgi?id=98538
+      ctx.wave.style.webkitTransform = 'scale(' + s + ',' + s + ')';
       ctx.wave.style.transform = 'scale3d(' + s + ',' + s + ',1)';
     }
 
@@ -420,7 +423,7 @@ Apply `circle` class to make the rippling effect within a circle.
           // Ripple gravitational pull to the center of the canvas.
           if (wave.endPosition) {
 
-            // This translates from the origin to the center of the view  based on the max dimension of  
+            // This translates from the origin to the center of the view  based on the max dimension of
             var translateFraction = Math.min(1, radius / wave.containerSize * 2 / Math.sqrt(2) );
 
             x += translateFraction * (wave.endPosition.x - wave.startPosition.x);
@@ -441,7 +444,8 @@ Apply `circle` class to make the rippling effect within a circle.
           var maximumWave = waveAtMaximum(wave, radius, anim);
           var waveDissipated = waveDidFinish(wave, radius, anim);
           var shouldKeepWave = !waveDissipated || maximumWave;
-          var shouldRenderWaveAgain = !waveDissipated && !maximumWave;
+          // keep rendering dissipating wave when at maximum radius on upAction
+          var shouldRenderWaveAgain = wave.mouseUpStart ? !waveDissipated : !maximumWave;
           shouldRenderNextFrame = shouldRenderNextFrame || shouldRenderWaveAgain;
           if (!shouldKeepWave || this.cancelled) {
             deleteTheseWaves.push(wave);
