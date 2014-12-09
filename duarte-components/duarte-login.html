@@ -54,6 +54,7 @@
 			},
 			onResponse: function(e, detail) {
 				this.user.login(JSON.parse(detail.response));
+				this.fire('close');
 			}
 		});
 	</script>

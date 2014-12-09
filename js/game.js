@@ -201,9 +201,8 @@ function isEmptySpot(proposedX, proposedY, level) {
 
 function resetVariables() {
 
-	var now = Date.now()
-
 	isRunning = false;
+	
 	clearInterval(updateLoop);
 
 	timeAttackTimeElement.text('');

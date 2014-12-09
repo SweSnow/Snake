@@ -5,7 +5,7 @@
 	manages maps.
 */
 
-function Level(grid, tiles, width, height, startTime, gameMode, player) {
+function Level(grid, tiles, width, height, startTime, gameMode, player, mode) {
 	this.grid = grid;
 	this.tiles = tiles;
 	this.width = width;
@@ -13,8 +13,8 @@ function Level(grid, tiles, width, height, startTime, gameMode, player) {
 	this.startTime = startTime;
 	this.gameMode = gameMode;
 	this.player = player;
+	this.mode = mode;
 
-	this.entities = [];
 	this.tileSize = width / tiles;
 
 	this.score(0, true);
@@ -24,19 +24,17 @@ Level.prototype = {
 	update: function(now) {
 		isRunning = true;
 
-		if (this.gameMode == gameModes['normal']) {
-
-			var timeRemaining = this.gameMode.maxTime - (now - this.startTime);
-			if (timeRemaining > 0) {
-				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
-			} else {
-				end('Time ran out :(');
-			}
+		//Time based
+		var timeRemaining = this.gameMode.maxTime - (now - this.startTime);
+		if (timeRemaining > 0) {
+			timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
+		} else {
+			end('Time ran out :(');
 		}
 
-		//We update player first separately
+		//We update player first separately, it renders itself
 		this.player.update(now, this);
-		
+
 		//Update all entites (food, bug, obstacles)
 		for (var i = 0; i < this.entities.length; i++) {
 			this.entities[i].update(now, this);
@@ -44,8 +42,6 @@ Level.prototype = {
 				this.entities[i].render();
 		}
 		
-		this.player.render();
-
 		//Manage bug and food spawn
 		if (now - this.lastFoodSpawn > Food.prototype.duration || this.lastFoodSpawn == null) {
 			this.spawnRandomFood(true, this);
@@ -119,6 +115,7 @@ Level.prototype = {
 	lastFoodSpawn: null,
 	lastBugSpawn: null,
 	scoreAmount: 0,
+	entities: [],
 	score: function(amount, override) {
 		if (override) {
 			this.scoreAmount = amount;
@@ -127,6 +124,7 @@ Level.prototype = {
 		}
 
 		scoreTextElement.text(this.scoreAmount + ' Points');
+		gameOverScore.text('Score: ' + this.scoreAmount + ' Points');
 	}
 };
 

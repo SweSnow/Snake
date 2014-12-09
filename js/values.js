@@ -20,7 +20,7 @@ var gameModes = {
 
 			updateLoop = setInterval(function() {
 				level.update(Date.now());
-			}, 100);
+			}, 50);
 		},
 		maxTime: 60000
 	},

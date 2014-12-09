@@ -148,28 +148,3 @@
 	background-color: #000;
 	color: #000;
 }
-
-.g_food {
-	position: absolute;
-	background-color: #ff0000;
-}
-
-.g_obstacle {
-	position: absolute;
-	background-color: #00ff00;
-}
-
-.g_bug {
-	position: absolute;
-	background-color: #0000ff;
-}
-
-.g_player {
-	position: absolute;
-	background-color: #000000;
-}
-
-.g_tail {
-	position: absolute;
-	background-color: #aaaaaa;
-}

@@ -1,4 +1,5 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
 
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/values.js"></script>
@@ -22,7 +23,39 @@
 			padding: 0;
 		}
 
+		.g_food {
+			position: absolute;
+			background-color: #4CAF50;
+			z-index: 1;
+		}
+
+		.g_obstacle {
+			position: absolute;
+			background-color: #00ff00;
+			z-index: 1;
+		}
+
+		.g_bug {
+			position: absolute;
+			background-color: #03A9F4;
+			z-index: 1;
+		}
+
+		.g_player {
+			transition: all 50ms;
+			position: absolute;
+			background-color: #009688;
+			z-index: 2;
+		}
+
+		.g_tail {
+			position: absolute;
+			background-color: #4DB6AC;
+			z-index: 1;
+		}
+
 		#container {
+			position: relative;
 			background: #ffffff;
 			display: block;
 			width: 600px;
@@ -30,12 +63,16 @@
 		}
 
 		#htmlCanvas {
+			position: absolute;
 			display: block;
+			top: 100px;
+			left: 0;
 			width: 600px;
 			height: 500px;
 		}
 
 		#gameOverlay {
+			position: absolute;
 			box-sizing: border-box;
 			padding: 16px;
 			color: #fff;
@@ -55,6 +92,36 @@
 			font-size: 25px;
 		}
 
+		#gameOverOverlay {
+			color: #fff;
+			background-color: #009688;
+			box-sizing: border-box;
+			padding: 16px;
+			position: absolute;
+			z-index: 4;
+			left: 150px;
+			width: 300px;
+			height: 130px;
+			top: 245px; 
+		}
+
+		#label {
+			font-weight: 500;
+			font-size: 23px;
+		}
+
+		#gameOverOverlay paper-button {
+			float: right;
+			margin-top: 12px;
+			margin-right: -7px;
+		}
+
+		#gameOverScore {
+			padding-top: 6px;
+			font-size: 16px;
+		}
+
+
 	</style>
 
 	<div id="container">
@@ -67,6 +134,16 @@
 		</paper-shadow>
 			
 		<paper-shadow z="2" id="htmlCanvas"></paper-shadow>
+
+		<paper-shadow z="3" id="gameOverOverlay" hidden="gameOver">
+
+			<div id="label">Game Over!</div>
+			<div id="gameOverScore">Score: 100 Points</div>
+
+			<paper-button on-tap="retry">Retry</paper-button>
+			<paper-button on-tap="quit">Quit</paper-button>
+
+		</paper-shadow>
 		
 	</div>
 		
@@ -81,14 +158,34 @@
 		ready: function() {
 			timeAttackTimeElement = $(this.$.timeAttackText);
 			scoreTextElement = $(this.$.scoreText);
+			gameOverOverlay = $(this.$.gameOverOverlay);
+			gameOverScore = $(this.$.gameOverScore);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
 			// this.game = new Game(htmlCanvas, state);
 			this.game = new Game(htmlCanvas, 'normal');
+
+			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},
 		onRouteLeave: function() {
 			// state = this.game.saveState();
-		}
+		},
+		retry: function() {
+			gameOver = false;
+		},
+		quit: function() {
+
+		},
+		onGameStateChanged: function(state) {
+			//Jag är inte efterbliven, ska utveckla detta senare
+			if (state == 'over') {
+				gameOver = true;
+			} else {
+				gameOver = false;
+			}
+		},
+		gameOver: false
+
 	});
 
 	})();

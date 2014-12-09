@@ -14,9 +14,6 @@ function Food(x, y, spawnDate){
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
-	this.element.css('background', this.color);
-	this.element.css('position', 'absolute');
-
 
 	htmlCanvas.append(this.element);
 }
@@ -36,7 +33,16 @@ Food.prototype = {
 	},
 	die: function(level) {
 		level.entities.splice(level.entities.indexOf(this), 1);
-		this.element.remove();
+		
+		var element = this.element;
+
+		element.css('transition', 'all 400ms');
+		element.css('opacity', '0.0');
+
+		setTimeout(function() {
+			element.remove();
+		}, 400);
+
 	},
 	eat: function(level) {
 		this.die(level);
@@ -64,8 +70,7 @@ Food.prototype = {
 	template: $('<paper-shadow z="1" class="g_food"></div>'),
 	value: 10,
 	width: 20,
-	height: 20,
-	color: '#ff0000'
+	height: 20
 }
 
 
@@ -79,8 +84,6 @@ function Obstacle(x, y) {
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
-	this.element.css('background', this.color);
-	this.element.css('position', 'absolute');
 
 	htmlCanvas.append(this.element);
 }
@@ -103,8 +106,7 @@ Obstacle.prototype = {
 	template: $('<paper-shadow z="1" class="g_obstacle"></div>'),
 	value: 10,
 	width: 20,
-	height: 20,
-	color: '#00ff00'
+	height: 20
 }
 
 
@@ -119,8 +121,6 @@ function Bug(x, y, spawnTime) {
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
-	this.element.css('background', this.color);
-	this.element.css('position', 'absolute');
 
 	htmlCanvas.append(this.element);
 }
@@ -140,7 +140,16 @@ Bug.prototype = {
 	},
 	die: function(level) {
 		level.entities.splice(level.entities.indexOf(this), 1);
-		this.element.remove();
+
+		var element = this.element;
+
+		element.css('transition', 'all 400ms');
+		element.css('opacity', '0.0');
+
+		setTimeout(function() {
+			element.remove();
+		}, 400);
+
 	},
 	eat: function(time, level) {
 		var scorePlus = this.maxValue -
@@ -156,8 +165,7 @@ Bug.prototype = {
 	interval: 14000,
 	maxValue: 70,
 	width: 20,
-	height: 20,
-	color: '#0000ff'
+	height: 20
 }
 
 
@@ -173,8 +181,6 @@ function Player(x, y, width, height) {
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
-	this.element.css('background', this.color);
-	this.element.css('position', 'absolute');
 
 	htmlCanvas.append(this.element);
 
@@ -189,28 +195,45 @@ Player.prototype = {
 			this.tailArray.push(tail);
 		}
 
+		if (this.skipAnim) {
+			this.element.css('transition', 'all 50ms');
+		}
+
+		this.skipAnim = false;
+
 		//Logic for not turning 180 deg
 		if (this.directionCurrent == this.directionLeft) {
 			this.x -= level.tileSize;
 			if (this.x < 0) {
 				this.x = level.width - level.tileSize;
+				this.skipAnim = true;
 			}
 		} else if (this.directionCurrent == this.directionUp) {
 			this.y -= level.tileSize;
 			if (this.y < 0) {
 				this.y = level.height - level.tileSize;
+				this.skipAnim = true;
 			}
 		} else if (this.directionCurrent == this.directionRight) {
 			this.x += level.tileSize;
 			if (this.x >= level.width) {
 				this.x = 0;
+				this.skipAnim = true;
 			}
 		} else if (this.directionCurrent == this.directionDown) {
 			this.y += level.tileSize;
 			if (this.y >= level.height) {
 				this.y = 0 ;
+				this.skipAnim = true;
 			}
 		}
+
+		if (this.skipAnim) {
+			this.element.css('transition', 'all 0ms');
+		}
+
+		this.render();
+
 		this.directionLastUsed = this.directionCurrent;
 
 		//if tailLength isn't the same as the actual length
@@ -243,8 +266,7 @@ Player.prototype = {
 	directionRight: 39,
 	directionDown: 40,
 	width: 20,
-	height: 20,
-	color: '#009688'
+	height: 20
 
 }
 
@@ -259,8 +281,6 @@ function Tail(x, y) {
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
-	this.element.css('background', this.color);
-	this.element.css('position', 'absolute');
 	htmlCanvas.append(this.element);
 }
 
@@ -291,6 +311,5 @@ Tail.prototype = {
 	template: $('<paper-shadow z="1" class="g_tail"></div>'),
 	value: 10,
 	width: 20,
-	height: 20,
-	color: '#80CBC4'
+	height: 20
 }
