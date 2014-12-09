@@ -36,14 +36,15 @@ Level.prototype = {
 
 		//We update player first separately
 		this.player.update(now, this);
-		this.player.render();
-
+		
 		//Update all entites (food, bug, obstacles)
 		for (var i = 0; i < this.entities.length; i++) {
 			this.entities[i].update(now, this);
 			if (this.entities[i])
 				this.entities[i].render();
 		}
+		
+		this.player.render();
 
 		//Manage bug and food spawn
 		if (now - this.lastFoodSpawn > Food.prototype.duration || this.lastFoodSpawn == null) {
@@ -53,7 +54,7 @@ Level.prototype = {
 		if (this.lastBugSpawn == null) {
 			this.lastBugSpawn = now;
 		} else {
-			if (now - this.lastBugSpawn > Bug.prototype.duration) {
+			if (now - this.lastBugSpawn > Bug.prototype.interval) {
 				this.spawnRandomBug(this);
 			}	
 		}

@@ -23,50 +23,53 @@
 		}
 
 		#container {
+			background: #ffffff;
 			display: block;
 			width: 600px;
-			height: 700px;
+			height: 600px;
 		}
 
 		#htmlCanvas {
 			display: block;
-			width: 100%;
-			height: calc(100%-100px);
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 1;
+			width: 600px;
+			height: 500px;
 		}
 
 		#gameOverlay {
-			display: block;
-			color: #333;
-			z-index: 2;
-			background-color: red;
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			width: 100%;
+			box-sizing: border-box;
+			padding: 16px;
+			color: #fff;
+			background: #009688;
+			width: 600px;
 			height: 100px;
 		}
+
+		#timeAttackText {
+			display: block;
+			float: right;
+		}
+
+		#scoreText {
+			display: block;
+			float: left;
+			font-size: 25px;
+		}
+
 	</style>
 
 	<div id="container">
-		
-		<div id="htmlCanvas"></div>
 
-		<div id="gameOverlay">
-			<paper-shadow z="1"></paper-shadow>
+		<paper-shadow z="2" id="gameOverlay">
+				
+				<div id="timeAttackText"></div>
+				<div id="scoreText"></div>
+
+		</paper-shadow>
 			
-			<div id="timeAttackText"></div>
-
-		</div>
+		<paper-shadow z="2" id="htmlCanvas"></paper-shadow>
 		
 	</div>
 		
-
-	</div>
-
 	</template>
 	<script>
 	(function() {
@@ -77,15 +80,14 @@
 		mode: false,
 		ready: function() {
 			timeAttackTimeElement = $(this.$.timeAttackText);
+			scoreTextElement = $(this.$.scoreText);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
 			// this.game = new Game(htmlCanvas, state);
 			this.game = new Game(htmlCanvas, 'normal');
-			console.log('new instance of game');
 		},
 		onRouteLeave: function() {
 			// state = this.game.saveState();
-			console.log('game state saved');
 		}
 	});
 

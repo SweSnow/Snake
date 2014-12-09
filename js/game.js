@@ -61,7 +61,8 @@ function checkKey(e) {
   	}
 }
 
-function end(text) {
+function end(level) {
+	/*
 	if (text) {
 		$('#start-overlay').css('display', 'none');
 		$('#game-over-overlay').css('display', 'block');
@@ -73,7 +74,8 @@ function end(text) {
 	$('#reset-button').css('display', 'none');
 	$('#clear-button').css('display', 'none');
 	$('#game-over-text').text(text);
-	$('#game-over-score').text(score);
+	*/
+	//$('#game-over-score').text(score);
 
 	resetVariables();
 }
