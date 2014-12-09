@@ -1,5 +1,3 @@
-<link rel="import" href="duarte-inject.html">
-
 <polymer-element name="duarte-about">
   <template>
 	<style>
@@ -42,15 +40,13 @@
 
 	</style>
 	
-	<duarte-inject service="user" as="{{user}}"></duarte-inject>
-	
 	<h1 class="jumpatron">Duarte Snake</h1>
 
 	<p hidden?="{{user.loggedIn}}">
 		Log in, bitch!
 	</p>
 	<p hidden?="{{user.loggedOut}}">
-		Welcome {{user.username}}
+		Welcome {{user.username}}!
 	</p>
 
 	<ul>

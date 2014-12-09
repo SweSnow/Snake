@@ -4,9 +4,8 @@
 
 <link rel="import" href="duarte-login.html">
 <link rel="import" href="duarte-register.html">
-<link rel="import" href="duarte-inject.html">
 
-<polymer-element name="duarte-header" attributes="selected">
+<polymer-element name="duarte-header" attributes="selected user">
   <template>
 	<style>
 
@@ -82,8 +81,6 @@
 		}
 	</style>
 
-	<duarte-inject service="user" as="{{user}}"></duarte-inject>
-
 	<div id="header-container" style="height: {{headerHeight}}">
 	<paper-shadow z="1" id="header-container" style="height: {{headerHeight}}">
 		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
@@ -95,7 +92,9 @@
 				<paper-item class="center-fix" on-tap="{{openModal}}" data-modal-id="loginModal">Log in</paper-item>
 			</div>
 			<div hidden?="{{user.loggedOut}}">
-				<paper-item class="center-fix">{{user.username}}</paper-item>
+				<paper-item class="center-fix">
+					<a is="pushstate-anchor" href="/profile">{{user.username}}</a>
+				</paper-item>
 				<paper-item class="center-fix" on-tap="{{logout}}">Log out</paper-item>
 			</div>
 
@@ -125,10 +124,10 @@
 		</core-toolbar>
 	</paper-shadow>
 	<paper-dialog transition="paper-dialog-transition-bottom" id="registerModal" heading="Sign up">
-		<duarte-register></duarte-register>
+		<duarte-register user="{{user}}" on-close="{{closeModal}}" data-modal-id="registerModal"></duarte-register>
 	</paper-dialog>
 	<paper-dialog id="loginModal" heading="Log in">
-		<duarte-login on-close="{{closeModal}}" data-modal-id="loginModal"></duarte-login>
+		<duarte-login user="{{user}}" on-close="{{closeModal}}" data-modal-id="loginModal"></duarte-login>
 	</paper-dialog>
 
   </template>
@@ -145,7 +144,7 @@
 			this.$[content.dataset.modalId].close();
 		},
 		logout: function() {
-			this.user.loggedIn = false;
+			this.user.logout();
 		}
 	});
   </script>

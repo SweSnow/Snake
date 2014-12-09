@@ -1,0 +1,72 @@
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<polymer-element name="duarte-user" attributes="user">
+	<template>
+
+		<core-ajax
+			id="getUser"
+			auto="true"
+			method="get"
+			url="http://192.168.0.189:8080/user/me"
+			on-core-response="{{onUserResponse}}"
+			headers='{"Content-Type": "application/json"}'
+			withCredentials="true"
+			></core-ajax>
+
+		<core-ajax
+			id="logout"
+			method="get"
+			url="http://192.168.0.189:8080/user/logout"
+			on-core-response="{{onLogoutResponse}}"
+			headers='{"Content-Type": "application/json"}'
+			withCredentials="true"
+			></core-ajax>
+	</template>
+	<script>
+	(function() {'use strict';
+
+		var prototype = {
+			name: null, username: null, loggedIn: false,
+			onUserResponse: function(e, detail) {
+				this.login(JSON.parse(detail.response));
+			},
+			onLogoutResponse: function() {
+				this.loggedIn = false;
+			},
+			login: function(response) {
+				console.log(response);
+
+				if(!response) return;
+				
+				extend(this, response);
+				this.loggedIn = true;
+			},
+			logout: function() {
+				this.$.logout.go();
+			},
+			generatePassword: function(username, password) {
+				return hash(username + password);
+			}
+		};
+
+		Object.defineProperty(prototype, 'loggedOut', {
+			get: function() {
+				return !this.loggedIn;
+			}
+		});
+
+		function hash(string) {
+			var hash = 0, i, chr, len;
+			if (string.length == 0) return hash;
+			for (i = 0, len = string.length; i < len; i++) {
+				chr   = string.charCodeAt(i);
+				hash  = ((hash << 5) - hash) + chr;
+				hash |= 0; // Convert to 32bit integer
+			}
+			return hash;
+		}
+
+		Polymer('duarte-user', prototype);
+	})();
+	</script>
+</polymer-element>

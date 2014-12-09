@@ -43,6 +43,7 @@
 
 	<link rel="import" href="library-components/app-router/app-router.html">
 
+	<link rel="import" href="duarte-components/duarte-user.html">
 	<link rel="import" href="duarte-components/duarte-header.html">
 
 	<link rel="stylesheet" type="text/css" href="style/main_style.css"/>
@@ -71,7 +72,9 @@
 
 			</style>
 
-			<duarte-header selected="{{selected}}" smaller="false" loggedin="false"></duarte-header>
+			<duarte-user id="user"></duarte-user>
+
+			<duarte-header selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
 			<!-- 
 			<core-animated-pages id="pages" selected="{{selected}}">
 				<duarte-about name="about"></duarte-about>
@@ -102,13 +105,16 @@
 					this.selected = detail.path.match(/[\/#]*([^\/]+)/)[1];
 				},
 				onRouteStart: function(e, detail) {
-					if(detail.oldRoute && detail.oldRoute.firstChild.onRouteLeave) {
-						detail.oldRoute.firstChild.onRouteLeave();
+					var element = detail.oldRoute && detail.oldRoute.firstChild;
+					if(element && element.onRouteLeave) {
+						element.onRouteLeave();
 					}
 				},
 				onRouteEnd: function(e, detail) {
-					if(detail.route && detail.route.firstChild.onRouteEnter) {
-						detail.route.firstChild.onRouteEnter();
+					var element = detail.route && detail.route.firstChild;
+					element.user = this.$.user;
+					if(element && element.onRouteEnter) {
+						element.onRouteEnter();
 					}
 				}
 				/*
