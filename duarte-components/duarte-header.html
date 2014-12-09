@@ -85,7 +85,7 @@
 	<duarte-inject service="user" as="{{user}}"></duarte-inject>
 
 	<div id="header-container" style="height: {{headerHeight}}">
-		<paper-shadow z="1"></paper-shadow>
+	<paper-shadow z="1" id="header-container" style="height: {{headerHeight}}">
 		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
 			<paper-icon-button icon="arrow-back" hidden?="{{!smaller}}"></paper-icon-button>
 			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
@@ -123,7 +123,7 @@
 		  
 			</div>
 		</core-toolbar>
-	</div>
+	</paper-shadow>
 	<paper-dialog transition="paper-dialog-transition-bottom" id="registerModal" heading="Sign up">
 		<duarte-register></duarte-register>
 	</paper-dialog>

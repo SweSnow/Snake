@@ -28,7 +28,7 @@ Game.prototype = {
 
 	},
 	pause: function() {
-		
+
 	}
 };
 
@@ -206,9 +206,5 @@ function resetVariables() {
 
 	timeAttackTimeElement.text('');
 
-	score = 0;
-
 	$(htmlCanvas).click(null);
-
-	//updateScoreDisplay(now, null);
 }

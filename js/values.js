@@ -7,15 +7,12 @@ var gameOptions = {
 	refreshRate: 50
 };
 
-var lastFoodSpawn = null,
-	lastBugSpawn = null;
-
 var gameModes = {
 	normal: {
 		init: function() {
 
 			var level = new Level(
-				defaultLevel(600, 600, 20), 30, 600, 600,
+				defaultLevel(600, 500, 20), 30, 600, 500,
 				Date.now(), this, new Player(20, 300, 20, 20));
 			
 			level.update(Date.now());
@@ -32,7 +29,7 @@ var gameModes = {
 			update();
 			updateLoop = setInterval(update, gameOptions.refreshRate);
 
-			updateScoreDisplay(null, null);
+			//updateScoreDisplay(null, null);
 		},
 	},
 	createmap: {
@@ -51,8 +48,6 @@ var gameModes = {
 };
 
 var isRunning = false;
-
-var score = 0;
 
 var snakeMaxColor = 255;
 var snakeMinColor = 80;
