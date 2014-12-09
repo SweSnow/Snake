@@ -1,0 +1,29 @@
+<polymer-element name="duarte-map" attributes="grid">
+	<template>
+	<style type="text/css">
+
+
+	</style>
+		<canvas id="render" width="200" height="200"></canvas>
+	</template>
+	<script>
+	(function() {'use strict';
+
+		Polymer('duarte-map', {
+			gridWidth: 30,
+			gridHeight: 25,
+			gridSize: 30 * 25,
+			gridChanged: function() {
+				var canvas = this.$.render, ctx = canvas.getContext('2d');
+
+				var width = canvas.width / this.gridWidth, height = canvas.height / this.gridHeight;
+				for(var i = 0; i < this.gridSize; i++) {
+					var x = i % this.gridWidth, y = i / this.gridHeight;
+					ctx.fillStyle = this.grid[i] ? '#000' : '#fff';
+					ctx.fillRect(x * width, y * height, width, height);
+				}
+			}
+		});
+	})();
+	</script>
+</polymer-element>

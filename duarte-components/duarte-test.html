@@ -1,25 +1,102 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
+<link rel="import" href="../components/paper-input/paper-input.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+
+<link rel="import" href="../duarte-components/duarte-map.html">
 
 <polymer-element name="duarte-test" attributes="user">
 	<template>
+	<style type="text/css">
+
+		paper-button {
+			background: #2196F3;
+			color: white;
+		}
+
+		.map {
+			float: left;
+		}
+
+		.map {
+			margin-left: 10px;
+		}
+
+	</style>
+
+		<core-ajax
+			id="get"
+			auto="true"
+			method="get"
+			url="http://192.168.0.189:8080/level/all"
+			on-core-response="{{onGetResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></core-ajax>
 
 		<core-ajax
 			id="submit"
 			method="post"
 			url="http://192.168.0.189:8080/level/submit"
-			on-core-response="{{onResponse}}"
+			on-core-response="{{onSubmitResponse}}"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
 
+		<paper-button raised on-tap="{{randomize}}">Randomize</paper-button>
+		<paper-button raised on-tap="{{submit}}">Submit</paper-button>
+
+		<paper-input floatingLabel label="Title" value="{{title}}"></paper-input>
+		<duarte-map grid="{{grid}}"></duarte-map>
+
+		<div>
+			<h1>Levels</h1>
+			<template repeat="{{level in levels}}">
+				<div class="map">
+					{{level.title}} by {{level.creator.username}}
+					<div><duarte-map grid="{{level.grid}}"></duarte-map></div>
+				</div>
+				
+			</template>	
+		</div>
 	</template>
 	<script>
 	(function() {'use strict';
 
 		Polymer('duarte-test', {
-			onResponse: function(e, detail) {
+			title: 'En bana.',
+			gridWidth: 30,
+			gridHeight: 25,
+			gridSize: 30 * 25,
+			ready: function() {
+				this.randomize();
+			},
+			onGetResponse: function(e, detail) {
+				this.levels = JSON.parse(detail.response);
+			},
+			onSubmitResponse: function(e, detail) {
 				var response = JSON.parse(detail.response);
 				console.log(response);
+				this.grid = response.grid;
+
+				this.$.get.go();
+			},
+			randomize: function() {
+				var grid = new Array(this.gridSize);
+				for(var i = 0; i < this.gridSize; i++) {
+					grid[i] = Math.random() < 0.8 ? 0 : 1;
+				}
+				this.grid = grid;
+			},
+			submit: function() {
+				var submit = this.$.submit;
+				
+				
+				submit.body = JSON.stringify({
+					title: this.title,
+					grid: this.grid
+				});
+
+				submit.go();
 			}
 		});
 	})();
