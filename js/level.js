@@ -130,14 +130,52 @@ Level.prototype = {
 		var bug = new Bug(spot.x, spot.y, Date.now());
 
 		this.entities.push(bug);
-
-
-		//writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
 	},
 	lastFoodSpawn: null,
 	lastBugSpawn: null,
 	scoreAmount: 0,
 	entities: [],
+	getEmptySpot: function() {
+		while(true) {
+			var proposedX = Math.floor(Math.random() * level.width / level.tileSize) * level.tileSize;
+			var proposedY = Math.floor(Math.random() * level.height / level.tileSize) * level.tileSize;
+
+			if (isEmptySpot(proposedX, proposedY, level)) {
+				return {
+					x: proposedX,
+					y: proposedY
+				}
+			}
+		}
+	}
+	isEmptySpot: function(proposedX, proposedY, level) {
+		for (var i = 0; i < level.entities.length; i++) {
+			if (level.entities[i].x == proposedX && level.entities[i].y == proposedY) {
+				return false;
+			}
+		}
+		
+		if (level.player.x == proposedX && level.player.y == proposedY)
+			return false;
+
+		for (var i = 0; i < level.player.tailArray.length; i++) {
+			if (level.player.tailArray[i].x == proposedX && level.player.tailArray[i].y == proposedY) {
+				return false;
+			}
+		}
+
+		if (gameOptions.gameMode == gameModes['obstacle']) {
+			for (var yi = 0; yi < 50; yi++) {
+				for (var xi = 0; xi < 50; xi++) {
+					if (proposedX == xi && proposedY == yi) {
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	},
 	score: function(amount, override) {
 		if (override) {
 			this.scoreAmount = amount;
@@ -148,7 +186,7 @@ Level.prototype = {
 		scoreTextElement.text(this.scoreAmount + ' Points');
 		gameOverScore.text('Score: ' + this.scoreAmount + ' Points');
 	},
-	endL: function() {
+	end: function() {
 		//TODO implement callback here
 	}
 };
