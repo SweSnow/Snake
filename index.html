@@ -25,6 +25,22 @@
 	<link rel="import" href="components/core-icons/core-icons.html">
 	<link rel="import" href="components/core-animated-pages/core-animated-pages.html">
 
+	<script type="text/javascript">
+		function extend(target, extension) {
+			for(var key in extension) {
+				target[key] = extension[key];
+			}
+		};
+
+		function isFunction(a) {
+			return typeof a === 'function';
+		}
+
+		function isArray(a) {
+			return Object.prototype.toString.call(a) === '[object Array]';
+		}
+	</script>
+
 	<link rel="import" href="library-components/app-router/app-router.html">
 
 	<link rel="import" href="duarte-components/duarte-header.html">

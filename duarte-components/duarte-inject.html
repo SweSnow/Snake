@@ -1,0 +1,82 @@
+<polymer-element name="duarte-inject" attributes="service as">
+	<template>
+	</template>
+</polymer-element>
+
+<script>
+//Heavily by Angular DI
+(function() {
+	var services = {}, factories = {};
+
+	Polymer('duarte-inject', {
+		attached: function() {
+			//Expose service
+			this.as = getService(this.service);
+		}
+	});
+
+	function getService(name) {
+		if(!services.hasOwnProperty(name)) {
+			//Instantiate service if it does not yet exist
+			services[name] = factories[name]();
+		}
+		return services[name];
+	}
+
+	var rexStripComments = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg,
+		rexArgumentNames = /([^\s,]+)/g;
+
+	function getParamNames(fn) {
+		var str = fn.toString().replace(rexStripComments, '');
+		return (str.slice(str.indexOf('(') + 1, str.indexOf(')')).match(rexArgumentNames)) || [];
+	}
+
+	var extractRequest = function(r) {
+		var fn, names;
+		if(isFunction(r)) {
+			fn = r;
+			names = getParamNames(fn);
+		} else if(isArray(r)) {
+			var last = r.length - 1;
+			fn = r[last];
+			names = r.splice(0, last);
+		}
+
+		return {
+			fn: fn,
+			services: names.map(function(name) {
+				return getService(name);
+			})
+		}
+	}
+
+	//Expose global API
+	extend(window, {
+		'define': function(/*name, fn OR services*/) {
+			var args = arguments;
+			switch(args.length) {
+				case 1:
+					extend(factories, args[0]);
+					break;
+				case 2:
+					factories[args[0]] = args[1];
+					break;
+			}
+			return this;
+		},
+		'invoke': function(r, ctx) {
+			var request = extractRequest(r);
+			return request.fn.apply(ctx, request.services);
+		},
+		'inject': function(r, ctx) {
+			var request = extractRequest(r);
+			return function() {
+				return request.fn.apply(ctx, request.services);
+			}
+		}
+	});
+})();
+</script>
+
+<!-- Import service files -->
+<script type="text/javascript" src="../services/user.js"></script>

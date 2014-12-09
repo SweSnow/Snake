@@ -69,24 +69,27 @@
 
 	</template>
 	<script>
+	(function() {
+
+	var state = {};
+
 	Polymer('duarte-game', {
 		mode: false,
 		ready: function() {
 			timeAttackTimeElement = $(this.$.timeAttackText);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
-			this.game = new Game($(this.$.htmlCanvas), 'normal');
-		},
-		onRouteEnter: function() {
-			console.log('time to start game');
-			this.game.resume();
+			// this.game = new Game(htmlCanvas, state);
+			this.game = new Game(htmlCanvas, 'normal');
+			console.log('new instance of game');
 		},
 		onRouteLeave: function() {
-			console.log('time to pause game');
-			this.game.pause();
+			// state = this.game.saveState();
+			console.log('game state saved');
 		}
 	});
 
+	})();
 
   </script>
 </polymer-element>

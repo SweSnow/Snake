@@ -4,6 +4,7 @@
 
 <link rel="import" href="duarte-login.html">
 <link rel="import" href="duarte-register.html">
+<link rel="import" href="duarte-inject.html">
 
 <polymer-element name="duarte-header" attributes="selected">
   <template>
@@ -71,20 +72,32 @@
 		a {
 			text-decoration: none;
 			color: inherit;
+		}
+
+		.center-fix, a {
 			display: inline-flex;
 			justify-content: center;
 			align-items: center;
+			text-align: center;
 		}
-
 	</style>
+
+	<duarte-inject service="user" as="{{user}}"></duarte-inject>
 
 	<div id="header-container" style="height: {{headerHeight}}">
 		<paper-shadow z="1"></paper-shadow>
 		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
 			<paper-icon-button icon="arrow-back" hidden?="{{!smaller}}"></paper-icon-button>
 			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
-			<paper-item on-tap="{{openModal}}" data-modal-id="registerModal">Sign up</paper-item>
-			<paper-item on-tap="{{openModal}}" data-modal-id="loginModal">Log in</paper-item>
+
+			<div hidden?="{{user.loggedIn}}">
+				<paper-item class="center-fix" on-tap="{{openModal}}" data-modal-id="registerModal">Sign up</paper-item>
+				<paper-item class="center-fix" on-tap="{{openModal}}" data-modal-id="loginModal">Log in</paper-item>
+			</div>
+			<div hidden?="{{user.loggedOut}}">
+				<paper-item class="center-fix">{{user.username}}</paper-item>
+				<paper-item class="center-fix" on-tap="{{logout}}">Log out</paper-item>
+			</div>
 
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
@@ -109,26 +122,30 @@
 				</paper-tabs>
 		  
 			</div>
-
 		</core-toolbar>
 	</div>
 	<paper-dialog transition="paper-dialog-transition-bottom" id="registerModal" heading="Sign up">
 		<duarte-register></duarte-register>
 	</paper-dialog>
 	<paper-dialog id="loginModal" heading="Log in">
-		<duarte-login></duarte-login>
+		<duarte-login on-close="{{closeModal}}" data-modal-id="loginModal"></duarte-login>
 	</paper-dialog>
 
   </template>
   <script>
 	Polymer('duarte-header', {
 		smaller: false,
-		loggedin: false,
 		ready: function() {
 			this.headerHeight = this.smaller ? '72px' : '142px';
 		},
 		openModal: function(event, detail, button) {
 			this.$[button.dataset.modalId].toggle();
+		},
+		closeModal: function(event, detail, content) {
+			this.$[content.dataset.modalId].close();
+		},
+		logout: function() {
+			this.user.loggedIn = false;
 		}
 	});
   </script>

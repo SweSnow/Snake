@@ -1,3 +1,5 @@
+<link rel="import" href="duarte-inject.html">
+
 <polymer-element name="duarte-about">
   <template>
 	<style>
@@ -40,10 +42,15 @@
 
 	</style>
 	
+	<duarte-inject service="user" as="{{user}}"></duarte-inject>
+	
 	<h1 class="jumpatron">Duarte Snake</h1>
 
-	<p>
-
+	<p hidden?="{{user.loggedIn}}">
+		Log in, bitch!
+	</p>
+	<p hidden?="{{user.loggedOut}}">
+		Welcome {{user.username}}
 	</p>
 
 	<ul>
@@ -52,8 +59,8 @@
 		<li>acj</li>
 	</ul>
 
-	<a href="../game/index.html">
-		<paper-button raisedButton class="colored" label="Play Now!"></paper-button>
+	<a is="pushstate-anchor" href="/play">
+		<paper-button raisedButton class="colored">Play Now!</paper-button>
 	</a>
 
 

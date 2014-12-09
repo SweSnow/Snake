@@ -2,7 +2,7 @@
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 
-<script type="text/javascript" src="../js/user.js"></script>
+<link rel="import" href="duarte-inject.html">
 
 <polymer-element name="duarte-login">
 	<template>
@@ -25,8 +25,9 @@
 		<paper-input floatingLabel label="Username" value="{{username}}"></paper-input>
 		<paper-input id="password-input" floatingLabel label="Password" type="password" value="{{password}}"></paper-input>
 
-		<paper-button affirmitive on-tap="{{submit}}" class="right" label="Log in"></paper-button>
+		<paper-button affirmitive on-tap="{{submit}}" class="right">Log in</paper-button>
 
+		<duarte-inject service="user" as="{{user}}"></duarte-inject>
 
 		<core-ajax
 			id="submit"
@@ -39,12 +40,18 @@
 	<script>
 		Polymer('duarte-login', {
 			submit: function() {
-				var submit = this.$.submit;
-				submit.body = JSON.stringify({
+				// var submit = this.$.submit;
+				// submit.body = JSON.stringify({
+				// 	username: this.username,
+				// 	hash: this.user.generatePassword(this.username, this.password)
+				// });
+				// submit.go();
+
+				extend(this.user, {
 					username: this.username,
-					hash: user.generatePassword(this.username, this.password)
+					loggedIn: true
 				});
-				submit.go();
+				this.fire('close');
 			},
 			onResponse: function() {
 

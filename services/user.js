@@ -11,13 +11,22 @@
 		return hash;
 	}
 
-
-	window.user = {
+	var user = {
+		name: 'John Rapp',
+		username: 'johnrapp',
+		loggedIn: true,
 		generatePassword: function(username, password) {
 			return hash(username + password);
 		}
-	}
+	};
+	Object.defineProperty(user, 'loggedOut', {
+		get: function() {
+			return !this.loggedIn;
+		}
+	});
+
+	define('user', function() {
+		return user;
+	});
+
 })();
-
-
-
