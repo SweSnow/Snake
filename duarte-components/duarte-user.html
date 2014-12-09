@@ -9,7 +9,7 @@
 			method="get"
 			url="http://192.168.0.189:8080/user/me"
 			on-core-response="{{onUserResponse}}"
-			headers='{"Content-Type": "application/json"}'
+			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
 
@@ -18,7 +18,7 @@
 			method="get"
 			url="http://192.168.0.189:8080/user/logout"
 			on-core-response="{{onLogoutResponse}}"
-			headers='{"Content-Type": "application/json"}'
+			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
 	</template>

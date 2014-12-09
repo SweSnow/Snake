@@ -1,0 +1,27 @@
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<polymer-element name="duarte-test" attributes="user">
+	<template>
+
+		<core-ajax
+			id="submit"
+			method="post"
+			url="http://192.168.0.189:8080/level/submit"
+			on-core-response="{{onResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></core-ajax>
+
+	</template>
+	<script>
+	(function() {'use strict';
+
+		Polymer('duarte-test', {
+			onResponse: function(e, detail) {
+				var response = JSON.parse(detail.response);
+				console.log(response);
+			}
+		});
+	})();
+	</script>
+</polymer-element>
