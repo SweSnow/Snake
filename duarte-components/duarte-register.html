@@ -1,15 +1,67 @@
 <link rel="import" href="../components/paper-input/paper-input.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/core-ajax/core-ajax.html">
 
-<polymer-element name="duarte-register">
+<polymer-element name="duarte-register" attributes="user">
 	<template>
 		<style>
+
+			paper-input {
+				font-size: 1.1em;
+			}
+
+			.right {
+				float: right;
+			}
+
+			#password-input {
+				margin-top: -18px;
+			}
+
 		</style>
 
-		Hej
+		<paper-input floatingLabel label="Username" value="{{username}}"></paper-input>
+		<paper-input id="password-input" floatingLabel label="Password" type="password" value="{{password}}"></paper-input>
 
+		<paper-button affirmitive on-tap="{{submit}}" class="right">Sign up</paper-button>
+
+		<div>{{message}}</div>
+
+		<core-ajax
+			id="submit"
+			method="post"
+			url="http://192.168.0.189:8080/user/register"
+			on-core-response="{{onSuccess}}"
+			headers='{"Content-Type": "application/json"}'
+			withCredentials="true"
+			></core-ajax>
 	</template>
 	<script>
 		Polymer('duarte-register', {
+			submit: function() {
+				var submit = this.$.submit;
+				submit.body = JSON.stringify({
+					username: this.username,
+					hash: this.user.generatePassword(this.username, this.password)
+				});
+				submit.go();
+
+				/*
+				extend(this.user, {
+					username: this.username,
+					loggedIn: true
+				});
+				this.fire('close');
+				*/
+			},
+			onSuccess: function(e, detail) {
+				var response = JSON.parse(detail.response);
+				if(response && !response.message) {
+					this.message = 'Success!';
+				} else {
+					this.message = 'Error.';
+				}
+			}
 		});
 	</script>
 </polymer-element>

@@ -2,9 +2,7 @@
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 
-<link rel="import" href="duarte-inject.html">
-
-<polymer-element name="duarte-login">
+<polymer-element name="duarte-login" attributes="user">
 	<template>
 		<style>
 
@@ -27,34 +25,35 @@
 
 		<paper-button affirmitive on-tap="{{submit}}" class="right">Log in</paper-button>
 
-		<duarte-inject service="user" as="{{user}}"></duarte-inject>
-
 		<core-ajax
 			id="submit"
 			method="post"
-			url="http://192.168.0.187:8080/user/login"
+			url="http://192.168.0.189:8080/user/login"
 			on-core-response="{{onResponse}}"
 			headers='{"Content-Type": "application/json"}'
+			withCredentials="true"
 			></core-ajax>
 	</template>
 	<script>
 		Polymer('duarte-login', {
 			submit: function() {
-				// var submit = this.$.submit;
-				// submit.body = JSON.stringify({
-				// 	username: this.username,
-				// 	hash: this.user.generatePassword(this.username, this.password)
-				// });
-				// submit.go();
+				var submit = this.$.submit;
+				submit.body = JSON.stringify({
+					username: this.username,
+					hash: this.user.generatePassword(this.username, this.password)
+				});
+				submit.go();
 
+				/*
 				extend(this.user, {
 					username: this.username,
 					loggedIn: true
 				});
 				this.fire('close');
+				*/
 			},
-			onResponse: function() {
-
+			onResponse: function(e, detail) {
+				this.user.login(JSON.parse(detail.response));
 			}
 		});
 	</script>
