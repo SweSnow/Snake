@@ -1,9 +1,10 @@
+'use strict';
 /*
 	entities.js contains all entities in the
 	game (food, bug, obstacle, playerand tail).
 */
 
-function Food(x, y, width, height, spawnDate){
+function Food(x, y, spawnDate){
 	this.x = x;
 	this.y = y;
 	this.spawnDate = spawnDate || Date.now();
@@ -11,8 +12,9 @@ function Food(x, y, width, height, spawnDate){
 	this.element = Food.prototype.template;
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
-	this.element.css('width', width + 'px');
-	this.element.css('height', height + 'px');
+	this.element.css('width', this.width + 'px');
+	this.element.css('height', this.height + 'px');
+	this.element.css('background', this.color);
 
 	htmlCanvas.append(this.element);
 }
@@ -20,28 +22,28 @@ function Food(x, y, width, height, spawnDate){
 Food.prototype = {
 	update: function(time, level) {
 	 	if (time - this.spawnDate > this.duration) 
-	 		this.die();
+	 		this.die(level);
 	 	
 	 	if (level.player.x == this.x && level.player.y == this.y) 
 	 		this.eat(level);
 
 	},
 	die: function(level) {
-		level.entities.remove(this);
-		this.$element.remove();
+		level.entities.splice(level.entities.indexOf(this), 1);
+		this.element.remove();
 	},
-	eat: function() {
-		score += value;
-		this.die();
+	eat: function(level) {
+		score += this.value;
+		this.die(level);
 
 		score += this.value;
 		level.player.tailLength++;
-		updateScoreDisplay(now, foodPoints);
+//		updateScoreDisplay(now, foodPoints);
 
 		var hasFoundFood = false;
 		var i = 0;
 
-		while (!hasFoundFood && i < level.entites.length) {
+		while (!hasFoundFood && i < level.entities.length) {
 			if (level.entities[i].template == this.template) {
 				hasFoundFood = true;
 			}
@@ -49,27 +51,31 @@ Food.prototype = {
 		}
 
 		if (hasFoundFood) {
-			spawnRandomFood(false);
-			writeLogMessage('No food on canvas, spawn new');
+			level.spawnRandomFood(false);
+			//writeLogMessage('No food on canvas, spawn new');
 		}
 
 	},
 	duration: 5000,
 	template: $('<div class="g_food"></div>'),
-	value: 10
+	value: 10,
+	width: 50,
+	height: 50,
+	color: '#ff0000'
 }
 
 
 
-function Obstacle(x, y, width, height) {
+function Obstacle(x, y) {
 	this.x = x;
 	this.y = y;
 
 	this.element = this.template.copy();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
-	this.element.css('width', width + 'px');
-	this.element.css('height', height + 'px');
+	this.element.css('width', this.width + 'px');
+	this.element.css('height', this.height + 'px');
+	this.element.css('background', this.color);
 
 	htmlCanvas.append(this.element);
 }
@@ -86,7 +92,10 @@ Obstacle.prototype = {
 		this.$element.remove();
 	},
 	template: $('<div class="g_obstacle"></div>'),
-	value: 10
+	value: 10,
+	width: 50,
+	height: 50,
+	color: '#00ff00'
 }
 
 
@@ -99,8 +108,9 @@ function Bug(x, y, width, height, spawnTime) {
 	this.element = this.template.copy();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
-	this.element.css('width', width + 'px');
-	this.element.css('height', height + 'px');
+	this.element.css('width', this.width + 'px');
+	this.element.css('height', this.height + 'px');
+	this.element.css('background', this.color);
 
 	htmlCanvas.append(this.element);
 }
@@ -108,7 +118,7 @@ function Bug(x, y, width, height, spawnTime) {
 Bug.prototype = {
 	update: function(time, level) {
 	 	if (time - this.spawnDate > this.duration) {
-	 		this.die();
+	 		this.die(level);
 	 	} else if (this.x == level.player.x && this.y == level.player.y) {
 	 		this.eat(time, level);
 		}
@@ -127,10 +137,13 @@ Bug.prototype = {
 		updateScoreDisplay(now, scorePlus);
 		level.player.tailLength++;
 
-		this.die();
+		this.die(level);
 	},
 	template: $('<div class="g_bug"></div>'),
-	maxValue: 70
+	maxValue: 70,
+	width: 50,
+	height: 50,
+	color: '#0000ff'
 }
 
 
@@ -144,8 +157,9 @@ function Player(x, y, width, height) {
 	this.element = Player.prototype.template;
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
-	this.element.css('width', width + 'px');
-	this.element.css('height', height + 'px');
+	this.element.css('width', this.width + 'px');
+	this.element.css('height', this.height + 'px');
+	this.element.css('background', this.color);
 
 	htmlCanvas.append(this.element);
 
@@ -179,7 +193,7 @@ Player.prototype = {
 		}
 		this.directionLastUsed = this.directionCurrent;
 
-		var tail = Tail(this.x, this.y, this.width, this.height);
+		var tail = new Tail(this.x, this.y, this.width, this.height);
 
 		this.tailArray.push(tail);
 
@@ -190,9 +204,9 @@ Player.prototype = {
 			this.tailArray.splice(0, 1);
 
 		//Checking tail collision
-		this.tailArray.forEach(function(index) {
-			this.tailArray[index].update();
-		});
+		this.tailArray.forEach(function(tail) {
+			tail.update();
+		}, this);
 
 	},
 	die: function() {
@@ -205,7 +219,10 @@ Player.prototype = {
 	directionLeft: 37,
 	directionUp: 38,
 	directionRight: 39,
-	directionDown: 40
+	directionDown: 40,
+	width: 50,
+	height: 50,
+	color: '#000000'
 
 }
 
@@ -218,9 +235,9 @@ function Tail(x, y, width, height) {
 	this.element = Tail.prototype.template;
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
-	this.element.css('width', width + 'px');
-	this.element.css('height', height + 'px');
-
+	this.element.css('width', this.width + 'px');
+	this.element.css('height', this.height + 'px');
+	this.element.css('background', this.color);
 	htmlCanvas.append(this.element);
 }
 
@@ -236,5 +253,8 @@ Tail.prototype = {
 		this.$element.remove();
 	},
 	template: $('<div class="g_tail"></div>'),
-	value: 10
+	value: 10,
+	width: 50,
+	height: 50,
+	color: '#aaaaaa'
 }

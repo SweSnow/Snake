@@ -92,13 +92,13 @@
 		.subheader-dropdown::shadow #control {
 			border-bottom: 1px solid #ccc;
 		}	
-		
-		.subheader-dropdown /deep/ #label {
-			color: #333;
-		}
 
 		.subheader-dropdown /deep/ #ripple {
 			color: #888;
+		}
+
+		#header > div > paper-dropdown-menu > paper-item {
+			color: #333;
 		}
 
 		::selection {
@@ -122,11 +122,12 @@
 			<div class="bottom fit" horizontal layout>
 
 				<div class="subheader-dropdown-label">Sort by:</div>
-		
 				<paper-dropdown-menu class="subheader-dropdown" selected="Popularity" valueattr="label">
-					<paper-item label="Newest"></paper-item>
-					<paper-item label="Popularity"></paper-item>
-					<paper-item label="Rating"></paper-item>
+
+					<paper-item label="Newest">Newest</paper-item>
+					<paper-item label="Popularity">Popularity</paper-item>
+					<paper-item label="Rating">Rating</paper-item>
+					
 				</paper-dropdown-menu>
 		  
 			</div>

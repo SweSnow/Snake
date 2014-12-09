@@ -1,3 +1,4 @@
+'use strict';
 /*
 	level.js contains the master level objects
 	which houses all entities all children. It
@@ -60,6 +61,31 @@ Level.prototype = {
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
 	},
+	handleKeyDown: function(e) {
+		e = e || window.event;
+   		var code = e.keyCode || e.which;
+
+   		/*
+
+   		if (code == 32 || code == 13) {
+	   		if (gameOptions.gameMode == gameModes['createmap']) {
+	   			e.preventDefault();
+
+	    		placeBlock();
+	    	}
+	   	}
+*/
+
+	    if (code > 36 && code < 41) {
+
+	    	e.preventDefault();
+
+	    	if (canTurn(code, this.player.directionLastUsed, this.player)) {
+	    		this.player.directionCurrent = code;
+	    	}
+	  	}
+
+	},
 	spawnRandomFood: function(logLastSpawn, level) {
 
 		if (logLastSpawn) {
@@ -75,7 +101,7 @@ Level.prototype = {
 		var spot = getEmptySpot(level);
 		var food = new Food(spot.x, spot.y, Date.now());
 
-		writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
+		//writeLogMessage('Spawned bug at (' + bug.x + ', ' + bug.y + ')');
 	},
 	lastFoodSpawn: null,
 	lastBugSpawn: null

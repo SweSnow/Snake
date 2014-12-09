@@ -97,9 +97,7 @@
 					this.router();
 
 					var self = this;
-					window.addEventListener('popstate', function() {
-						self.router.call(self);
-					});
+					window.addEventListener('popstate', this.router.bind(this));
 				},
 				router: function() {
 					var page = location.pathname.substring(1);

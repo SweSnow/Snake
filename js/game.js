@@ -1,3 +1,4 @@
+'use strict';
 /*
 	game.js is primarily a utility file
 	with functions unbound from classes.
@@ -5,45 +6,54 @@
 
 function Game(container, gameMode) {
 
-	document.onkeydown = checkKey;
-	function checkKey(e) {
-
-	    e = e || window.event;
-	   	var code = (e.keyCode ? e.keyCode : e.which);
-
-	   	if (code == 32 || code == 13) {
-	   		if (gameOptions.gameMode == gameModes['createmap']) {
-	   			e.preventDefault();
-
-	    		placeBlock();
-	    	}
-	   	}
-
-	    if (code > 36 && code < 41) {
-
-	    	e.preventDefault();
-
-	    	if (gameOptions.gameMode == gameModes['createmap']) {
-	    		movePointer(code);
-	    	}
-
-	    	if (canTurn(code, directionLastUsed)) {
-	    		directionCurrent = code;
-	    	}
-	  	}
-	}
-
 	$('#reset-button').css('display', 'block');
 
 	gameOptions.gameMode = gameModes[gameMode];
 
 	gameOptions.gameMode.init();
 
-	requestAnimationFrame(draw);
-
+	document.onkeydown = gameOptions.gameMode.level.handleKeyDown.bind(gameOptions.gameMode.level);
 }
 
+Game.prototype = {
+	handleKeyDown: function(e) {
 
+		e = e || window.event;
+   		var code = e.keyCode || e.which;
+
+		if(!this.level.checkKey(e))
+			this.level.player.checkKey(e);
+	}
+};
+
+function checkKey(e) {
+
+    e = e || window.event;
+   	var code = (e.keyCode ? e.keyCode : e.which);
+
+   	if (code == 32 || code == 13) {
+   		if (gameOptions.gameMode == gameModes['createmap']) {
+   			e.preventDefault();
+
+    		placeBlock();
+    	}
+   	}
+
+   	else player.checkKey(e);
+
+    if (code > 36 && code < 41) {
+
+    	e.preventDefault();
+
+    	if (gameOptions.gameMode == gameModes['createmap']) {
+    		movePointer(code);
+    	}
+
+    	if (canTurn(code, directionLastUsed)) {
+    		directionCurrent = code;
+    	}
+  	}
+}
 
 function end(text) {
 	if (text) {
@@ -62,22 +72,22 @@ function end(text) {
 	resetVariables();
 }
 
-function canTurn(from, to) {
+function canTurn(from, to, player) {
 	var canTurn = true;
 	    	
-	if (to == directionLeft && from == directionRight) {
+	if (to == player.directionLeft && from == player.directionRight) {
 		canTurn = false;
 	}
 
-	if (to == directionUp && from == directionDown) {
+	if (to == player.directionUp && from == player.directionDown) {
 		canTurn = false;
 	}
 
-	if (to == directionRight && from == directionLeft) {
+	if (to == player.directionRight && from == player.directionLeft) {
 		canTurn = false;
 	}
 
-	if (to == directionDown && from == directionUp) {
+	if (to == player.directionDown && from == player.directionUp) {
 		canTurn = false;
 	}
 
@@ -194,5 +204,5 @@ function resetVariables() {
 
 	$(htmlCanvas).click(null);
 
-	updateScoreDisplay(now, null);
+	//updateScoreDisplay(now, null);
 }

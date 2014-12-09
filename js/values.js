@@ -1,3 +1,4 @@
+'use strict';
 /*
 	values.js contains values used by all the other classes
 */
@@ -18,7 +19,11 @@ var gameModes = {
 				Date.now(), this, new Player(20, 300, 20, 20));
 			
 			level.update(Date.now());
-			updateLoop = setInterval(level.update(Date.now(), 100));
+			this.level = level;
+
+			updateLoop = setInterval(function() {
+				level.update(Date.now());
+			}, 100);
 		},
 		maxTime: 60000
 	},
@@ -46,9 +51,6 @@ var gameModes = {
 };
 
 var isRunning = false;
-
-//39 is right which is our default
-
 
 var score = 0;
 

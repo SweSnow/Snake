@@ -1,3 +1,4 @@
+'use strict';
 (function() {
 	function hash(string) {
 		var hash = 0, i, chr, len;
