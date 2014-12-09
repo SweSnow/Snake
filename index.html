@@ -8,7 +8,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
 
-	<script src="components/platform/platform.js"></script>
 	<script src="components/webcomponentsjs/webcomponents.js"></script>
 
 	<link rel="import" href="components/font-roboto/roboto.html">
@@ -26,11 +25,9 @@
 	<link rel="import" href="components/core-icons/core-icons.html">
 	<link rel="import" href="components/core-animated-pages/core-animated-pages.html">
 
+	<link rel="import" href="library-components/app-router/app-router.html">
+
 	<link rel="import" href="duarte-components/duarte-header.html">
-	<link rel="import" href="duarte-components/duarte-about.html">
-	<link rel="import" href="duarte-components/duarte-browse.html">
-	<link rel="import" href="duarte-components/duarte-profile.html">
-	<link rel="import" href="duarte-components/duarte-game-manager.html">
 
 	<link rel="stylesheet" type="text/css" href="style/main_style.css"/>
 
@@ -41,6 +38,9 @@
 	<polymer-element name="duarte-app">
 		<template>
 			<style>
+				:host {
+					display: block;
+				}
 				.page {
 					display: none;
 				}
@@ -55,8 +55,8 @@
 
 			</style>
 
-			<duarte-header selected="{{selected}}" on-selected="{{onSelect}}" smaller="false" loggedin="false"></duarte-header>
-			
+			<duarte-header selected="{{selected}}" smaller="false" loggedin="false"></duarte-header>
+			<!-- 
 			<core-animated-pages id="pages" selected="{{selected}}">
 				<duarte-about name="about"></duarte-about>
 				<duarte-browse name="browse"></duarte-browse>
@@ -65,7 +65,16 @@
 
 				<duarte-game name="play"></duarte-game>
 			</core-animated-pages>
+			-->
 
+			<app-router id="router" on-state-change="{{onStateChanged}}">
+				<app-route path="/about" import="/duarte-components/duarte-about.html"></app-route>
+				<app-route path="/browse" import="/duarte-components/duarte-browse.html"></app-route>
+				<app-route path="/profile" import="/duarte-components/duarte-profile.html"></app-route>
+				<app-route path="/create" import="/duarte-components/duarte-game-manager.html"></app-route>
+				<app-route path="/play" import="/duarte-components/duarte-game.html"></app-route>
+				<app-route path="*" import="/duarte-components/duarte-not-found.html"></app-route>
+			</app-router>
 			
 			
 		</template>	
@@ -73,6 +82,10 @@
 
 		<script type="text/javascript">
 			Polymer('duarte-app', {
+				onStateChanged: function(e, detail) {
+					this.selected = detail.path.match(/[\/#]*([^\/]+)/)[1];
+				}
+				/*
 				defaultPage: 'about',
 				attached: function() {
 					this.pages = [].map.call(this.$.pages.querySelectorAll('[name]'),
@@ -102,7 +115,7 @@
 					  .replace(/\d{3}(?!$)/g, '$& ')
 					  .split('').reverse().join('');
 				}*/
-			});
+		});
 		</script>
 	</polymer-element>
 

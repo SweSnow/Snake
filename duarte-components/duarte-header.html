@@ -1,8 +1,11 @@
 <link rel="import" href="../components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../library-components/pushstate-anchor/pushstate-anchor.html">
+
 <link rel="import" href="duarte-login.html">
 <link rel="import" href="duarte-register.html">
 
-<polymer-element name="duarte-header" attributes="smaller selected loggedin">
+<polymer-element name="duarte-header" attributes="selected">
   <template>
 	<style>
 
@@ -65,6 +68,13 @@
 			font-weight: 100;
 			font-size: 0.8em;
 		}
+		a {
+			text-decoration: none;
+			color: inherit;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+		}
 
 	</style>
 
@@ -73,18 +83,28 @@
 		<core-toolbar id="header" class="medium-tall" style="height: {{headerHeight}}">
 			<paper-icon-button icon="arrow-back" hidden?="{{!smaller}}"></paper-icon-button>
 			<div flex id="header-title"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
-			<paper-item hidden?="{{loggedin}}" on-tap="{{openModal}}" data-modal-id="registerModal" label="Sign up"></paper-item>
-			<paper-item hidden?="{{loggedin}}" on-tap="{{openModal}}" data-modal-id="loginModal" label="Log in"></paper-item>
+			<paper-item on-tap="{{openModal}}" data-modal-id="registerModal">Sign up</paper-item>
+			<paper-item on-tap="{{openModal}}" data-modal-id="loginModal">Log in</paper-item>
 
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
-				<paper-tabs id="tabs" on-core-activate="{{onSelect}}" selected="{{selected}}" flex>
+				<paper-tabs id="tabs" selected="{{selected}}" flex>
 				
-					<paper-tab name="about">About</paper-tab>
-					<paper-tab name="browse">Browse maps</paper-tab>
-					<paper-tab name="profile">My profile</paper-tab>
-					<paper-tab name="create">Create map</paper-tab>
-					<paper-tab name="play">Play</paper-tab>
+					<paper-tab name="about">
+						<a is="pushstate-anchor" href="/about">About</a>
+					</paper-tab>
+					<paper-tab name="browse">
+						<a is="pushstate-anchor" href="/browse">Browse maps</a>
+					</paper-tab>
+					<paper-tab name="profile">
+						<a is="pushstate-anchor" href="/profile">My profile</a>
+					</paper-tab>
+					<paper-tab name="create">
+						<a is="pushstate-anchor" href="/create">Create map</a>
+					</paper-tab>
+					<paper-tab name="play">
+						<a is="pushstate-anchor" href="/play">Play</a>
+					</paper-tab>
 			
 				</paper-tabs>
 		  
@@ -109,9 +129,6 @@
 		},
 		openModal: function(event, detail, button) {
 			this.$[button.dataset.modalId].toggle();
-		},
-		onSelect: function(event, detail) {
-			this.fire('selected');
 		}
 	});
   </script>
