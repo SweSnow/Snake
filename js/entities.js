@@ -144,7 +144,7 @@ Bug.prototype = {
 	},
 	eat: function(time, level) {
 		var scorePlus = this.maxValue -
-			(Math.floor((time - this.spawnTime) * 100));
+			(Math.floor((time - this.spawnTime) / 100));
 		level.score(scorePlus, false)
 
 		level.player.tailLength++;
@@ -153,6 +153,7 @@ Bug.prototype = {
 	},
 	template: $('<paper-shadow z="1" class="g_bug"></div>'),
 	duration: 7000,
+	interval: 14000,
 	maxValue: 70,
 	width: 20,
 	height: 20,
@@ -214,9 +215,11 @@ Player.prototype = {
 
 		//if tailLength isn't the same as the actual length
 		//we ate som food on the last food update
-		//meaning we shouldn't splice te array
-		if (this.tailLength <= this.tailArray.length)
+		//meaning we shouldn't splice the array
+		if (this.tailLength < this.tailArray.length) {
+			this.tailArray[0].die(level);
 			this.tailArray.splice(0, 1);
+		}
 
 		//Checking tail collision
 		this.tailArray.forEach(function(tail) {
@@ -228,8 +231,8 @@ Player.prototype = {
 		this.element.css('top', this.y + 'px');
 		this.element.css('left', this.x + 'px');
 	},
-	die: function() {
-		end();
+	die: function(level) {
+		end(level);
 	},
 	tailArray: [],
 	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
@@ -241,7 +244,7 @@ Player.prototype = {
 	directionDown: 40,
 	width: 20,
 	height: 20,
-	color: '#980284'
+	color: '#009688'
 
 }
 
@@ -251,7 +254,7 @@ function Tail(x, y) {
 	this.x = x;
 	this.y = y;
 
-	this.element = Tail.prototype.template;
+	this.element = Tail.prototype.template.clone();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
@@ -274,11 +277,20 @@ Tail.prototype = {
 		this.element.css('left', this.x + 'px');
 	},
 	die: function() {
-		this.$element.remove();
+
+		var element = this.element;
+
+		element.css('transition', 'all 150ms');
+		element.css('opacity', '0.0');
+
+		setTimeout(function() {
+			element.remove();
+		}, 150);
+		
 	},
 	template: $('<paper-shadow z="1" class="g_tail"></div>'),
 	value: 10,
 	width: 20,
 	height: 20,
-	color: '#aaaaaa'
+	color: '#80CBC4'
 }
