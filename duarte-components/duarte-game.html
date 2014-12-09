@@ -75,9 +75,16 @@
 			timeAttackTimeElement = $(this.$.timeAttackText);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
-			new Game($(this.$.htmlCanvas), 'normal');
-
+			this.game = new Game($(this.$.htmlCanvas), 'normal');
 		},
+		onRouteEnter: function() {
+			console.log('time to start game');
+			this.game.resume();
+		},
+		onRouteLeave: function() {
+			console.log('time to pause game');
+			this.game.pause();
+		}
 	});
 
 

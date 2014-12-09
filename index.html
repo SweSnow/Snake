@@ -67,7 +67,7 @@
 			</core-animated-pages>
 			-->
 
-			<app-router id="router" on-state-change="{{onStateChanged}}">
+			<app-router id="router" on-state-change="{{onStateChanged}}" on-activate-route-start="{{onRouteStart}}" on-activate-route-end="{{onRouteEnd}}">
 				<app-route path="/about" import="/duarte-components/duarte-about.html"></app-route>
 				<app-route path="/browse" import="/duarte-components/duarte-browse.html"></app-route>
 				<app-route path="/profile" import="/duarte-components/duarte-profile.html"></app-route>
@@ -84,6 +84,16 @@
 			Polymer('duarte-app', {
 				onStateChanged: function(e, detail) {
 					this.selected = detail.path.match(/[\/#]*([^\/]+)/)[1];
+				},
+				onRouteStart: function(e, detail) {
+					if(detail.oldRoute && detail.oldRoute.firstChild.onRouteLeave) {
+						detail.oldRoute.firstChild.onRouteLeave();
+					}
+				},
+				onRouteEnd: function(e, detail) {
+					if(detail.route && detail.route.firstChild.onRouteEnter) {
+						detail.route.firstChild.onRouteEnter();
+					}
 				}
 				/*
 				defaultPage: 'about',
