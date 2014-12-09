@@ -15,6 +15,8 @@ function Food(x, y, spawnDate){
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
 	this.element.css('background', this.color);
+	this.element.css('position', 'absolute');
+
 
 	htmlCanvas.append(this.element);
 }
@@ -27,6 +29,10 @@ Food.prototype = {
 	 	if (level.player.x == this.x && level.player.y == this.y) 
 	 		this.eat(level);
 
+	},
+	render: function() {
+		this.element.css('top', this.y + 'px');
+		this.element.css('left', this.x + 'px');
 	},
 	die: function(level) {
 		level.entities.splice(level.entities.indexOf(this), 1);
@@ -51,7 +57,7 @@ Food.prototype = {
 		}
 
 		if (hasFoundFood) {
-			level.spawnRandomFood(false);
+			level.spawnRandomFood(false, level);
 			//writeLogMessage('No food on canvas, spawn new');
 		}
 
@@ -59,8 +65,8 @@ Food.prototype = {
 	duration: 5000,
 	template: $('<div class="g_food"></div>'),
 	value: 10,
-	width: 50,
-	height: 50,
+	width: 20,
+	height: 20,
 	color: '#ff0000'
 }
 
@@ -76,6 +82,7 @@ function Obstacle(x, y) {
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
 	this.element.css('background', this.color);
+	this.element.css('position', 'absolute');
 
 	htmlCanvas.append(this.element);
 }
@@ -88,13 +95,17 @@ Obstacle.prototype = {
 			end('Collided with obstacle');
 		}
 	},
+	render: function() {
+		this.element.css('top', this.y + 'px');
+		this.element.css('left', this.x + 'px');
+	},
 	die: function() {
 		this.$element.remove();
 	},
 	template: $('<div class="g_obstacle"></div>'),
 	value: 10,
-	width: 50,
-	height: 50,
+	width: 20,
+	height: 20,
 	color: '#00ff00'
 }
 
@@ -111,6 +122,7 @@ function Bug(x, y, width, height, spawnTime) {
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
 	this.element.css('background', this.color);
+	this.element.css('position', 'absolute');
 
 	htmlCanvas.append(this.element);
 }
@@ -124,7 +136,10 @@ Bug.prototype = {
 		}
 
 	},
-	duration: 7000,
+	render: function() {
+		this.element.css('top', this.y + 'px');
+		this.element.css('left', this.x + 'px');
+	},
 	die: function(level) {
 		level.entities.remove(this);
 		this.$element.remove();
@@ -140,9 +155,10 @@ Bug.prototype = {
 		this.die(level);
 	},
 	template: $('<div class="g_bug"></div>'),
+	duration: 7000,
 	maxValue: 70,
-	width: 50,
-	height: 50,
+	width: 20,
+	height: 20,
 	color: '#0000ff'
 }
 
@@ -160,6 +176,7 @@ function Player(x, y, width, height) {
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
 	this.element.css('background', this.color);
+	this.element.css('position', 'absolute');
 
 	htmlCanvas.append(this.element);
 
@@ -205,9 +222,13 @@ Player.prototype = {
 
 		//Checking tail collision
 		this.tailArray.forEach(function(tail) {
-			tail.update();
+			tail.update(this, level);
 		}, this);
 
+	},
+	render: function() {
+		this.element.css('top', this.y + 'px');
+		this.element.css('left', this.x + 'px');
 	},
 	die: function() {
 		end();
@@ -220,8 +241,8 @@ Player.prototype = {
 	directionUp: 38,
 	directionRight: 39,
 	directionDown: 40,
-	width: 50,
-	height: 50,
+	width: 20,
+	height: 20,
 	color: '#000000'
 
 }
@@ -238,6 +259,7 @@ function Tail(x, y, width, height) {
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
 	this.element.css('background', this.color);
+	this.element.css('position', 'absolute');
 	htmlCanvas.append(this.element);
 }
 
@@ -249,12 +271,16 @@ Tail.prototype = {
 			end('Collided with obstacle');
 		}
 	},
+	render: function() {
+		this.element.css('top', this.y + 'px');
+		this.element.css('left', this.x + 'px');
+	},
 	die: function() {
 		this.$element.remove();
 	},
 	template: $('<div class="g_tail"></div>'),
 	value: 10,
-	width: 50,
-	height: 50,
+	width: 20,
+	height: 20,
 	color: '#aaaaaa'
 }

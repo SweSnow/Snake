@@ -23,6 +23,12 @@ Game.prototype = {
 
 		if(!this.level.checkKey(e))
 			this.level.player.checkKey(e);
+	},
+	resume: function() {
+
+	},
+	pause: function() {
+		
 	}
 };
 
