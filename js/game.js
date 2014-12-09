@@ -9,20 +9,22 @@ function Game(container, gameMode) {
 	if (gameMode == 'normal') {
 
 		this.level = new Level(
-				defaultLevel(600, 500, 20), 20, 600, 500,
+				Level.createDefaultLevel(600, 500, 20), 20, 600, 500,
 				Date.now(), 60000, new Player(20, 300, 20, 20));
 			
-			this.level.update(Date.now());
+		this.level.update(Date.now());
 
-			this.updateLoop = setInterval(function() {
-				level.update(Date.now());
-			}, 50);
+		var level = this.level;
+
+		this.updateLoop = setInterval(function() {
+			level.update(Date.now());
+		}, 50);
 
 
 	} else if (gameMode == 'create') {
 
 		this.level = new LevelCreator(
-				defaultLevel(600, 500, 20), 30, 600, 500,
+				Level.createDefaultLevel(600, 500, 20), 30, 600, 500,
 				Date.now(), this);
 			
 			this.level.update(Date.now());
@@ -44,6 +46,16 @@ Game.prototype = {
 		if(!this.level.checkKey(e))
 			this.level.player.checkKey(e);
 	},
+	handleMouseClick: function() {
+		var x = Math.floor((event.offsetX) / this.tileSize);
+		var y = Math.floor((event.offsetY) / this.tileSize);
+
+		if (this.level.get(x, y) == 1) {
+			this.level.set(x, y, 0);
+		} else {
+			this.level.set(x, y, 1);
+		}
+	},
 	resume: function() {
 
 	},
@@ -56,28 +68,12 @@ Game.prototype = {
 	resetVariables: function() {
 		this.isRunning = false;
 
-	clearInterval(updateLoop);
+		clearInterval(updateLoop);
 
-	timeAttackTimeElement.text('');
+		timeAttackTimeElement.text('');
 
-	$(htmlCanvas).click(null);
-	},
-	createDefaultLevel: function(_width, _height, tileSize) {
-	return (function() {
-		var array = [];
-
-		var width = _width / tileSize;
-		var height = _height / tileSize;
-
-		var max = width * height;
-
-		for (var i = 0; i < max; i++) {
-			array[i] = 0;
-		}
-
-		return array;
-
-	})();
+		$(htmlCanvas).click(null);
+	}
 }
 
 function mouseDownEvent(event) {

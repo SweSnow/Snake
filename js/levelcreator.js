@@ -7,17 +7,19 @@
 	@param height 		Pixel height of game container
 */
 
-function LevelCreator(grid, tileSize, width, height,) {
+function LevelCreator(grid, tileSize, width, height) {
 	this.grid = grid;
 	this.tileSize = tileSize;
 	this.width = width;
 	this.height = height;
 
+	this.pointer = new Pointer(10, 10);
 }
 
 LevelCreator.prototype = {
 	update: function(now) {
 		isRunning = true;
+		this.pointer.update();
 	},
 	get: function(x, y) {
 		return this.grid[x + (y * this.width)];
@@ -57,7 +59,7 @@ LevelCreator.prototype = {
 		} else {
 			this.level.set(pointerX, pointerY, 0);
 		}
-	}
+	},
 	movePointer: function (code) {
 
 		switch(code) {

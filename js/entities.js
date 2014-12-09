@@ -65,6 +65,18 @@ Food.prototype = {
 			//writeLogMessage('No food on canvas, spawn new');
 		}
 
+		var canvasRect = htmlCanvas[0].getBoundingClientRect();
+
+		foodRipple[0].downAction({
+			x: (this.x + canvasRect.left),
+			y: (this.y + canvasRect.top)
+		});
+
+		setTimeout(function() {
+			foodRipple[0].upAction();
+		}, 200);
+
+
 	},
 	duration: 5000,
 	template: $('<paper-shadow z="1" class="g_food"></div>'),
@@ -159,6 +171,17 @@ Bug.prototype = {
 		level.player.tailLength++;
 
 		this.die(level);
+
+		var canvasRect = htmlCanvas[0].getBoundingClientRect();
+
+		bugRipple[0].downAction({
+			x: (this.x + canvasRect.left),
+			y: (this.y + canvasRect.top)
+		});
+
+		setTimeout(function() {
+			bugRipple[0].upAction();
+		}, 200);
 	},
 	template: $('<paper-shadow z="1" class="g_bug"></div>'),
 	duration: 7000,

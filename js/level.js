@@ -32,8 +32,8 @@ Level.prototype = {
 		isRunning = true;
 
 		//Time based
-		if (timeLimit != -1) {
-			var timeRemaining = this.gameMode.maxTime - (now - this.startTime);
+		if (this.timeLimit != -1) {
+			var timeRemaining = this.timeLimit - (now - this.startTime);
 			if (timeRemaining > 0) {
 				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
 			} else {
@@ -78,36 +78,21 @@ Level.prototype = {
 		e = e || window.event;
    		var code = e.keyCode || e.which;
 
-   		/*
-
-   		if (code == 32 || code == 13) {
-	   		if (gameOptions.gameMode == gameModes['createmap']) {
-	   			e.preventDefault();
-
-	    		placeBlock();
-	    	}
-	   	}
-*/
-
 	    if (code > 36 && code < 41) {
 
 	    	e.preventDefault();
 
 	    	//Art
-			if (!(	to == player.directionLeft 
-					&& from == player.directionRight
-				||	to == player.directionUp 
-					&& from == player.directionDown
-				||	to == player.directionRight 
-					&& from == player.directionLeft
-				||	to == player.directionDown 
-					&& from == player.directionUp)) {
+			if (!(	code == this.player.directionLeft 
+					&& this.player.directionCurrent == this.player.directionRight
+				||	code == this.player.directionUp 
+					&& this.player.directionCurrent == this.player.directionDown
+				||	code == this.player.directionRight 
+					&& this.player.directionCurrent == this.player.directionLeft
+				||	code == this.player.directionDown 
+					&& this.player.directionCurrent == this.player.directionUp)) {
 				this.player.directionCurrent = code;
 			}
-
-	    	if (canTurn(code, this.player.directionLastUsed, this.player)) {
-	    		this.player.directionCurrent = code;
-	    	}
 	  	}
 
 	},
@@ -117,7 +102,7 @@ Level.prototype = {
 			this.lastFoodSpawn = Date.now();
 		}
 
-		var spot = getEmptySpot(level);
+		var spot = this.getEmptySpot(level);
 		var food = new Food(spot.x, spot.y, Date.now());
 
 		this.entities.push(food);
@@ -126,7 +111,7 @@ Level.prototype = {
 		
 		this.lastBugSpawn = Date.now();
 
-		var spot = getEmptySpot(level);
+		var spot = this.getEmptySpot(level);
 		var bug = new Bug(spot.x, spot.y, Date.now());
 
 		this.entities.push(bug);
@@ -137,40 +122,30 @@ Level.prototype = {
 	entities: [],
 	getEmptySpot: function() {
 		while(true) {
-			var proposedX = Math.floor(Math.random() * level.width / level.tileSize) * level.tileSize;
-			var proposedY = Math.floor(Math.random() * level.height / level.tileSize) * level.tileSize;
+			var proposedX = Math.floor(Math.random() * this.width / this.tileSize) * this.tileSize;
+			var proposedY = Math.floor(Math.random() * this.height / this.tileSize) * this.tileSize;
 
-			if (isEmptySpot(proposedX, proposedY, level)) {
+			if (this.isEmptySpot(proposedX, proposedY)) {
 				return {
 					x: proposedX,
 					y: proposedY
 				}
 			}
 		}
-	}
-	isEmptySpot: function(proposedX, proposedY, level) {
-		for (var i = 0; i < level.entities.length; i++) {
-			if (level.entities[i].x == proposedX && level.entities[i].y == proposedY) {
+	},
+	isEmptySpot: function(proposedX, proposedY) {
+		for (var i = 0; i < this.entities.length; i++) {
+			if (this.entities[i].x == proposedX && this.entities.y == proposedY) {
 				return false;
 			}
 		}
 		
-		if (level.player.x == proposedX && level.player.y == proposedY)
+		if (this.player.x == proposedX && this.player.y == proposedY)
 			return false;
 
-		for (var i = 0; i < level.player.tailArray.length; i++) {
-			if (level.player.tailArray[i].x == proposedX && level.player.tailArray[i].y == proposedY) {
+		for (var i = 0; i < this.player.tailArray.length; i++) {
+			if (this.player.tailArray[i].x == proposedX && this.player.tailArray[i].y == proposedY) {
 				return false;
-			}
-		}
-
-		if (gameOptions.gameMode == gameModes['obstacle']) {
-			for (var yi = 0; yi < 50; yi++) {
-				for (var xi = 0; xi < 50; xi++) {
-					if (proposedX == xi && proposedY == yi) {
-						return false;
-					}
-				}
 			}
 		}
 
@@ -190,3 +165,23 @@ Level.prototype = {
 		//TODO implement callback here
 	}
 };
+
+extend(Level, {
+	createDefaultLevel: function(_width, _height, tileSize) {
+		return (function() {
+			var array = [];
+
+			var width = _width / tileSize;
+			var height = _height / tileSize;
+
+			var max = width * height;
+
+			for (var i = 0; i < max; i++) {
+				array[i] = 0;
+			}
+
+			return array;
+
+		})();
+	}
+});

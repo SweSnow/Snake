@@ -55,7 +55,27 @@
 		}
 
 		.g_pointer {
-			
+			position: absolute;
+			background-color: #ff0000;
+			z-index: 1;
+		}
+
+		.game-ripple {
+			position: absolute;
+			display: block;
+			top: 100px;
+			left: 0;
+			width: 600px;
+			height: 500px;
+			z-index: 3;
+		}
+
+		#foodRipple {
+			color: #4CAF50;
+		}
+
+		#bugRipple {
+			color: #03A9F4;
 		}
 
 		#container {
@@ -74,6 +94,8 @@
 			width: 600px;
 			height: 500px;
 		}
+
+
 
 		#gameOverlay {
 			position: absolute;
@@ -136,8 +158,13 @@
 				<div id="scoreText"></div>
 
 		</paper-shadow>
+
+		<paper-ripple class="game-ripple" id="foodRipple"></paper-ripple>
+		<paper-ripple class="game-ripple" id="bugRipple"></paper-ripple>
 			
-		<paper-shadow z="2" id="htmlCanvas"></paper-shadow>
+		<paper-shadow z="2" id="htmlCanvas">
+			
+		</paper-shadow>
 
 		<paper-shadow z="3" id="gameOverOverlay" hidden="gameOver">
 
@@ -164,9 +191,11 @@
 			scoreTextElement = $(this.$.scoreText);
 			gameOverOverlay = $(this.$.gameOverOverlay);
 			gameOverScore = $(this.$.gameOverScore);
+			foodRipple = $(this.$.foodRipple);
+			bugRipple = $(this.$.bugRipple);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
-			this.game = new Game(htmlCanvas, gameMode);
+			this.game = new Game(htmlCanvas, this.gameMode);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},
@@ -187,7 +216,8 @@
 				gameOver = false;
 			}
 		},
-		gameOver: false
+		gameOver: false,
+		gameMode: 'normal'
 
 	});
 
