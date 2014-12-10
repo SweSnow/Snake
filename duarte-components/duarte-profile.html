@@ -1,3 +1,9 @@
+<link rel="import" href="../components/paper-dropdown/paper-dropdown-menu.html">
+<link rel="import" href="../components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<link rel="import" href="../duarte-components/duarte-map.html">
+
 <polymer-element name="duarte-profile">
 	<template>
 		<style>
@@ -23,23 +29,25 @@
 			}
 
 			#maps-container {
-				padding-left: 32px;
-				padding-right: 32px;
-				max-width: 1100px;
+				max-width: 1128px;
 				margin-top: 32px;
 				margin-left: auto;
 				margin-right: auto;
 			}
 
 			.map {
+				box-sizing: border-box;
 				cursor: pointer;
 				border-radius: 4px;
 				background-color: #ffffff;
-				width: 350px;
-				height: 410px;
+				width: 250px;
+				height: 310px;
 				position: relative;
+				float: left;
 				display: inline-block;
 				transition: background-color 0.4s;
+				margin: 16px;
+				padding: 16px;
 			}
 
 			.map:active {
@@ -47,53 +55,70 @@
 			}
 
 			.map-title {
-				padding: 16px;
+				margin-top: 16px;
 				font-weight: 300;
 				color: #444;
 				font-size: 1.7em;
+
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			.map-creator {
+				color: #444;
 			}
 
 			.map-ripple {
 				color: #009688;
 			}
+
+			.duarte-thumbnail {
+				width: 220px;
+				height: 220px;
+			}
 			
 		</style>
 
 			<div class="container">
-				<div class="profile-name">{{name}}</div>
+				<div class="profile-name">{{user.username}}</div>
 
 				<div class="heading">My maps</div>
 
 				<div id="maps-container">
-				<!--	<core-ajax
-						auto
-						url="http://192.168.0.187:8080/levels/interval"
-						params='{"from":"0", "length":"10"}'
-						handleAs="json"
-						on-core-response="{{handleResponse}}"></core-ajax>-->
+					<core-ajax
+						id="get"
+						auto="true"
+						method="get"
+						url="http://192.168.0.189:8080/level/my"
+						on-core-response="{{onResponse}}"
+						contentType="application/json"
+						withCredentials="true"
+						></core-ajax>
 
-				<!--	<template reapeat="map in maps">-->
-						<div vertical layout class="map" on-tap="{{mapClick}}">
-							<paper-shadow z="1"></paper-shadow>
-							<duarte-game-preview class="duarte-thumbnail">
-								<paper-ripple fit class="map-ripple"></paper-ripple>
-							</duarte-game-preview>
+					<template repeat="{{map in levels}}">
+						<a is="pushstate-anchor" href="/play?id={{map._id}}">
+							<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
+								<paper-shadow z="1"></paper-shadow>
+								<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
+									<paper-ripple fit class="map-ripple"></paper-ripple>
+								</duarte-map>
 
-							<div class="map-title">map.title</div>
-						</div>
-
-				<!--	</template>-->
-	</div>
+								<div class="map-title">{{map.title}}</div>
+							</paper-shadow>
+						</a>
+					</template>
+				</div>
 
 			</div>
 
 	</template>
 	<script>
 		Polymer('duarte-profile', {
-			name: "Lorem Ipsum",
-			mapClick: function() {
-				
-			}
+			onResponse: function(e, detail) {
+				this.levels = JSON.parse(detail.response);
+				console.log(this.levels);
+		  	}
 		});
   </script>
 </polymer-element>

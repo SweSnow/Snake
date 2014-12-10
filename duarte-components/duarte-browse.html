@@ -47,6 +47,7 @@
 			display: inline-block;
 			transition: background-color 0.4s;
 			margin: 16px;
+			padding: 16px;
 		}
 
 		.map:active {
@@ -54,10 +55,18 @@
 		}
 
 		.map-title {
-			padding: 16px;
+			margin-top: 16px;
 			font-weight: 300;
 			color: #444;
 			font-size: 1.7em;
+
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+
+		.map-creator {
+			color: #444;
 		}
 
 		.map-ripple {
@@ -65,8 +74,8 @@
 		}
 
 		.duarte-thumbnail {
-			width: 350px;
-			height: 350px;
+			width: 220px;
+			height: 220px;
 		}
 
 		.subheader-dropdown-label  {
@@ -149,14 +158,17 @@
 			></core-ajax>
 
 		<template repeat="{{map in levels}}">
-			<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
-				<paper-shadow z="1"></paper-shadow>
-				<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
-					<paper-ripple fit class="map-ripple"></paper-ripple>
-				</duarte-map>
+			<a is="pushstate-anchor" href="/play?id={{map._id}}">
+				<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
+					<paper-shadow z="1"></paper-shadow>
+					<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
+						<paper-ripple fit class="map-ripple"></paper-ripple>
+					</duarte-map>
 
-				<div class="map-title">{{map.title}}</div>
-			</paper-shadow>
+					<div class="map-title">{{map.title}}</div>
+					<div class="map-creator">{{map.creator.username}}</div>
+				</paper-shadow>
+			</a>
 		</template>
 	</div>
 
