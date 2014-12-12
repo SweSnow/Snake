@@ -13,9 +13,10 @@
 	@param startTime 	Date in unix standard time
 	@param timeLimit 	Time limit for the game, set as -1 for infinite
 	@param player 		Player object, create this before initializing Level
+	@param gameOptions	Objects containing used values for the session, validate with server
 */
 
-function Level(grid, tileSize, width, height, startTime, timeLimit, player) {
+function Level(grid, tileSize, width, height, startTime, timeLimit, player, gameOptions) {
 	this.grid = grid;
 	this.tileSize = tileSize;
 	this.width = width;
@@ -23,13 +24,14 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, player) {
 	this.startTime = startTime;
 	this.timeLimit = timeLimit;
 	this.player = player;
+	this.gameOptions = gameOptions;
 
 	this.score(0, true);
 }
 
 Level.prototype = {
 	update: function(now) {
-		isRunning = true;
+		this.isRunning = true;
 
 		//Time based
 		if (this.timeLimit != -1) {
@@ -103,7 +105,7 @@ Level.prototype = {
 		}
 
 		var spot = this.getEmptySpot(level);
-		var food = new Food(spot.x, spot.y, Date.now());
+		var food = new Food(spot.x, spot.y, Date.now(), level.gameOptions);
 
 		this.entities.push(food);
 	},
@@ -112,7 +114,7 @@ Level.prototype = {
 		this.lastBugSpawn = Date.now();
 
 		var spot = this.getEmptySpot(level);
-		var bug = new Bug(spot.x, spot.y, Date.now());
+		var bug = new Bug(spot.x, spot.y, Date.now(), level.gameOptions);
 
 		this.entities.push(bug);
 	},
@@ -163,7 +165,9 @@ Level.prototype = {
 	},
 	end: function() {
 		//TODO implement callback here
-	}
+		this.isRunning = false;
+	},
+	isRunning: false
 };
 
 extend(Level, {

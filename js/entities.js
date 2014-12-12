@@ -4,10 +4,12 @@
 	game (food, bug, obstacle, playerand tail).
 */
 
-function Food(x, y, spawnDate){
+function Food(x, y, spawnDate, gameOptions){
 	this.x = x;
 	this.y = y;
 	this.spawnDate = spawnDate || Date.now();
+	this.value = gameOptions.food.score;
+	this.duration = gameOptions.food.duration;
 
 	this.element = Food.prototype.template.clone();
 	this.element.css('top', y + 'px');
@@ -116,17 +118,18 @@ Obstacle.prototype = {
 		this.$element.remove();
 	},
 	template: $('<paper-shadow z="1" class="g_obstacle"></div>'),
-	value: 10,
 	width: 20,
 	height: 20
 }
 
 
 
-function Bug(x, y, spawnTime) {
+function Bug(x, y, spawnTime, gameOptions) {
 	this.x = x;
 	this.y = y;
 	this.spawnTime = spawnTime || Date.now();
+	this.value = gameOptions.bug.score;
+	this.duration = gameOptions.bug.duration;
 
 	this.element = this.template.clone();
 	this.element.css('top', y + 'px');

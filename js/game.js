@@ -10,7 +10,8 @@ function Game(container, gameMode) {
 
 		this.level = new Level(
 				Level.createDefaultLevel(600, 500, 20), 20, 600, 500,
-				Date.now(), 60000, new Player(20, 300, 20, 20));
+				Date.now(), 60000, new Player(20, 300, 20, 20),
+				new GameOptions(GameOptions.prototype.Default));
 			
 		this.level.update(Date.now());
 
