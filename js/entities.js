@@ -282,8 +282,8 @@ Player.prototype = {
 
 		for (var i = 0; i < level.players.length; i++) {
 			if (level.players[i] != this) {
-				if (this.x = level.players[i].x &&
-					this.y = level.players[i].y) {
+				if (this.x == level.players[i].x &&
+					this.y == level.players[i].y) {
 					level.game.end('Collided with other player');
 				}
 			}
