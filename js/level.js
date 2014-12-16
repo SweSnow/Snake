@@ -14,9 +14,10 @@
 	@param timeLimit 	Time limit for the game, set as -1 for infinite
 	@param players		Player objects, create this before initializing Level
 	@param gameOptions	Objects containing used values for the session, validate with server
+	@param game			Game object containing the level, useful for callbacks
 */
 
-function Level(grid, tileSize, width, height, startTime, timeLimit, players, gameOptions) {
+function Level(grid, tileSize, width, height, startTime, timeLimit, players, gameOptions, game) {
 	this.grid = grid;
 	this.tileSize = tileSize;
 	this.width = width;
@@ -25,7 +26,9 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, players, gam
 	this.timeLimit = timeLimit;
 	this.players = players;
 	this.gameOptions = gameOptions;
+	this.game = game;
 
+	this.time = startTime;
 	this.score(0, true);
 	for (var i = 0; i < this.players.length; i++) {
 		this.players[i].propsedDirection = this.players[i].directionRight;
@@ -42,7 +45,9 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, players, gam
 }
 
 Level.prototype = {
-	update: function(now) {
+	update: function() {
+
+		this.time += this.gameOptions.updateInterval;
 
 		for (var i = 0; i < this.players.length; i++) {
 			if (!(	this.players[i].propsedDirection == this.players[i].directionLeft 
@@ -57,38 +62,36 @@ Level.prototype = {
 			}
 		}
 
-		this.isRunning = true;
-
 		//Time based
 		if (this.timeLimit != -1) {
-			var timeRemaining = this.timeLimit - (now - this.startTime);
+			this.timeLimit -= this.gameOptions.updateInterval;
 			if (timeRemaining > 0) {
-				timeAttackTimeElement.text(Math.floor(timeRemaining / 1000) + 's');
+				this.timeLimit.text(Math.floor(this.timeLimit / 1000) + 's');
 			} else {
-				this.end('Time ran out :(');
+				this.game.end('Ran out of time', this.scoreAmount);
 			}
 		}
 		
 
 		//We update player first separately, it renders itself
 		for (var i = 0; i < this.players.length; i++) {
-			this.players[i].update(now, this);
+			this.players[i].update(this.time, this);
 		}
 
 		//Update all entites (food, bug, obstacles)
 		for (var i = 0; i < this.entities.length; i++) {
-			this.entities[i].update(now, this);
+			this.entities[i].update(this.time, this);
 		}
 		
 		//Manage bug and food spawn
-		if (now - this.lastFoodSpawn > this.gameOptions.food.duration || this.lastFoodSpawn == null) {
+		if (this.time - this.lastFoodSpawn > this.gameOptions.food.duration || this.lastFoodSpawn == null) {
 			this.spawnRandomFood(true, this);
 		}
 
 		if (this.lastBugSpawn == null) {
-			this.lastBugSpawn = now;
+			this.lastBugSpawn = this.time;
 		} else {
-			if (now - this.lastBugSpawn > Bug.prototype.interval) {
+			if (this.time - this.lastBugSpawn > Bug.prototype.interval) {
 				this.spawnRandomBug(this);
 			}	
 		}
@@ -117,20 +120,20 @@ Level.prototype = {
 	spawnRandomFood: function(logLastSpawn, level) {
 
 		if (logLastSpawn) {
-			this.lastFoodSpawn = Date.now();
+			this.lastFoodSpawn = level.time;
 		}
 
 		var spot = this.getEmptySpot(level);
-		var food = new Food(spot.x, spot.y, Date.now(), level.gameOptions);
+		var food = new Food(spot.x, spot.y, level.time, level.gameOptions);
 
 		this.entities.push(food);
 	},
 	spawnRandomBug: function(level) {
 		
-		this.lastBugSpawn = Date.now();
+		this.lastBugSpawn = level.time;
 
 		var spot = this.getEmptySpot(level);
-		var bug = new Bug(spot.x, spot.y, Date.now(), level.gameOptions);
+		var bug = new Bug(spot.x, spot.y, level.time, level.gameOptions);
 
 		this.entities.push(bug);
 	},
@@ -181,12 +184,7 @@ Level.prototype = {
 
 		scoreTextElement.text(this.scoreAmount + ' Points');
 		gameOverScore.text('Score: ' + this.scoreAmount + ' Points');
-	},
-	end: function() {
-		this.isRunning = false;
-		alert("end");
-	},
-	isRunning: false
+	}
 };
 
 extend(Level, {

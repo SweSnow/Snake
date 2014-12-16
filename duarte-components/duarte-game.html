@@ -1,5 +1,7 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/core-icons/av-icons.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
 
@@ -117,6 +119,11 @@
 			font-size: 25px;
 		}
 
+		#pauseResume {
+			display: block;
+			float: right;
+		}
+
 		#gameOverOverlay {
 			color: #fff;
 			background-color: #009688;
@@ -126,7 +133,7 @@
 			z-index: 4;
 			left: 150px;
 			width: 300px;
-			height: 130px;
+			height: 154px;
 			top: 245px; 
 		}
 
@@ -146,6 +153,15 @@
 			font-size: 16px;
 		}
 
+		#gameOverMessage {
+			padding-top: 6px;
+			font-size: 16px;
+		}
+
+		#quit {
+			color: #fff;
+		}
+
 
 	</style>
 
@@ -155,6 +171,10 @@
 				
 				<div id="timeAttackText"></div>
 				<div id="scoreText"></div>
+				<paper-button on-tap="{{pauseResume}}" hidden?="{{gameOver}}" raised id="pauseResume">
+					<core-icon hidden?="{{!isPlaying}}" icon="av:pause"></core-icon>
+					<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
+				</paper-button>
 
 		</paper-shadow>
 
@@ -165,13 +185,16 @@
 			
 		</paper-shadow>
 
-		<paper-shadow z="3" id="gameOverOverlay" hidden="gameOver">
+		<paper-shadow z="3" id="gameOverOverlay" hidden?="{{!gameOver}}">
 
 			<div id="label">Game Over!</div>
+			<div id="gameOverMessage">{{message}}</div>
 			<div id="gameOverScore">Score: 100 Points</div>
 
-			<paper-button on-tap="retry">Retry</paper-button>
-			<paper-button on-tap="quit">Quit</paper-button>
+			<paper-button on-tap="{{retry}}">Retry</paper-button>
+			<a is="pushstate-anchor" href="/browse">
+				<paper-button id="quit">Back to browse</paper-button>
+			</a>
 
 		</paper-shadow>
 		
@@ -190,8 +213,6 @@
 	<script>
 	(function() {
 
-	var state = {};
-
 	Polymer('duarte-game', {
 		mode: false,
 		ready: function() {
@@ -202,6 +223,11 @@
 			this.startGame(level.grid);
 		},
 		startGame: function(grid) {
+
+			if (this.isPlaying) {
+				return;
+			}
+
 			timeAttackTimeElement = $(this.$.timeAttackText);
 			scoreTextElement = $(this.$.scoreText);
 			gameOverOverlay = $(this.$.gameOverOverlay);
@@ -209,8 +235,10 @@
 			foodRipple = $(this.$.foodRipple);
 			bugRipple = $(this.$.bugRipple);
 			htmlCanvas = $(this.$.htmlCanvas);
+
+			this.isPlaying = true;
 			
-			this.game = new Game(htmlCanvas, this.gameMode, grid);
+			this.game = new Game(htmlCanvas, this.gameMode, grid, this);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},
@@ -226,9 +254,26 @@
 		},
 		retry: function() {
 			gameOver = false;
-		},
-		quit: function() {
+			isPlaying = true;
 
+			if(this.levelId) {
+				this.$.request.go();
+			} else {
+				this.startGame(new Level.createDefaultLevel(600, 500, 20));
+			}
+		},
+		end: function(message) {
+			this.gameOver = true;
+			this.isPlaying = false;
+			this.message = message;
+		},
+		pauseResume: function() {
+			this.isPlaying = !this.isPlaying;
+			if (this.isPlaying) {
+				this.game.resume();
+			} else {
+				this.game.pause();
+			}
 		},
 		onGameStateChanged: function(state) {
 			if (state == 'over') {
@@ -238,7 +283,8 @@
 			}
 		},
 		gameOver: false,
-		gameMode: 'normal'
+		gameMode: 'normal',
+		isPlaying: false
 
 	});
 

@@ -7,7 +7,7 @@
 function Food(x, y, spawnDate, gameOptions){
 	this.x = x;
 	this.y = y;
-	this.spawnDate = spawnDate || Date.now();
+	this.spawnDate = spawnDate;
 	this.value = gameOptions.food.score;
 	this.duration = gameOptions.food.duration;
 
@@ -107,7 +107,7 @@ Obstacle.prototype = {
 	 	for (var i = 0; i < level.players.length; i++) {
 			if (level.players[i].x == this.x &&
 				level.players[i].y == this.y) {
-				level.end('Collided with obstacle');
+				level.game.end('Collided with obstacle');
 			}
 	 		
 	 	}
@@ -125,7 +125,7 @@ Obstacle.prototype = {
 function Bug(x, y, spawnTime, gameOptions) {
 	this.x = x;
 	this.y = y;
-	this.spawnTime = spawnTime || Date.now();
+	this.spawnTime = spawnTime;
 	this.value = gameOptions.bug.score;
 	this.duration = gameOptions.bug.duration;
 
@@ -290,9 +290,6 @@ Player.prototype = {
 		this.element.css('top', this.y + 'px');
 		this.element.css('left', this.x + 'px');
 	},
-	die: function(level) {
-		level.end(level);
-	},
 	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
 	directionCurrent: 39,
 	directionLastUsed: 39,
@@ -326,7 +323,7 @@ Tail.prototype = {
 	 	for (var i = 0; i < level.players.length; i++) {
 			if (level.players[i].x == this.x &&
 				level.players[i].y == this.y) {
-				level.end('Collided with tail');
+				level.game.end('Collided with tail', level.scoreAmount);
 			}
 	 	}
 	},

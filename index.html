@@ -109,7 +109,10 @@
 		<script type="text/javascript">
 			Polymer('duarte-app', {
 				onStateChanged: function(e, detail) {
-					this.selected = detail.path.match(/[\/#]*([^\/]+)/)[1];
+					var that = this;
+					setTimeout(function() {
+						that.selected = detail.path.match(/[\/#]*([^\/]+)/)[1];
+					}, 200)
 				},
 				onRouteStart: function(e, detail) {
 					var element = detail.oldRoute && detail.oldRoute.firstChild;

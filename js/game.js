@@ -4,11 +4,13 @@
 	with functions unbound from classes.
 */
 
-function Game(container, gameMode, tiles) {
+function Game(container, gameMode, tiles, master) {
+
+	this.master = master;
 
 	if (gameMode == 'normal') {
 
-		var gameOptions = GameOptions.Default;
+		this.gameOptions = GameOptions.Default;
 
 		var player1 = new Player(20, 240, 20, 20, {
 			left: 37,
@@ -26,16 +28,13 @@ function Game(container, gameMode, tiles) {
 		this.level = new Level(
 				tiles, 20, 600, 500,
 				Date.now(), -1, [player1, player2],
-				gameOptions);
+				this.gameOptions, this);
 			
-		this.level.update(Date.now());
+		this.level.end = this.end;
 
-		var level = this.level;
+		this.level.update();
 
-		this.updateLoop = setInterval(function() {
-			level.update(Date.now());
-		}, gameOptions.updateInterval);
-
+		this.resume();
 
 	} else if (gameMode == 'create') {
 
@@ -43,52 +42,34 @@ function Game(container, gameMode, tiles) {
 				Level.createDefaultLevel(600, 500, 20), 30, 600, 500,
 				Date.now(), this);
 			
-			this.level.update(Date.now());
+			this.level.update();
 
 			this.updateLoop = setInterval(function() {
-				level.update(Date.now());
+				level.update();
 			}, 16);
 	}
 
 	document.onkeydown = this.level.handleKeyDown.bind(this.level);
+
 }
 
 Game.prototype = {
-	handleKeyDown: function(e) {
-
-		e = e || window.event;
-   		var code = e.keyCode || e.which;
-
-		if(!this.level.checkKey(e))
-			this.level.player.checkKey(e);
-	},
-	handleMouseClick: function() {
-		var x = Math.floor((event.offsetX) / this.tileSize);
-		var y = Math.floor((event.offsetY) / this.tileSize);
-
-		if (this.level.get(x, y) == 1) {
-			this.level.set(x, y, 0);
-		} else {
-			this.level.set(x, y, 1);
-		}
-	},
 	resume: function() {
+
+		var level = this.level;
+		var gameOptions = this.gameOptions;
+
+		this.updateLoop = setInterval(function() {
+			level.update();
+		}, gameOptions.updateInterval);
 
 	},
 	pause: function() {
-
+		clearInterval(this.updateLoop);
 	},
-	end: function() {
-		this.resetVariables();
-	},
-	resetVariables: function() {
-		this.isRunning = false;
-
-		clearInterval(updateLoop);
-
-		timeAttackTimeElement.text('');
-
-		$(htmlCanvas).click(null);
+	end: function(message) {
+		this.pause();
+		this.master.end(message);
 	}
 }
 

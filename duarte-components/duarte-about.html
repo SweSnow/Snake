@@ -64,7 +64,9 @@
 	</style>
 
 	<div class="header">
-		<paper-fab icon="av:play-arrow" class="fab" title="create"></paper-fab>
+		<a is="pushstate-anchor" href="/play">
+			<paper-fab icon="av:play-arrow" class="fab" title="create"></paper-fab>
+		</a>
 	</div>
 
 	<div class="container">
@@ -74,10 +76,6 @@
 		<p hidden?="{{user.loggedOut}}">
 			Welcome {{user.username}}!
 		</p>
-
-		<a is="pushstate-anchor" href="/play">
-			<paper-button raisedButton class="colored">Play Now!</paper-button>
-		</a>
 
 	</div>
 
