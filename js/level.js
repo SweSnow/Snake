@@ -27,10 +27,32 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, player, game
 	this.gameOptions = gameOptions;
 
 	this.score(0, true);
+	this.propsedDirection = this.player.directionRight;
+
+	for(var y = 0, i = 0; y < height / tileSize; y++) {
+		for(var x = 0; x < width / tileSize; x++, i++) {
+			if (grid[i] == 1) {
+				this.entities.push(new Obstacle(x * tileSize, y * tileSize));
+			}
+		}
+	}
+
 }
 
 Level.prototype = {
 	update: function(now) {
+
+		if (!(	this.propsedDirection == this.player.directionLeft 
+				&& this.player.directionCurrent == this.player.directionRight
+			||	this.propsedDirection == this.player.directionUp 
+				&& this.player.directionCurrent == this.player.directionDown
+			||	this.propsedDirection == this.player.directionRight 
+				&& this.player.directionCurrent == this.player.directionLeft
+			||	this.propsedDirection == this.player.directionDown 
+				&& this.player.directionCurrent == this.player.directionUp)) {
+			this.player.directionCurrent = this.propsedDirection;
+		}
+
 		this.isRunning = true;
 
 		//Time based
@@ -50,12 +72,10 @@ Level.prototype = {
 		//Update all entites (food, bug, obstacles)
 		for (var i = 0; i < this.entities.length; i++) {
 			this.entities[i].update(now, this);
-			if (this.entities[i])
-				this.entities[i].render();
 		}
 		
 		//Manage bug and food spawn
-		if (now - this.lastFoodSpawn > Food.prototype.duration || this.lastFoodSpawn == null) {
+		if (now - this.lastFoodSpawn > this.gameOptions.food.duration || this.lastFoodSpawn == null) {
 			this.spawnRandomFood(true, this);
 		}
 
@@ -77,24 +97,13 @@ Level.prototype = {
 		return new Level(this.grid.slice(), this.width, this.height);
 	},
 	handleKeyDown: function(e) {
+
 		e = e || window.event;
    		var code = e.keyCode || e.which;
 
 	    if (code > 36 && code < 41) {
-
 	    	e.preventDefault();
-
-	    	//Art
-			if (!(	code == this.player.directionLeft 
-					&& this.player.directionCurrent == this.player.directionRight
-				||	code == this.player.directionUp 
-					&& this.player.directionCurrent == this.player.directionDown
-				||	code == this.player.directionRight 
-					&& this.player.directionCurrent == this.player.directionLeft
-				||	code == this.player.directionDown 
-					&& this.player.directionCurrent == this.player.directionUp)) {
-				this.player.directionCurrent = code;
-			}
+	    	this.propsedDirection = code;
 	  	}
 
 	},
@@ -181,7 +190,11 @@ extend(Level, {
 			var max = width * height;
 
 			for (var i = 0; i < max; i++) {
-				array[i] = 0;
+				if (Math.random() < 0.5) {
+					array[i] = 1;
+				} else {
+					array[i] = 0;
+				}
 			}
 
 			return array;

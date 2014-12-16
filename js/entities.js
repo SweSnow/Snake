@@ -29,20 +29,18 @@ Food.prototype = {
 	 		this.eat(level);
 
 	},
-	render: function() {
-		this.element.css('top', this.y + 'px');
-		this.element.css('left', this.x + 'px');
-	},
 	die: function(level) {
+
+		var element = this.element
 		level.entities.splice(level.entities.indexOf(this), 1);
 		
-		var element = this.element;
-
 		element.css('transition', 'all 400ms');
 		element.css('opacity', '0.0');
 
+		var self = this;
+
 		setTimeout(function() {
-			element.remove();
+			self.element.remove();
 		}, 400);
 
 	},
@@ -50,7 +48,7 @@ Food.prototype = {
 		this.die(level);
 
 		level.score(this.value, false)
-		level.player.tailLength++;
+		level.player.tailLength += level.gameOptions.food.grow;
 
 		var hasFoundFood = false;
 		var i = 0;
@@ -103,21 +101,17 @@ function Obstacle(x, y) {
 }
 
 Obstacle.prototype = {
-	update: function(player, level) {
+	update: function(time, level) {
 	 	//Checking tile collision
-		if (player.x == this.x &&
-			player.y == this.y) {
+		if (level.player.x == this.x &&
+			level.player.y == this.y) {
 			level.end('Collided with obstacle');
 		}
-	},
-	render: function() {
-		this.element.css('top', this.y + 'px');
-		this.element.css('left', this.x + 'px');
 	},
 	die: function() {
 		this.$element.remove();
 	},
-	template: $('<paper-shadow z="1" class="g_obstacle"></div>'),
+	template: $('<div class="g_obstacle"></div>'),
 	width: 20,
 	height: 20
 }
@@ -149,17 +143,16 @@ Bug.prototype = {
 		}
 
 	},
-	render: function() {
-		this.element.css('top', this.y + 'px');
-		this.element.css('left', this.x + 'px');
-	},
 	die: function(level) {
+		
+		var element = this.element;
 		level.entities.splice(level.entities.indexOf(this), 1);
 
-		var element = this.element;
 
 		element.css('transition', 'all 400ms');
 		element.css('opacity', '0.0');
+
+		var self = this;
 
 		setTimeout(function() {
 			element.remove();
@@ -171,7 +164,8 @@ Bug.prototype = {
 			(Math.floor((time - this.spawnTime) / 100));
 		level.score(scorePlus, false)
 
-		level.player.tailLength++;
+		level.player.tailLength +=
+		Math.round(level.gameOptions.bug.grow * (scorePlus / this.maxValue));
 
 		this.die(level);
 
@@ -318,10 +312,6 @@ Tail.prototype = {
 			level.player.y == this.y) {
 			level.end('Collided with obstacle');
 		}
-	},
-	render: function() {
-		this.element.css('top', this.y + 'px');
-		this.element.css('left', this.x + 'px');
 	},
 	die: function() {
 

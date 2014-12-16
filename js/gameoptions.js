@@ -1,20 +1,15 @@
-function GameOptions(flag) {
-	if (flag == this.Default) {
-		this.food = new FoodOptions(10, 5000);
-		this.bug = new BugOptions(50, 7000);
+var GameOptions = {
+	Default: {
+		food: {
+			score: 10,
+			duration: 5000,
+			grow: 2
+		},
+		bug: {
+			score: 50,
+			duration: 7000,
+			grow: 10
+		},
+		updateInterval: 50
 	}
-}
-
-GameOptions.prototype = {
-	Default: 1
-}
-
-function FoodOptions(score, duration) {
-	this.score = score;
-	this.duration = duration;
-}
-
-function BugOptions(score, duration) {
-	this.score = score;
-	this.duration = duration;
 }

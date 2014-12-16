@@ -97,7 +97,7 @@
 						></core-ajax>
 
 					<template repeat="{{map in levels}}">
-						<a is="pushstate-anchor" href="/play?id={{map._id}}">
+						<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
 							<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
 								<paper-shadow z="1"></paper-shadow>
 								<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">

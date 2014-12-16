@@ -79,13 +79,14 @@
 		}
 
 		.subheader-dropdown-label  {
-			margin-top: 26px;
+			margin-top: 34px;
 			font-size: 0.8em;
 		}
 
 		.subheader-dropdown {
 			width: 130px;
 			margin-left: 32px;
+			margin-top: 10px;
 			color: #fff;
 			fill: #fff;
 			background-color: transparent;
@@ -101,7 +102,7 @@
 		}	
 		
 		.subheader-dropdown::shadow #control {
-			border-bottom: 1px solid #ccc;
+			border-bottom: 1px solid #00695C;
 		}	
 
 		.subheader-dropdown /deep/ #ripple {
@@ -158,7 +159,7 @@
 			></core-ajax>
 
 		<template repeat="{{map in levels}}">
-			<a is="pushstate-anchor" href="/play?id={{map._id}}">
+			<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
 				<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
 					<paper-shadow z="1"></paper-shadow>
 					<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">

@@ -1,13 +1,15 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 
+<link rel="import" href="../duarte-components/duarte-map.html">
+
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/gameoptions.js"></script>
 <script type="text/javascript" src="../js/level.js"></script>
 <script type="text/javascript" src="../js/game.js"></script>
 <script type="text/javascript" src="../js/entities.js"></script>
 
-<polymer-element name="duarte-game" attributes="gameMode">
+<polymer-element name="duarte-game" attributes="gameMode levelId">
 	<template>
 
 	<style type="text/css">
@@ -32,7 +34,7 @@
 
 		.g_obstacle {
 			position: absolute;
-			background-color: #00ff00;
+			background-color: #673AB7;
 			z-index: 1;
 		}
 
@@ -176,6 +178,15 @@
 		</paper-shadow>
 		
 	</div>
+
+	<core-ajax
+		id="request"
+		method="get"
+		url="http://192.168.0.189:8080/level/byid?id={{levelId}}"
+		on-core-response="{{onResponse}}"
+		contentType="application/json"
+		withCredentials="true"
+		></core-ajax>
 		
 	</template>
 	<script>
@@ -186,6 +197,13 @@
 	Polymer('duarte-game', {
 		mode: false,
 		ready: function() {
+			
+		},
+		onResponse: function(e, detail) {
+			var level = JSON.parse(detail.response);
+
+			this.grid = level.grid;
+
 			timeAttackTimeElement = $(this.$.timeAttackText);
 			scoreTextElement = $(this.$.scoreText);
 			gameOverOverlay = $(this.$.gameOverOverlay);
@@ -194,9 +212,14 @@
 			bugRipple = $(this.$.bugRipple);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
-			this.game = new Game(htmlCanvas, this.gameMode);
+			this.game = new Game(htmlCanvas, this.gameMode, this.grid);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
+		},
+		onRouteEnter: function() {
+			var request = this.$.request;
+			
+			request.go();
 		},
 		onRouteLeave: function() {
 			// state = this.game.saveState();

@@ -108,7 +108,7 @@
 			randomize: function() {
 				var grid = new Array(this.gridSize);
 				for(var i = 0; i < this.gridSize; i++) {
-					grid[i] = Math.random() < 0.8 ? 0 : 1;
+					grid[i] = Math.random() < 0.99 ? 0 : 1;
 				}
 				this.grid = grid;
 			},

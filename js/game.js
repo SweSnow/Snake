@@ -4,14 +4,16 @@
 	with functions unbound from classes.
 */
 
-function Game(container, gameMode) {
+function Game(container, gameMode, tiles) {
 
 	if (gameMode == 'normal') {
 
+		var gameOptions = GameOptions.Default;
+
 		this.level = new Level(
-				Level.createDefaultLevel(600, 500, 20), 20, 600, 500,
+				tiles, 20, 600, 500,
 				Date.now(), 60000, new Player(20, 300, 20, 20),
-				new GameOptions(GameOptions.prototype.Default));
+				gameOptions);
 			
 		this.level.update(Date.now());
 
@@ -19,7 +21,7 @@ function Game(container, gameMode) {
 
 		this.updateLoop = setInterval(function() {
 			level.update(Date.now());
-		}, 50);
+		}, gameOptions.updateInterval);
 
 
 	} else if (gameMode == 'create') {
