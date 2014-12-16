@@ -280,6 +280,15 @@ Player.prototype = {
 			this.tailArray.splice(0, 1);
 		}
 
+		for (var i = 0; i < level.players.length; i++) {
+			if (level.players[i] != this) {
+				if (this.x = level.players[i].x &&
+					this.y = level.players[i].y) {
+					level.game.end('Collided with other player');
+				}
+			}
+		}
+
 		//Checking tail collision
 		this.tailArray.forEach(function(tail) {
 			tail.update(level);
