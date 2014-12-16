@@ -1,0 +1,49 @@
+<link rel="import" href="../components/core-icons/core-icons.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/paper-slider/paper-slider.html">
+
+<link rel="import" href="../components/core-icons/core-icons.html">
+
+<polymer-element name="duarte-rate">
+  <template>
+	<style>
+
+		::host {
+			display: block;
+			background-color: #000000;
+		}
+
+		.submit {
+			color: #333;
+			float: right;
+			margin-top: 16px;
+			margin-bottom: 12px;
+		}
+
+		paper-slider {
+			width: 100%;
+		}
+
+		paper-slider::shadow #sliderKnobInner,
+	    paper-slider::shadow #sliderKnobInner::before,
+	    paper-slider::shadow #sliderBar::shadow #activeProgress {
+	    	background-color: #009688;
+	    }
+
+	</style>
+
+	<h1>Rate</h1>
+
+	<p>Submit your rating of the map here.</p>
+
+	<paper-slider id="ratings" pin snaps editable max="5" step="1" value="5"></paper-slider>
+
+	<paper-button class="submit" on-tap="{{submitRating}}">Submit</paper-button>
+
+  </template>
+  <script>
+	Polymer('duarte-rate', {
+	  
+	});
+  </script>
+</polymer-element>

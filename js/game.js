@@ -8,11 +8,11 @@ function Game(container, gameMode, tiles, master) {
 
 	this.master = master;
 
-	if (gameMode == 'normal') {
+	if (gameMode == '') {
 
 		this.gameOptions = GameOptions.Default;
 
-		var player1 = new Player(20, 240, 20, 20, {
+		var player1 = new Player(20, 220, 20, 20, {
 			left: 37,
 			up: 38,
 			right: 39,
@@ -34,7 +34,7 @@ function Game(container, gameMode, tiles, master) {
 
 		this.level.update();
 
-		this.resume();
+		//this.resume();
 
 	} else if (gameMode == 'create') {
 

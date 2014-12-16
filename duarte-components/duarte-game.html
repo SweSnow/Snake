@@ -4,6 +4,7 @@
 <link rel="import" href="../components/paper-button/paper-button.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
+<link rel="import" href="../duarte-components/duarte-rate.html">
 
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/gameoptions.js"></script>
@@ -11,7 +12,7 @@
 <script type="text/javascript" src="../js/game.js"></script>
 <script type="text/javascript" src="../js/entities.js"></script>
 
-<polymer-element name="duarte-game" attributes="gameMode levelId">
+<polymer-element name="duarte-game" attributes="mode levelId">
 	<template>
 
 	<style type="text/css">
@@ -36,7 +37,7 @@
 
 		.g_obstacle {
 			position: absolute;
-			background-color: #673AB7;
+			background-color: #444;
 			z-index: 1;
 		}
 
@@ -162,6 +163,22 @@
 			color: #fff;
 		}
 
+		#rate {
+			float: right;
+		}
+
+		#rate-container {
+			box-sizing: border-box;
+			position: absolute;
+			width: 400px;
+			left: 100px;
+			top: 200px;
+			background-color: #fff;
+			padding-left: 20px;
+			padding-right: 20px;
+			z-index: 5;
+		}
+
 
 	</style>
 
@@ -169,12 +186,14 @@
 
 		<paper-shadow z="2" id="gameOverlay">
 				
-				<div id="timeAttackText"></div>
-				<div id="scoreText"></div>
-				<paper-button on-tap="{{pauseResume}}" hidden?="{{gameOver}}" raised id="pauseResume">
-					<core-icon hidden?="{{!isPlaying}}" icon="av:pause"></core-icon>
-					<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
-				</paper-button>
+			<div id="timeAttackText"></div>
+			<div id="scoreText"></div>
+			<paper-button on-tap="{{pauseResume}}" hidden?="{{gameOver}}" raised id="pauseResume">
+				<core-icon hidden?="{{!isPlaying}}" icon="av:pause"></core-icon>
+				<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
+			</paper-button>
+
+			<paper-button on-tap="{{rate}}" id="rate" raised>Rate</paper-button>
 
 		</paper-shadow>
 
@@ -183,6 +202,10 @@
 			
 		<paper-shadow z="2" id="htmlCanvas">
 			
+		</paper-shadow>
+
+		<paper-shadow id="rate-container" z="1" hidden?="{{!rating}}">
+			<duarte-rate></duarte-rate>
 		</paper-shadow>
 
 		<paper-shadow z="3" id="gameOverOverlay" hidden?="{{!gameOver}}">
@@ -238,7 +261,7 @@
 
 			this.isPlaying = true;
 			
-			this.game = new Game(htmlCanvas, this.gameMode, grid, this);
+			this.game = new Game(htmlCanvas, this.mode, grid, this);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},
@@ -275,6 +298,9 @@
 				this.game.pause();
 			}
 		},
+		rate: function() {
+
+		},
 		onGameStateChanged: function(state) {
 			if (state == 'over') {
 				gameOver = true;
@@ -284,7 +310,8 @@
 		},
 		gameOver: false,
 		gameMode: 'normal',
-		isPlaying: false
+		isPlaying: false,
+		rating: true
 
 	});
 

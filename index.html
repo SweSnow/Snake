@@ -98,7 +98,8 @@
 				<app-route path="/about" import="/duarte-components/duarte-about.html"></app-route>
 				<app-route path="/browse" import="/duarte-components/duarte-browse.html"></app-route>
 				<app-route path="/profile" import="/duarte-components/duarte-profile.html"></app-route>
-				<app-route path="/create" import="/duarte-components/duarte-test.html"></app-route>
+				<app-route path="/test" import="/duarte-components/duarte-test.html"></app-route>
+				<app-route path="/create" import="/duarte-components/duarte-game.html"></app-route>
 				<app-route path="/play" import="/duarte-components/duarte-game.html"></app-route>
 				<app-route path="*" redirect="/about"></app-route>
 			</app-router>
@@ -111,7 +112,7 @@
 				onStateChanged: function(e, detail) {
 					var that = this;
 					setTimeout(function() {
-						that.selected = detail.path.match(/[\/#]*([^\/]+)/)[1];
+						that.selected = detail.path.match(/[\/#]*(.*)/)[1];
 					}, 200)
 				},
 				onRouteStart: function(e, detail) {
@@ -124,6 +125,7 @@
 					var element = detail.route && detail.route.firstChild;
 
 					//Inject
+					element.path = detail.path;
 					element.user = this.$.user;
 					element.socket = this.socket;
 
