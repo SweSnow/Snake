@@ -6,7 +6,7 @@
 
 <link rel="import" href="../duarte-components/duarte-map.html">
 
-<polymer-element name="duarte-test" attributes="user">
+<polymer-element name="duarte-test">
 	<template>
 	<style type="text/css">
 
@@ -89,6 +89,7 @@
 			},
 			onGetResponse: function(e, detail) {
 				this.levels = JSON.parse(detail.response);
+				console.log(this.levels);
 			},
 			onSubmitResponse: function(e, detail) {
 				var response = JSON.parse(detail.response);
