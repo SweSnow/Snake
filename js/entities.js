@@ -369,9 +369,9 @@ function Pointer(x, y) {
 }
 
 Pointer.prototype = {
-	update: function() {
-		this.element.css('top', y + 'px');
-		this.element.css('left', x + 'px');
+	update: function(level) {
+		this.element.css('top', this.y + 'px');
+		this.element.css('left', this.x + 'px');
 	},
 	template: $('<paper-shadow z="1" class="g_pointer"></paper-shadow>'),
 	width: 20,

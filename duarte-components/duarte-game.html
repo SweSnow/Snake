@@ -9,10 +9,12 @@
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/gameoptions.js"></script>
 <script type="text/javascript" src="../js/level.js"></script>
+<script type="text/javascript" src="../js/levelcreator.js"></script>
 <script type="text/javascript" src="../js/game.js"></script>
 <script type="text/javascript" src="../js/entities.js"></script>
+<script type="text/javascript" src="../js/keyboard.js"></script>
 
-<polymer-element name="duarte-game" attributes="mode levelId">
+<polymer-element name="duarte-game" attributes="levelId">
 	<template>
 
 	<style type="text/css">
@@ -59,8 +61,8 @@
 		}
 
 		.g_pointer {
+			outline: #009688 1px dotted;
 			position: absolute;
-			background-color: #ff0000;
 			z-index: 1;
 		}
 
@@ -266,6 +268,12 @@
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},
 		onRouteEnter: function() {
+			if (this.path == '/play') {
+				this.mode = 'normal';
+			} else if (this.path = '/create') {
+				this.mode = 'create';
+			}
+
 			if(this.levelId) {
 				this.$.request.go();
 			} else {
@@ -299,7 +307,7 @@
 			}
 		},
 		rate: function() {
-
+			this.rating = true;
 		},
 		onGameStateChanged: function(state) {
 			if (state == 'over') {
@@ -311,7 +319,8 @@
 		gameOver: false,
 		gameMode: 'normal',
 		isPlaying: false,
-		rating: true
+		rating: false,
+		mode: 'normal'
 
 	});
 

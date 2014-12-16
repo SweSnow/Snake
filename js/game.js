@@ -8,7 +8,7 @@ function Game(container, gameMode, tiles, master) {
 
 	this.master = master;
 
-	if (gameMode == '') {
+	if (gameMode == 'normal') {
 
 		this.gameOptions = GameOptions.Default;
 
@@ -34,22 +34,29 @@ function Game(container, gameMode, tiles, master) {
 
 		this.level.update();
 
-		//this.resume();
+		document.onkeydown = this.level.handleKeyDown.bind(this.level);
+
+		this.resume();
 
 	} else if (gameMode == 'create') {
 
 		this.level = new LevelCreator(
-				Level.createDefaultLevel(600, 500, 20), 30, 600, 500,
+				Level.createDefaultLevel(600, 500, 20), 20, 600, 500,
 				Date.now(), this);
 			
-			this.level.update();
+		this.level.update();
 
-			this.updateLoop = setInterval(function() {
-				level.update();
-			}, 16);
+		var level = this.level;
+
+		this.updateLoop = setInterval(function() {
+			level.update();
+		}, 16);
+
+		window.addEventListener('mousemove', level.mouseMove.bind(this.level));
+		window.addEventListener('click', level.mouseClick.bind(this.level));
 	}
 
-	document.onkeydown = this.level.handleKeyDown.bind(this.level);
+	
 
 }
 

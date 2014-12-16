@@ -13,13 +13,12 @@ function LevelCreator(grid, tileSize, width, height) {
 	this.width = width;
 	this.height = height;
 
-	this.pointer = new Pointer(10, 10);
+	this.pointer = new Pointer(240, 290);
 }
 
 LevelCreator.prototype = {
 	update: function(now) {
-		isRunning = true;
-		this.pointer.update();
+		this.pointer.update(this);
 	},
 	get: function(x, y) {
 		return this.grid[x + (y * this.width)];
@@ -30,60 +29,28 @@ LevelCreator.prototype = {
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
 	},
-	handleKeyDown: function(e) {
-		e = e || window.event;
-   		var code = e.keyCode || e.which;
-
-   		if (code == 32 || code == 13) {
-	   		if (gameOptions.gameMode == gameModes['createmap']) {
-	   			e.preventDefault();
-
-	    		this.placeBlock();
-	    	}
-	   	}
-
-
-	    if (code > 36 && code < 41) {
-	    	this.movePointer(code);
-		}
-
-	  	}
-
-	},
 	placeBlock: function() {
 		var pointerX = this.pointer.x / this.tileSize;
 		var pointerY = this.pointer.y / this.tileSize;
 
-		if (this.level.get(pointerX, pointerY) == 0) {
-			this.level.set(pointerX, pointerY, 1);
+		if (this.get(pointerX, pointerY) == 0) {
+			this.set(pointerX, pointerY, 1);
 		} else {
-			this.level.set(pointerX, pointerY, 0);
+			this.set(pointerX, pointerY, 0);
 		}
 	},
-	movePointer: function (code) {
+	mouseMove: function(e) {
+		var canvasRect = htmlCanvas[0].getBoundingClientRect();
 
-		switch(code) {
-			case directionLeft:
-				if (this.pointer.x != 0)
-					this.pointer.x -= this.player.size;
+		this.pointer.x = Math.min(Math.max((Math.round((e.x - canvasRect.left - (this.tileSize / 2)) / this.tileSize)) * this.tileSize, 0), this.width);
+		this.pointer.y = Math.min(Math.max((Math.round((e.y - canvasRect.top - (this.tileSize / 2)) / this.tileSize)) * this.tileSize, 0), this.height);
+	},
+	mouseClick: function(e) {
 
-			break
-			case directionRight:
-				if (this.pointer.x != this.width - this.player.size)
-					this.pointer.x += this.player.size;
-
-			break
-			case directionUp:
-				if (this.pointer.y != 0)
-					this.pointer.y -= this.player.size;
-
-			break
-			case directionDown:
-				if (this.pointer.y != this.width - this.player.size)
-					this.pointer.y += this.player.size;
-
-			break
-		}
 	},
 	entities: [],
+	directionLeft: 37,
+	directionUp: 38,
+	directionRight: 39,
+	directionDown: 40
 };
