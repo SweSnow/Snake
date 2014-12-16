@@ -47,13 +47,11 @@
 		.g_player {
 			transition: all 50ms;
 			position: absolute;
-			background-color: #009688;
 			z-index: 2;
 		}
 
 		.g_tail {
 			position: absolute;
-			background-color: #4DB6AC;
 			z-index: 1;
 		}
 
@@ -201,9 +199,9 @@
 		},
 		onResponse: function(e, detail) {
 			var level = JSON.parse(detail.response);
-
-			this.grid = level.grid;
-
+			this.startGame(level.grid);
+		},
+		startGame: function(grid) {
 			timeAttackTimeElement = $(this.$.timeAttackText);
 			scoreTextElement = $(this.$.scoreText);
 			gameOverOverlay = $(this.$.gameOverOverlay);
@@ -212,14 +210,16 @@
 			bugRipple = $(this.$.bugRipple);
 			htmlCanvas = $(this.$.htmlCanvas);
 			
-			this.game = new Game(htmlCanvas, this.gameMode, this.grid);
+			this.game = new Game(htmlCanvas, this.gameMode, grid);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 		},
 		onRouteEnter: function() {
-			var request = this.$.request;
-			
-			request.go();
+			if(this.levelId) {
+				this.$.request.go();
+			} else {
+				this.startGame(new Level.createDefaultLevel(600, 500, 20));
+			}
 		},
 		onRouteLeave: function() {
 			// state = this.game.saveState();
@@ -231,7 +231,6 @@
 
 		},
 		onGameStateChanged: function(state) {
-			//Jag är inte efterbliven, ska utveckla detta senare
 			if (state == 'over') {
 				gameOver = true;
 			} else {

@@ -25,8 +25,10 @@ Food.prototype = {
 	 	if (time - this.spawnDate > this.duration) 
 	 		this.die(level);
 	 	
-	 	if (level.player.x == this.x && level.player.y == this.y) 
-	 		this.eat(level);
+	 	for (var i = 0; i < level.players.length; i++) {
+	 		if (level.players[i].x == this.x && level.players[i].y == this.y) 
+	 			this.eat(level, level.players[i]);
+	 	}
 
 	},
 	die: function(level) {
@@ -44,11 +46,11 @@ Food.prototype = {
 		}, 400);
 
 	},
-	eat: function(level) {
+	eat: function(level, player) {
 		this.die(level);
 
 		level.score(this.value, false)
-		level.player.tailLength += level.gameOptions.food.grow;
+		player.tailLength += level.gameOptions.food.grow;
 
 		var hasFoundFood = false;
 		var i = 0;
@@ -62,7 +64,6 @@ Food.prototype = {
 
 		if (!hasFoundFood) {
 			level.spawnRandomFood(false, level);
-			//writeLogMessage('No food on canvas, spawn new');
 		}
 
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
@@ -79,7 +80,7 @@ Food.prototype = {
 
 	},
 	duration: 5000,
-	template: $('<paper-shadow z="1" class="g_food"></div>'),
+	template: $('<paper-shadow z="1" class="g_food"></paper-shadow>'),
 	value: 10,
 	width: 20,
 	height: 20
@@ -103,10 +104,13 @@ function Obstacle(x, y) {
 Obstacle.prototype = {
 	update: function(time, level) {
 	 	//Checking tile collision
-		if (level.player.x == this.x &&
-			level.player.y == this.y) {
-			level.end('Collided with obstacle');
-		}
+	 	for (var i = 0; i < level.players.length; i++) {
+			if (level.players[i].x == this.x &&
+				level.players[i].y == this.y) {
+				level.end('Collided with obstacle');
+			}
+	 		
+	 	}
 	},
 	die: function() {
 		this.$element.remove();
@@ -138,8 +142,12 @@ Bug.prototype = {
 	update: function(time, level) {
 	 	if (time - this.spawnTime > this.duration) {
 	 		this.die(level);
-	 	} else if (this.x == level.player.x && this.y == level.player.y) {
-	 		this.eat(time, level);
+	 	} else {
+	 		for (var i = 0; i < level.players.length; i++) {
+		 		if (this.x == level.players[i].x && this.y == level.players[i].y) {
+		 			this.eat(time, level, level.players[i]);
+	 			}
+	 		}
 		}
 
 	},
@@ -147,7 +155,6 @@ Bug.prototype = {
 		
 		var element = this.element;
 		level.entities.splice(level.entities.indexOf(this), 1);
-
 
 		element.css('transition', 'all 400ms');
 		element.css('opacity', '0.0');
@@ -159,13 +166,12 @@ Bug.prototype = {
 		}, 400);
 
 	},
-	eat: function(time, level) {
-		var scorePlus = this.maxValue -
-			(Math.floor((time - this.spawnTime) / 100));
+	eat: function(time, level, player) {
+		var scorePlus = Math.max(this.maxValue -
+			(Math.floor((time - this.spawnTime) / 100)), 10);
 		level.score(scorePlus, false)
 
-		level.player.tailLength +=
-		Math.round(level.gameOptions.bug.grow * (scorePlus / this.maxValue));
+		player.tailLength += Math.max(Math.round(level.gameOptions.bug.grow * (scorePlus / this.maxValue)), 1);
 
 		this.die(level);
 
@@ -180,7 +186,7 @@ Bug.prototype = {
 			bugRipple[0].upAction();
 		}, 200);
 	},
-	template: $('<paper-shadow z="1" class="g_bug"></div>'),
+	template: $('<paper-shadow z="1" class="g_bug"></paper-shadow>'),
 	duration: 7000,
 	interval: 14000,
 	maxValue: 70,
@@ -190,28 +196,38 @@ Bug.prototype = {
 
 
 
-function Player(x, y, width, height) {
+function Player(x, y, width, height, directions, color, tailColor) {
 	this.x = x;
 	this.y = y;
 	this.width = width;
 	this.height = height;
+	this.tailColor = tailColor;
 
 	this.element = Player.prototype.template.clone();
 	this.element.css('top', y + 'px');
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
+	this.element.css('background', color);
 
 	htmlCanvas.append(this.element);
 
+	this.directionLeft = directions.left;
+	this.directionRight = directions.right;
+	this.directionDown = directions.down;
+	this.directionUp = directions.up;
+
+	this.acceptedKeys = [this.directionLeft, this.directionDown, this.directionUp, this.directionRight]
+
 	this.tailLength = 0;
+	this.tailArray = [];
 }
 
 Player.prototype = {
 	update: function(time, level) {
 
 		if (this.tailLength != 0) {
-			var tail = new Tail(this.x, this.y);
+			var tail = new Tail(this.x, this.y, this.tailColor);
 			this.tailArray.push(tail);
 		}
 
@@ -266,7 +282,7 @@ Player.prototype = {
 
 		//Checking tail collision
 		this.tailArray.forEach(function(tail) {
-			tail.update(this, level);
+			tail.update(level);
 		}, this);
 
 	},
@@ -277,7 +293,6 @@ Player.prototype = {
 	die: function(level) {
 		level.end(level);
 	},
-	tailArray: [],
 	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
 	directionCurrent: 39,
 	directionLastUsed: 39,
@@ -288,12 +303,11 @@ Player.prototype = {
 	width: 20,
 	height: 20,
 	size: 20
-
 }
 
 
 
-function Tail(x, y) {
+function Tail(x, y, color) {
 	this.x = x;
 	this.y = y;
 
@@ -302,16 +316,19 @@ function Tail(x, y) {
 	this.element.css('left', x + 'px');
 	this.element.css('width', this.width + 'px');
 	this.element.css('height', this.height + 'px');
+	this.element.css('background-color', color);
 	htmlCanvas.append(this.element);
 }
 
 Tail.prototype = {
-	update: function(player, level) {
+	update: function(level) {
 	 	//Checking tile collision
-		if (level.player.x == this.x &&
-			level.player.y == this.y) {
-			level.end('Collided with obstacle');
-		}
+	 	for (var i = 0; i < level.players.length; i++) {
+			if (level.players[i].x == this.x &&
+				level.players[i].y == this.y) {
+				level.end('Collided with tail');
+			}
+	 	}
 	},
 	die: function() {
 
@@ -325,7 +342,7 @@ Tail.prototype = {
 		}, 150);
 		
 	},
-	template: $('<paper-shadow z="1" class="g_tail"></div>'),
+	template: $('<paper-shadow z="1" class="g_tail"></paper-shadow>'),
 	value: 10,
 	width: 20,
 	height: 20
@@ -350,7 +367,7 @@ Pointer.prototype = {
 		this.element.css('top', y + 'px');
 		this.element.css('left', x + 'px');
 	},
-	template: $('<paper-shadow z="1" class="g_pointer"></div>'),
+	template: $('<paper-shadow z="1" class="g_pointer"></paper-shadow>'),
 	width: 20,
 	height: 20
 }

@@ -12,22 +12,24 @@
 	@param height 		Pixel height of game container
 	@param startTime 	Date in unix standard time
 	@param timeLimit 	Time limit for the game, set as -1 for infinite
-	@param player 		Player object, create this before initializing Level
+	@param players		Player objects, create this before initializing Level
 	@param gameOptions	Objects containing used values for the session, validate with server
 */
 
-function Level(grid, tileSize, width, height, startTime, timeLimit, player, gameOptions) {
+function Level(grid, tileSize, width, height, startTime, timeLimit, players, gameOptions) {
 	this.grid = grid;
 	this.tileSize = tileSize;
 	this.width = width;
 	this.height = height;
 	this.startTime = startTime;
 	this.timeLimit = timeLimit;
-	this.player = player;
+	this.players = players;
 	this.gameOptions = gameOptions;
 
 	this.score(0, true);
-	this.propsedDirection = this.player.directionRight;
+	for (var i = 0; i < this.players.length; i++) {
+		this.players[i].propsedDirection = this.players[i].directionRight;
+	}
 
 	for(var y = 0, i = 0; y < height / tileSize; y++) {
 		for(var x = 0; x < width / tileSize; x++, i++) {
@@ -42,15 +44,17 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, player, game
 Level.prototype = {
 	update: function(now) {
 
-		if (!(	this.propsedDirection == this.player.directionLeft 
-				&& this.player.directionCurrent == this.player.directionRight
-			||	this.propsedDirection == this.player.directionUp 
-				&& this.player.directionCurrent == this.player.directionDown
-			||	this.propsedDirection == this.player.directionRight 
-				&& this.player.directionCurrent == this.player.directionLeft
-			||	this.propsedDirection == this.player.directionDown 
-				&& this.player.directionCurrent == this.player.directionUp)) {
-			this.player.directionCurrent = this.propsedDirection;
+		for (var i = 0; i < this.players.length; i++) {
+			if (!(	this.players[i].propsedDirection == this.players[i].directionLeft 
+					&& this.players[i].directionCurrent == this.players[i].directionRight
+				||	this.players[i].propsedDirection == this.players[i].directionUp 
+					&& this.players[i].directionCurrent == this.players[i].directionDown
+				||	this.players[i].propsedDirection == this.players[i].directionRight 
+					&& this.players[i].directionCurrent == this.players[i].directionLeft
+				||	this.players[i].propsedDirection == this.players[i].directionDown 
+					&& this.players[i].directionCurrent == this.players[i].directionUp)) {
+				this.players[i].directionCurrent = this.players[i].propsedDirection;
+			}
 		}
 
 		this.isRunning = true;
@@ -67,7 +71,9 @@ Level.prototype = {
 		
 
 		//We update player first separately, it renders itself
-		this.player.update(now, this);
+		for (var i = 0; i < this.players.length; i++) {
+			this.players[i].update(now, this);
+		}
 
 		//Update all entites (food, bug, obstacles)
 		for (var i = 0; i < this.entities.length; i++) {
@@ -101,11 +107,12 @@ Level.prototype = {
 		e = e || window.event;
    		var code = e.keyCode || e.which;
 
-	    if (code > 36 && code < 41) {
-	    	e.preventDefault();
-	    	this.propsedDirection = code;
-	  	}
-
+   		for (var i = 0; i < this.players.length; i++) {
+   			if (this.players[i].acceptedKeys.indexOf(code) != -1) {
+   				e.preventDefault();
+   				this.players[i].propsedDirection = code;
+   			}
+   		}
 	},
 	spawnRandomFood: function(logLastSpawn, level) {
 
@@ -151,12 +158,15 @@ Level.prototype = {
 			}
 		}
 		
-		if (this.player.x == proposedX && this.player.y == proposedY)
-			return false;
-
-		for (var i = 0; i < this.player.tailArray.length; i++) {
-			if (this.player.tailArray[i].x == proposedX && this.player.tailArray[i].y == proposedY) {
+		for (var i = 0; i < this.players.length; i++) {
+			if (this.players[i].x == proposedX && this.players[i].y == proposedY) {
 				return false;
+			}
+
+			for (var j = 0; j < this.players[i].tailArray.length; j++) {
+				if (this.players[i].tailArray[j].x == proposedX && this.players[i].tailArray[j].y == proposedY) {
+					return false;
+				}
 			}
 		}
 
@@ -173,8 +183,8 @@ Level.prototype = {
 		gameOverScore.text('Score: ' + this.scoreAmount + ' Points');
 	},
 	end: function() {
-		//TODO implement callback here
 		this.isRunning = false;
+		alert("end");
 	},
 	isRunning: false
 };
@@ -190,10 +200,10 @@ extend(Level, {
 			var max = width * height;
 
 			for (var i = 0; i < max; i++) {
-				if (Math.random() < 0.5) {
-					array[i] = 1;
-				} else {
+				if (Math.random() < 0.99) {
 					array[i] = 0;
+				} else {
+					array[i] = 1;
 				}
 			}
 
