@@ -50,6 +50,7 @@
 	<link rel="import" href="library-components/app-router/app-router.html">
 
 	<link rel="import" href="duarte-components/duarte-user.html">
+	<link rel="import" href="duarte-components/duarte-socket.html">
 	<link rel="import" href="duarte-components/duarte-header.html">
 
 	<link rel="stylesheet" type="text/css" href="style/main_style.css"/>
@@ -78,6 +79,7 @@
 
 			</style>
 
+			<duarte-socket socket="{{socket}}"></duarte-socket>
 			<duarte-user id="user"></duarte-user>
 
 			<duarte-header selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
@@ -117,7 +119,11 @@
 				},
 				onRouteEnd: function(e, detail) {
 					var element = detail.route && detail.route.firstChild;
+
+					//Inject
 					element.user = this.$.user;
+					element.socket = this.socket;
+
 					if(element && element.onRouteEnter) {
 						element.onRouteEnter();
 					}

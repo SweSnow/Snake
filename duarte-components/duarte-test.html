@@ -6,6 +6,8 @@
 
 <link rel="import" href="../duarte-components/duarte-map.html">
 
+<script type="text/javascript" src="http://192.168.0.189:8080/socket.io/socket.io.js"></script>
+
 <polymer-element name="duarte-test">
 	<template>
 	<style type="text/css">
@@ -87,6 +89,28 @@
 			ready: function() {
 				this.randomize();
 			},
+			onRouteEnter: function() {
+				this._onNewLevel = this.onNewLevel.bind(this);
+				this._onRemoveLevel = this.onRemoveLevel.bind(this);
+				this.socket.on('level added', this._onNewLevel);
+				this.socket.on('level removed', this._onRemoveLevel);
+			},
+			onRouteLeave: function() {
+				this.socket.off('level added', this._onNewLevel);
+			},
+			onNewLevel: function(level) {
+				this.levels.push(level);
+				console.log(level);
+			},
+			onRemoveLevel: function(id) {
+				for(var i = 0, l = this.levels.length; i < l; i++) {
+					var level = this.levels[i];
+					if(level._id === id) {
+						this.levels.splice(this.levels.indexOf(level), 1);
+						break;
+					}
+				}
+			},
 			onGetResponse: function(e, detail) {
 				this.levels = JSON.parse(detail.response);
 				console.log(this.levels);
@@ -97,14 +121,10 @@
 				if(!response.message) {
 					this.grid = response.grid;
 				}
-
-				this.$.get.go();
 			},
 			onRemoveResponse: function(e, detail) {
 				var response = JSON.parse(detail.response);
 				console.log(response);
-
-				this.$.get.go();
 			},
 			randomize: function() {
 				var grid = new Array(this.gridSize);

@@ -1,0 +1,22 @@
+<script type="text/javascript" src="http://192.168.0.189:8080/socket.io/socket.io.js"></script>
+
+<polymer-element name="duarte-socket" attributes="socket">
+	<template>
+		<core-ajax
+			id="get"
+			auto="true"
+			method="get"
+			url="http://192.168.0.189:8080/level/all"
+			on-core-response="{{onGetResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></core-ajax>
+	</template>
+	<script>
+		Polymer('duarte-socket', {
+			ready: function() {
+				this.socket = io('http://192.168.0.189:8080/');
+			}
+		});
+	</script>
+</polymer-element>
