@@ -5,6 +5,7 @@
 <link rel="import" href="../library-components/pushstate-anchor/pushstate-anchor.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
+<link rel="import" href="../duarte-components/duarte-maintainer.html">
 
 <script type="text/javascript" src="http://192.168.0.189:8080/socket.io/socket.io.js"></script>
 
@@ -37,8 +38,9 @@
 			id="get"
 			auto="true"
 			method="get"
+			handleAs="json"
+			response="{{levels}}"
 			url="http://192.168.0.189:8080/level/all"
-			on-core-response="{{onGetResponse}}"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -46,8 +48,9 @@
 		<core-ajax
 			id="submit"
 			method="post"
+			handleAs="json"
 			url="http://192.168.0.189:8080/level/submit"
-			on-core-response="{{onSubmitResponse}}"
+			on-core-response="{{randomize}}"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -55,11 +58,13 @@
 		<core-ajax
 			id="remove"
 			method="delete"
+			handleAs="json"
 			url="http://192.168.0.189:8080/level/byid"
-			on-core-response="{{onRemoveResponse}}"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
+
+		<duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer>
 
 		<paper-button raised on-tap="{{randomize}}">Randomize</paper-button>
 		<paper-button raised on-tap="{{submit}}">Submit</paper-button>
@@ -88,43 +93,6 @@
 			gridSize: 30 * 25,
 			ready: function() {
 				this.randomize();
-			},
-			onRouteEnter: function() {
-				this._onNewLevel = this.onNewLevel.bind(this);
-				this._onRemoveLevel = this.onRemoveLevel.bind(this);
-				this.socket.on('level added', this._onNewLevel);
-				this.socket.on('level removed', this._onRemoveLevel);
-			},
-			onRouteLeave: function() {
-				this.socket.off('level added', this._onNewLevel);
-			},
-			onNewLevel: function(level) {
-				this.levels.push(level);
-				console.log(level);
-			},
-			onRemoveLevel: function(id) {
-				for(var i = 0, l = this.levels.length; i < l; i++) {
-					var level = this.levels[i];
-					if(level._id === id) {
-						this.levels.splice(this.levels.indexOf(level), 1);
-						break;
-					}
-				}
-			},
-			onGetResponse: function(e, detail) {
-				this.levels = JSON.parse(detail.response);
-				console.log(this.levels);
-			},
-			onSubmitResponse: function(e, detail) {
-				var response = JSON.parse(detail.response);
-				console.log(response);
-				if(!response.message) {
-					this.grid = response.grid;
-				}
-			},
-			onRemoveResponse: function(e, detail) {
-				var response = JSON.parse(detail.response);
-				console.log(response);
 			},
 			randomize: function() {
 				var grid = new Array(this.gridSize);

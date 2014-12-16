@@ -3,6 +3,7 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
+<link rel="import" href="../duarte-components/duarte-maintainer.html">
 
 <polymer-element name="duarte-browse">
   <template>
@@ -147,17 +148,7 @@
 	</paper-shadow>
 
 	<div id="maps-container">
-		<core-ajax
-			id="get"
-			auto="true"
-			method="get"
-			body='{"from": "0", "length": "10", "sort": "-time"}'
-			url="http://192.168.0.189:8080/level/interval"
-			on-core-response="{{onResponse}}"
-			contentType="application/json"
-			withCredentials="true"
-			></core-ajax>
-
+		
 		<template repeat="{{map in levels}}">
 			<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
 				<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
@@ -173,13 +164,22 @@
 		</template>
 	</div>
 
+	<core-ajax
+		id="get"
+		auto="true"
+		method="get"
+		handleAs="json"
+		response="{{levels}}"
+		url="http://192.168.0.189:8080/level/all"
+		contentType="application/json"
+		withCredentials="true"
+		></core-ajax>
+
+	<duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer>
+
   </template>
   <script>
 	Polymer('duarte-browse', {
-		onResponse: function(e, detail) {
-			this.levels = JSON.parse(detail.response);
-			console.log(this.levels);
-	  	},
 	  	mapClick: function() {
 
 	  	}

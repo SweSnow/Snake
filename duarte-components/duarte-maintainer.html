@@ -1,0 +1,38 @@
+<polymer-element name="duarte-maintainer" attributes="socket namespace collection">
+	<template>
+	</template>
+	<script>
+		Polymer('duarte-maintainer', {
+			ready: function() {
+				this._onAdd = this.onAdd.bind(this);
+				this._onRemove = this.onRemove.bind(this);
+
+				this.addEvent = this.namespace + ':add';
+				this.removeEvent = this.namespace + ':remove';
+			},
+			socketChanged: function() {
+				this.socket.on(this.addEvent, this._onAdd);
+				this.socket.on(this.removeEvent, this._onRemove);
+			},
+			onAdd: function(item) {
+				this.collection.push(item);
+				console.log('added', item);
+			},
+			onRemove: function(id) {
+				var collection = this.collection;
+				for(var i = 0, l = collection.length; i < l; i++) {
+					var item = collection[i];
+					if(item._id === id) {
+						console.log('removed', item);
+						collection.splice(collection.indexOf(item), 1);
+						break;
+					}
+				}
+			},
+			detached: function() {
+				this.socket.off(this.addEvent, this._onAdd);
+				this.socket.off(this.removeEvent, this._onRemove);
+			}
+		});
+	</script>
+</polymer-element>
