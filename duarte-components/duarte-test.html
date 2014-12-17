@@ -50,7 +50,6 @@
 			method="post"
 			handleAs="json"
 			url="http://192.168.0.189:8080/level/submit"
-			on-core-response="{{randomize}}"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -64,9 +63,19 @@
 			withCredentials="true"
 			></core-ajax>
 
+		<core-ajax
+			id="rate"
+			method="post"
+			handleAs="json"
+			on-core-response="{{onRateResponse}}"
+			url="http://192.168.0.189:8080/level/rate"
+			contentType="application/json"
+			withCredentials="true"
+			></core-ajax>
+
 		<duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer>
 
-		<paper-button raised on-tap="{{randomize}}">Randomize</paper-button>
+		<paper-button raised on-tap="{{regrid}}">Randomize</paper-button>
 		<paper-button raised on-tap="{{submit}}">Submit</paper-button>
 
 		<paper-input floatingLabel label="Title" value="{{title}}"></paper-input>
@@ -76,8 +85,10 @@
 			<h1>Levels</h1>
 			<template repeat="{{level in levels}}">
 				<div class="map">
-					{{level.title}} by {{level.creator.username}} <paper-button raised data-id="{{level._id}}" on-tap="{{remove}}">Remove</paper-button>
-					<div><duarte-map grid="{{level.grid}}"></duarte-map></div>
+					{{level.title}} by {{level.creator.username}}
+					<paper-button raised data-id="{{level._id}}" on-tap="{{rate}}">Rate</paper-button>
+					<paper-button raised data-id="{{level._id}}" on-tap="{{remove}}">Remove</paper-button>
+					<div><duarte-map grid="{{level.grid}}"></duarte-map></div>{{level.ratings.length}}
 				</div>
 				
 			</template>	
@@ -92,14 +103,51 @@
 			gridHeight: 25,
 			gridSize: 30 * 25,
 			ready: function() {
-				this.randomize();
+				this.grid = new Array(this.gridSize);
+				this.regrid();
+			},
+			regrid: function() {
+				this.clear();
+
+				var middleX = Math.floor(this.gridHeight / 2);
+				var middleY = Math.floor(this.gridWidth / 2);
+				this.horizontal(1, middleX);
+				this.vertical(1, middleY);
+				this.circle(1, 10, 1);
 			},
 			randomize: function() {
-				var grid = new Array(this.gridSize);
 				for(var i = 0; i < this.gridSize; i++) {
-					grid[i] = Math.random() < 0.99 ? 0 : 1;
+					this.grid[i] = Math.random() < 0.99 ? 0 : 1;
 				}
-				this.grid = grid;
+			},
+			clear: function() {
+				for(var i = 0; i < this.gridSize; i++) {
+					this.grid[i] = 0;
+				}
+			},
+			horizontal: function(v, row) {
+				var start = this.gridWidth * row;
+				for(var i = start; i < start + this.gridWidth; i++) {
+					this.grid[i] = v;
+				}
+			},
+			vertical: function(v, col) {
+				var start = col;
+				for(var i = start; i <= this.gridSize - start; i += this.gridWidth) {
+					this.grid[i] = v;
+				}
+			},
+			circle: function(v, r, b) {
+				var center = {x: this.gridWidth / 2, y: this.gridHeight / 2};
+				for(var y = 0; y < this.gridHeight; y++) {
+					for(var x = 0; x < this.gridWidth; x++) {
+						var dx = center.x - x, dy = center.y - y;
+						var dist = Math.sqrt(dx*dx + dy*dy);
+						if(dist < r && dist > r - b) {
+							this.grid[x + y * this.gridWidth] = v;
+						}
+					}
+				}
 			},
 			submit: function() {
 				var submit = this.$.submit;
@@ -111,11 +159,21 @@
 				});
 
 				submit.go();
+
+				this.regrid();
 			},
 			remove: function(e, detail, button) {
 				var remove = this.$.remove;
 				remove.body = JSON.stringify({id: button.dataset.id});
 				remove.go();
+			},
+			rate: function(e, detail, button) {
+				var rate = this.$.rate;
+				rate.body = JSON.stringify({id: button.dataset.id, rating: 5});
+				rate.go();
+			},
+			onRateResponse: function(e, detail) {
+				console.log(detail);
 			}
 		});
 	})();

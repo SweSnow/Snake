@@ -6,13 +6,16 @@
 			ready: function() {
 				this._onAdd = this.onAdd.bind(this);
 				this._onRemove = this.onRemove.bind(this);
+				this._onChange = this.onChange.bind(this);
 
 				this.addEvent = this.namespace + ':add';
 				this.removeEvent = this.namespace + ':remove';
+				this.changeEvent = this.namespace + ':change';
 			},
 			socketChanged: function() {
 				this.socket.on(this.addEvent, this._onAdd);
 				this.socket.on(this.removeEvent, this._onRemove);
+				this.socket.on(this.changeEvent, this._onChange);
 			},
 			onAdd: function(item) {
 				this.collection.push(item);
@@ -29,9 +32,13 @@
 					}
 				}
 			},
+			onChange: function(changes) {
+				console.log('changes:', changes);
+			},
 			detached: function() {
 				this.socket.off(this.addEvent, this._onAdd);
 				this.socket.off(this.removeEvent, this._onRemove);
+				this.socket.off(this.changeEvent, this._onChange);
 			}
 		});
 	</script>
