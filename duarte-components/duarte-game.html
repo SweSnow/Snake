@@ -207,7 +207,7 @@
 		</paper-shadow>
 
 		<paper-shadow id="rate-container" z="1" hidden?="{{!rating}}">
-			<duarte-rate></duarte-rate>
+			<duarte-rate levelId="{{levelId}}"></duarte-rate>
 		</paper-shadow>
 
 		<paper-shadow z="3" id="gameOverOverlay" hidden?="{{!gameOver}}">
@@ -228,7 +228,7 @@
 	<core-ajax
 		id="request"
 		method="get"
-		url="http://192.168.0.189:8080/level/byid?id={{levelId}}"
+		url="http://192.168.1.87:8080/level/byid?id={{levelId}}"
 		on-core-response="{{onResponse}}"
 		contentType="application/json"
 		withCredentials="true"

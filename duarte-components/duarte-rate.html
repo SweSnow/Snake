@@ -4,7 +4,7 @@
 
 <link rel="import" href="../components/core-icons/core-icons.html">
 
-<polymer-element name="duarte-rate">
+<polymer-element name="duarte-rate" attributes="levelId">
   <template>
 	<style>
 
@@ -36,14 +36,33 @@
 
 	<p>Submit your rating of the map here.</p>
 
-	<paper-slider id="ratings" pin snaps editable max="5" step="1" value="5"></paper-slider>
+	<paper-slider id="ratings" pin snaps editable immediateValue="{{rating}}" max="5" step="1" value="5"></paper-slider>
 
 	<paper-button class="submit" on-tap="{{submitRating}}">Submit</paper-button>
+
+	<core-ajax
+		id="rate"
+		method="post"
+		handleAs="json"
+		body='{"id": "{{levelId}}", "rating": "{{rating}}"}'
+		on-core-response="{{onRateResponse}}"
+		url="http://192.168.1.87:8080/level/rate"
+		contentType="application/json"
+		withCredentials="true"
+		></core-ajax>
+
 
   </template>
   <script>
 	Polymer('duarte-rate', {
-	  
+	  submitRating: function() {
+	  	if(this.rating > 0) {
+		  	this.$.rate.go();
+	  	}
+	  },
+	  onResponse: function(e, detail) {
+	  	console.log(detail.response);
+	  }
 	});
   </script>
 </polymer-element>
