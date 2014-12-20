@@ -90,7 +90,7 @@
 					<paper-button raised data-id="{{level._id}}" on-tap="{{remove}}">Remove</paper-button>
 					<div><duarte-map grid="{{level.grid}}"></duarte-map></div>
 						<div>{{level.ratings | displayRatings}}</div>
-						<div>Average: {{level.averageRating}}</div>
+						<div>Popularity: {{level.popularity}}</div>
 				</div>
 				
 			</template>	
@@ -113,19 +113,22 @@
 
 				var middleX = Math.floor(this.gridHeight / 2);
 				var middleY = Math.floor(this.gridWidth / 2);
-				this.horizontal(1, middleX);
-				this.vertical(1, middleY);
-				this.circle(1, 10, 1);
+				this.noise(1, 0.005);
 			},
-			randomize: function() {
+			noise: function(v, f) {
 				for(var i = 0; i < this.gridSize; i++) {
-					this.grid[i] = Math.random() < 0.99 ? 0 : 1;
+					if(Math.random() < f) {
+						this.grid[i] = v;
+					}
+				}
+			},
+			fill: function(v) {
+				for(var i = 0; i < this.gridSize; i++) {
+					this.grid[i] = v;
 				}
 			},
 			clear: function() {
-				for(var i = 0; i < this.gridSize; i++) {
-					this.grid[i] = 0;
-				}
+				this.fill(0);
 			},
 			horizontal: function(v, row) {
 				var start = this.gridWidth * row;
@@ -178,8 +181,9 @@
 				console.log(detail);
 			},
 			displayRatings: function(value) {
+				if(!value) return;
 				return '[' + value.map(function(a) {
-					return a.rating + " by " + a.by.username ;
+					return a.by.username + ": " + a.rating;
 				}).join(', ') + ']';
 			}
 		});
