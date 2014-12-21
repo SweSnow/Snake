@@ -7,7 +7,7 @@
 <link rel="import" href="../duarte-components/duarte-map.html">
 <link rel="import" href="../duarte-components/duarte-maintainer.html">
 
-<script type="text/javascript" src="http://192.168.1.87:8080/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="http://78.68.39.230:8080/socket.io/socket.io.js"></script>
 
 <polymer-element name="duarte-test">
 	<template>
@@ -40,7 +40,7 @@
 			method="get"
 			handleAs="json"
 			response="{{levels}}"
-			url="http://192.168.1.87:8080/level/all"
+			url="http://78.68.39.230:8080/level/all"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -49,7 +49,7 @@
 			id="submit"
 			method="post"
 			handleAs="json"
-			url="http://192.168.1.87:8080/level/submit"
+			url="http://78.68.39.230:8080/level/submit"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -58,7 +58,7 @@
 			id="remove"
 			method="delete"
 			handleAs="json"
-			url="http://192.168.1.87:8080/level/byid"
+			url="http://78.68.39.230:8080/level/byid"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -68,7 +68,7 @@
 			method="post"
 			handleAs="json"
 			on-core-response="{{onRateResponse}}"
-			url="http://192.168.1.87:8080/level/rate"
+			url="http://78.68.39.230:8080/level/rate"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -181,12 +181,13 @@
 				console.log(detail);
 			},
 			displayRatings: function(value) {
-				if(!value) return;
+				// if(!value) return;
 				return '[' + value.map(function(a) {
 					return a.by.username + ": " + a.rating;
 				}).join(', ') + ']';
 			}
 		});
 	})();
+
 	</script>
 </polymer-element>
