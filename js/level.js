@@ -197,13 +197,13 @@ extend(Level, {
 
 			var max = width * height;
 
-			for (var i = 0; i < max; i++) {
+			/*for (var i = 0; i < max; i++) {
 				if (Math.random() < 0.99) {
 					array[i] = 0;
 				} else {
 					array[i] = 1;
 				}
-			}
+			}*/
 
 			return array;
 
