@@ -113,7 +113,7 @@ Obstacle.prototype = {
 	 	}
 	},
 	die: function() {
-		this.$element.remove();
+		this.element.remove();
 	},
 	template: $('<div class="g_obstacle"></div>'),
 	width: 20,

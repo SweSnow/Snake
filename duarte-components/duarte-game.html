@@ -267,8 +267,6 @@
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 			this.game.onGameState = this.onGameState.bind(this);
-
-			this.socket.emit('start');
 		},
 		onRouteEnter: function() {
 			if (this.path == '/play') {

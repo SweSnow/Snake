@@ -52,7 +52,7 @@ function Game(container, gameMode, tiles, master) {
 			level.update();
 		}, 16);
 
-		window.addEventListener('mousemove', level.mouseMove.bind(this.level));
+		//window.addEventListener('mousemove', level.mouseMove.bind(this.level));
 		window.addEventListener('click', level.mouseClick.bind(this.level));
 	}
 
@@ -79,20 +79,5 @@ Game.prototype = {
 	end: function(message) {
 		this.pause();
 		this.master.end(message);
-	}
-}
-
-function mouseDownEvent(event) {
-
-	if (gameOptions.gameMode != gameModes['createmap'])
-		return;
-
-	var x = Math.floor((event.offsetX) / player.size);
-	var y = Math.floor((event.offsetY) / player.size);
-
-	if (gameOptions.gameMode.level.get(x, y) == 1) {
-		gameOptions.gameMode.level.set(x, y, 0);
-	} else {
-		gameOptions.gameMode.level.set(x, y, 1);
 	}
 }

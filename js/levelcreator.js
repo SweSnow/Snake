@@ -25,38 +25,44 @@ LevelCreator.prototype = {
 		}
 	},
 	get: function(x, y) {
-		return this.grid[x + (y * this.width)];
+		for (var i = 0; i < this.entities.length; i++) {
+			if (this.entities[i].x == x && this.entities[i].y == y) {
+				return 1;
+			}
+		}
+		return 0;
 	},
 	set: function(x, y, value) {
-		this.grid[x + (y * this.width)] = value;
-
-		this.entities = [];
-
-		for(var y = 0, i = 0; y < this.height / this.tileSize; y++) {
-			for(var x = 0; x < this.width / this.tileSize; x++, i++) {
-				if (this.grid[i] == 1) {
-					this.entities.push(new Obstacle(x * this.tileSize, y * this.tileSize));
+		if (value == 1) {
+			this.entities.push(new Obstacle(x, y));
+		} else if (value == 0) {
+			for (var i = 0; i < this.entities.length; i++) {
+				if (this.entities[i].x == x && this.entities[i].y == y) {
+					this.entities[i].die();
+					this.entities.splice(this.entities.indexOf(this.entities[i]), 1);
 				}
 			}
 		}
-
-		console.log(this.grid);
-
 	},
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
 	},
 	placeBlock: function() {
-		var pointerX = this.pointer.x / this.tileSize;
-		var pointerY = this.pointer.y / this.tileSize;
+		var pointerX = this.pointer.x;
+		var pointerY = this.pointer.y;
 
 		if (this.get(pointerX, pointerY) == 0) {
 			this.set(pointerX, pointerY, 1);
+			this.createMode = 'add';
 		} else {
 			this.set(pointerX, pointerY, 0);
+			this.createMode = 'remove';
 		}
 	},
 	mouseMove: function(e) {
+
+		console.log(e.which);
+
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
 
 		this.pointer.x = Math.min(Math.max((Math.round((e.x - canvasRect.left - (this.tileSize / 2)) / this.tileSize)) * this.tileSize, 0), this.width - this.tileSize);
@@ -69,5 +75,6 @@ LevelCreator.prototype = {
 	directionLeft: 37,
 	directionUp: 38,
 	directionRight: 39,
-	directionDown: 40
+	directionDown: 40,
+	createMode: 'add'
 };
