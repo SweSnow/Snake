@@ -266,6 +266,9 @@
 			this.game = new Game(htmlCanvas, this.mode, grid, this);
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
+			this.game.onGameState = this.onGameState.bind(this);
+
+			this.socket.emit('start');
 		},
 		onRouteEnter: function() {
 			if (this.path == '/play') {
@@ -308,6 +311,9 @@
 		},
 		rate: function() {
 			this.rating = true;
+		},
+		onGameState: function(state) {
+
 		},
 		onGameStateChanged: function(state) {
 			if (state == 'over') {

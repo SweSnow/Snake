@@ -1,0 +1,272 @@
+<script type="text/javascript" src="../js/keyboard.js"></script>
+
+<polymer-element name="duarte-test-game" attributes="levelId">
+	<template>
+
+	<style type="text/css">
+
+		:host {
+			display: block;
+		}
+
+		canvas {
+			position: relative;
+			top: 30px;
+			display: block;
+			width: 600px;
+			height: 500px;
+			margin: auto;
+			box-shadow: 1px 1px 6px 0px rgba(50, 50, 50, 0.75);
+		}
+
+	</style>
+
+	<canvas id="canvas" width="600" height="500"></canvas>
+
+	</template>
+	<script>
+	(function() {
+
+	Polymer('duarte-test-game', {
+		ready: function() {
+			this._onStart = this.onStart.bind(this);
+			this._onKeydown = this.onKeydown.bind(this);
+		},
+		attached: function() {
+			window.addEventListener('keydown', this._onKeydown);
+		},
+		detached: function() {
+			window.addEventListener('keydown', this._onKeydown);
+		},
+		onRouteEnter: function() {
+			this.socket.emit('start', this.levelId);
+			this.socket.on('start', this._onStart);
+		},
+		onRouteLeave: function() {
+			this.socket.off('start', this._onStart);
+		},
+		onStart: function(level) {
+			console.log('start', level);
+			this.game = new Game(this.socket, level, this.$.canvas);
+			this.game.start();
+		},
+		onKeydown: function(e) {
+			this.game.keydown(e);
+		}
+	});
+
+	var gridWidth = 30, gridHeight = 25;
+
+	function Game(socket, level, canvas) {
+		this.socket = socket;
+		this.level = new Level(level, gridWidth, gridHeight, canvas.width, canvas.height);
+		this.player = new Player();
+
+		this.canvas = canvas;
+		this.ctx = canvas.getContext('2d');
+	
+		this._update = this.update.bind(this);
+		this._render = this.render.bind(this);
+
+		this.ticks = [];
+		this.stop = false;
+	}
+
+	var updateRate = 150;
+	var keyMap = {
+		//name, args
+		38: ['move', [ 0,  -1]],
+		37: ['move', [-1,  0]],
+		40: ['move', [ 0,  1]],
+		39: ['move', [ 1,  0]]
+	};
+
+	Game.prototype = {
+		tick: 0,
+		start: function() {
+			this.interval = setInterval(this._update, updateRate);
+
+			requestAnimationFrame(this._render);
+		},
+		stop: function() {
+			clearInterval(this.interval);
+		},
+		update: function() {
+			++this.tick;
+
+			this.level.update(this);
+
+			this.emit('tick', this.player.dir.x, this.player.dir.y);
+
+			console.log(this.tick, this.player.pos);
+		},
+		render: function() {
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+			this.level.render(this, this.ctx);
+
+			requestAnimationFrame(this._render);
+		},
+		move: function(x, y) {
+			this.player.move(this, x, y);
+		},
+		keydown: function(e) {
+			var event = keyMap[e.which];
+			if(event) {
+				var name = event[0], args = event[1];
+				this[name].apply(this, args);
+
+				e.preventDefault();
+			}
+		},
+		emit: function(event /*, args*/) {
+			var args = Array.prototype.slice.call(arguments);
+			args.splice(1, 0, this.tick);
+
+			this.socket.emit.apply(this.socket, args);
+		}
+	}
+
+	function Level(level, width, height, renderWidth, renderHeight) {
+		this.width = width;
+		this.height = height;
+
+		this.renderWidth = renderWidth / width;
+		this.renderHeight = renderHeight / height;
+
+		this.map = new Map(this.width, this.height, level.grid);
+	}
+
+	Level.prototype = {
+		update: function(game) {
+			game.player.update(game, this);
+		},
+		render: function(game, ctx) {
+			var self = this;
+			this.map.all().forEach(function(coord) {
+				var x = +coord[0], y = +coord[1];
+
+				ctx.fillStyle = '#000';
+				ctx.fillRect(
+					Math.round(x * self.renderWidth),
+					Math.round(y * self.renderHeight),
+					self.renderWidth,
+					self.renderHeight);
+			});
+
+			game.player.render(this, ctx);
+		}
+	};
+
+	function Map(width, height, grid) {
+		this.width = width;
+		this.height = height;
+
+		this.map = {};
+
+		for(var y = 0, i = 0; y < height; y++) {
+			for(var x = 0; x < width; x++, i++) {
+				grid[i] && this.fill(x, y);
+			}
+		}
+	}
+
+	Map.prototype = {
+		hash: function(x, y) {
+			return x + '|' + y;
+		},
+		dehash: function(hash) {
+			return hash.split('|');
+		},
+		get: function(x, y) {
+			return this.map[this.hash(x, y)];
+		},
+		fill: function(x, y) {
+			this.map[this.hash(x, y)] = 1;
+		},
+		clear: function(x, y) {
+			delete this.map[this.hash(x, y)];
+		},
+		all: function() {
+			var coords = [];
+			for(var hash in this.map) {
+				coords.push(this.dehash(hash));
+			}
+			return coords;
+		}
+	};
+
+	function Player() {
+		this.pos = Vec2.ZERO;
+		this.dir = Vec2.RIGHT;
+	}
+
+	Player.prototype = {
+		update: function(game, level) {
+			this.pos = this.pos.add(this.dir);
+			this.wrap(level);
+
+			if(level.map.get(this.pos.x, this.pos.y)) {
+				console.log(game.tick, 'dead');
+			}
+		},
+		move: function(game, x, y) {
+			var dir = new Vec2(x, y);
+			if(!dir.isOppositeOf(this.dir) && !dir.isEqualTo(this.dir)) {
+				this.dir = dir;
+			}
+		},
+		wrap: function(level) {
+			if(this.pos.x > level.width - 1) {
+				this.pos = this.pos.setX(0);
+			} else if(this.pos.x < 0) {
+				this.pos = this.pos.setX(level.width - 1);
+			}
+
+			if(this.pos.y > level.height - 1) {
+				this.pos = this.pos.setY(0);
+			} else if(this.pos.y < 0) {
+				this.pos = this.pos.setY(level.height - 1);
+			}
+		},
+		render: function(level, ctx) {
+			ctx.fillStyle = '#f00';
+			ctx.fillRect(
+				Math.round(this.pos.x * level.renderWidth),
+				Math.round(this.pos.y * level.renderHeight),
+				level.renderWidth,
+				level.renderHeight);
+		}
+	};
+
+	function Vec2(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	Vec2.prototype = {
+		add: function(v) {
+			return new Vec2(this.x + v.x, this.y + v.y);
+		},
+		setX: function(x) {
+			return new Vec2(x, this.y);
+		},
+		setY: function(y) {
+			return new Vec2(this.x, y);
+		},
+		isEqualTo: function(v) {
+			return this.x == v.x && this.y == v.y;
+		},
+		isOppositeOf: function(v) {
+			return this.x == -v.x && this.y == -v.y;
+		}
+	};
+
+	extend(Vec2, {
+		ZERO: new Vec2(0, 0),
+		RIGHT: new Vec2(1, 0)
+	});
+	
+	})();
+ 	</script>
+</polymer-element>

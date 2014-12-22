@@ -66,7 +66,9 @@ Game.prototype = {
 		var level = this.level;
 		var gameOptions = this.gameOptions;
 
+		var self = this;
 		this.updateLoop = setInterval(function() {
+			console.log('tick', self);
 			level.update();
 		}, gameOptions.updateInterval);
 
