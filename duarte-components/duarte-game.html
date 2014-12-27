@@ -11,6 +11,7 @@
 <script type="text/javascript" src="../js/level.js"></script>
 <script type="text/javascript" src="../js/levelcreator.js"></script>
 <script type="text/javascript" src="../js/game.js"></script>
+<script type="text/javascript" src="../js/gamecreator.js"></script>
 <script type="text/javascript" src="../js/entities.js"></script>
 <script type="text/javascript" src="../js/keyboard.js"></script>
 
@@ -169,6 +170,14 @@
 			float: right;
 		}
 
+		#exit {
+			float: right;
+		}
+
+		#exitCreateLink {
+			color: #fff;
+		}
+
 		#rate-container {
 			box-sizing: border-box;
 			position: absolute;
@@ -190,12 +199,25 @@
 				
 			<div id="timeAttackText"></div>
 			<div id="scoreText"></div>
-			<paper-button on-tap="{{pauseResume}}" hidden?="{{gameOver}}" raised id="pauseResume">
-				<core-icon hidden?="{{!isPlaying}}" icon="av:pause"></core-icon>
-				<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
-			</paper-button>
 
-			<paper-button on-tap="{{rate}}" id="rate" raised>Rate</paper-button>
+			<div hidden?="{{mode === 'create'}}" >
+				<paper-button on-tap="{{pauseResume}}" hidden?="{{gameOver}}" raised id="pauseResume">
+					<core-icon hidden?="{{!isPlaying}}" icon="av:pause"></core-icon>
+					<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
+				</paper-button>
+
+				<paper-button on-tap="{{rate}}" id="rate"  raised>Rate</paper-button>
+			</div>
+
+			<div hidden?="{{mode === 'normal'}}" >
+
+				<a id="exitCreateLink" is="pushstate-anchor" href="/profile">
+					<paper-button on-tap="{{exitCreate}}" id="exit" raised>Save and Exit</paper-button>
+				</a>
+				
+
+				<paper-input floatingLabel label="Map name" value="{{mapname}}"></paper-input>
+			</div>
 
 		</paper-shadow>
 
@@ -262,8 +284,12 @@
 			htmlCanvas = $(this.$.htmlCanvas);
 
 			this.isPlaying = true;
-			
-			this.game = new Game(htmlCanvas, this.mode, grid, this);
+
+			if (this.mode === 'normal') {
+				this.game = new Game(htmlCanvas, this.mode, grid, this);
+			} else if (this.mode === 'create') {
+				this.game = new GameCreator(htmlCanvas, this.mode, grid, this);
+			}
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 			this.game.onGameState = this.onGameState.bind(this);
@@ -319,6 +345,9 @@
 			} else {
 				gameOver = false;
 			}
+		},
+		exitCreate: function() {
+
 		},
 		gameOver: false,
 		gameMode: 'normal',

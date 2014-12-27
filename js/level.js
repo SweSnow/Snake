@@ -112,8 +112,10 @@ Level.prototype = {
 
    		for (var i = 0; i < this.players.length; i++) {
    			if (this.players[i].acceptedKeys.indexOf(code) != -1) {
-   				e.preventDefault();
-   				this.players[i].propsedDirection = code;
+   				if (this.game.gameMode ==='normal') {
+	   				e.preventDefault();
+   					this.players[i].propsedDirection = code;
+   				}
    			}
    		}
 	},

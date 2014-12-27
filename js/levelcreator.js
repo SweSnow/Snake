@@ -17,13 +17,6 @@ function LevelCreator(grid, tileSize, width, height) {
 }
 
 LevelCreator.prototype = {
-	update: function(now) {
-		this.pointer.update(this);
-
-		for (var i = 0; i < this.entities.length; i++) {
-		//	entities[i].update();
-		}
-	},
 	get: function(x, y) {
 		for (var i = 0; i < this.entities.length; i++) {
 			if (this.entities[i].x == x && this.entities[i].y == y) {
@@ -53,28 +46,54 @@ LevelCreator.prototype = {
 
 		if (this.get(pointerX, pointerY) == 0) {
 			this.set(pointerX, pointerY, 1);
-			this.createMode = 'add';
-		} else {
+		}
+	},
+	removeBlock: function() {
+		var pointerX = this.pointer.x;
+		var pointerY = this.pointer.y;
+
+		if (this.get(pointerX, pointerY) == 1) {
 			this.set(pointerX, pointerY, 0);
-			this.createMode = 'remove';
 		}
 	},
 	mouseMove: function(e) {
-
-		console.log(e.which);
-
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
 
 		this.pointer.x = Math.min(Math.max((Math.round((e.x - canvasRect.left - (this.tileSize / 2)) / this.tileSize)) * this.tileSize, 0), this.width - this.tileSize);
 		this.pointer.y = Math.min(Math.max((Math.round((e.y - canvasRect.top - (this.tileSize / 2)) / this.tileSize)) * this.tileSize, 0), this.height - this.tileSize);
+		
+		this.pointer.update();
+
+		if (this.lastMouse === 'down') {
+			this.placeBlock();
+		} else if (this.lastMouse === 'up') {
+			this.removeBlock();
+		}
 	},
-	mouseClick: function(e) {
-		this.placeBlock();
+	mouseDown: function(e) {
+
+		this.lastMouse = 'down';
+
+
+
+		var canvasRect = htmlCanvas[0].getBoundingClientRect();
+		if (e.x > canvasRect.left && e.x < canvasRect.right && e.y > canvasRect.top && e.y < canvasRect.bottom) {
+			
+		}
+	},
+	mouseUp: function(e) {
+
+		this.lastMouse = 'up';
+
+		var canvasRect = htmlCanvas[0].getBoundingClientRect();
+		if (e.x > canvasRect.left && e.x < canvasRect.right && e.y > canvasRect.top && e.y < canvasRect.bottom) {
+			this.placeBlock();		
+		}
+
 	},
 	entities: [],
 	directionLeft: 37,
 	directionUp: 38,
 	directionRight: 39,
 	directionDown: 40,
-	createMode: 'add'
 };

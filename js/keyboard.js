@@ -14,25 +14,38 @@
 
 	window.keys = keys;
 
-	window.addEventListener('keydown', function(e) {
+	function listen() {
+		window.addEventListener('keydown', onkeydown);
+		window.addEventListener('keyup', onkeyup);
+	}
+
+	function cancel() {
+		window.removeEventListener('keydown', onkeydown);
+		window.removeEventListener('keyup', onkeyup);
+	}
+
+	function onkeydown(e) {
 		if(keyMap.hasOwnProperty(e.which)) {
 			keys[keyMap[e.which]] = 1;
 			e.preventDefault();
-		} 
-	});
-	window.addEventListener('keyup', function(e) {
+		}
+	}
+
+	function onkeyup(e) {
 		if(keyMap.hasOwnProperty(e.which)) {
 			keys[keyMap[e.which]] = 0;
 			e.preventDefault();
 		}
-	});
+	}
 
 	function keydown(key) {
 		return keys[key];
 	}
 
 	window.keyboard = {
-		isDown: keydown
+		isDown: keydown,
+		listen: listen,
+		cancel: cancel
 	};
 
 })();
