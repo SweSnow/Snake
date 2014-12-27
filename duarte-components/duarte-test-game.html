@@ -47,6 +47,7 @@
 		},
 		onRouteLeave: function() {
 			this.socket.off('start', this._onStart);
+			this.game.stop();
 		},
 		onStart: function(level) {
 			console.log('start', level);
@@ -75,7 +76,6 @@
 		this._render = this.render.bind(this);
 
 		this.ticks = [];
-		this.stop = false;
 	}
 
 	var updateRate = 150;
@@ -94,10 +94,11 @@
 		start: function() {
 			this.interval = setInterval(this._update, updateRate);
 
-			requestAnimationFrame(this._render);
+			requestAnimationFrame(this._render, this.canvas);
 		},
 		stop: function() {
 			clearInterval(this.interval);
+			cancelAnimationFrame(this.animationFrame);
 		},
 		update: function() {
 			++this.tick;
@@ -114,7 +115,7 @@
 
 			this.level.render(this, this.ctx);
 
-			requestAnimationFrame(this._render);
+			this.animationFrame = requestAnimationFrame(this._render, this.canvas);
 		},
 		keydown: function(e) {
 			var event = keyMap[e.which];
