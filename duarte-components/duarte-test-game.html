@@ -31,12 +31,15 @@
 		ready: function() {
 			this._onStart = this.onStart.bind(this);
 			this._onKeydown = this.onKeydown.bind(this);
+			this._onKeyup = this.onKeyup.bind(this);
 		},
 		attached: function() {
 			window.addEventListener('keydown', this._onKeydown);
+			window.addEventListener('keyup', this._onKeyup);
 		},
 		detached: function() {
-			window.addEventListener('keydown', this._onKeydown);
+			window.removeEventListener('keydown', this._onKeydown);
+			window.removeEventListener('keyup', this._onKeyup);
 		},
 		onRouteEnter: function() {
 			this.socket.emit('start', this.levelId);
@@ -52,6 +55,9 @@
 		},
 		onKeydown: function(e) {
 			this.game.keydown(e);
+		},
+		onKeyup: function(e) {
+			// this.game.keyup(e);
 		}
 	});
 
@@ -81,6 +87,8 @@
 		39: ['move', [ 1,  0]]
 	};
 
+	var events = {};
+
 	Game.prototype = {
 		tick: 0,
 		start: function() {
@@ -98,6 +106,7 @@
 
 			this.emit('tick', this.player.dir.x, this.player.dir.y);
 
+			events = {};
 			console.log(this.tick, this.player.pos);
 		},
 		render: function() {
@@ -107,14 +116,11 @@
 
 			requestAnimationFrame(this._render);
 		},
-		move: function(x, y) {
-			this.player.move(this, x, y);
-		},
 		keydown: function(e) {
 			var event = keyMap[e.which];
 			if(event) {
 				var name = event[0], args = event[1];
-				this[name].apply(this, args);
+				events[name] = args;
 
 				e.preventDefault();
 			}
@@ -144,7 +150,7 @@
 		render: function(game, ctx) {
 			var self = this;
 			this.map.all().forEach(function(coord) {
-				var x = +coord[0], y = +coord[1];
+				var x = coord[0], y = coord[1];
 
 				ctx.fillStyle = '#000';
 				ctx.fillRect(
@@ -176,7 +182,7 @@
 			return x + '|' + y;
 		},
 		dehash: function(hash) {
-			return hash.split('|');
+			return hash.split('|').map(function(c) {return +c;});
 		},
 		get: function(x, y) {
 			return this.map[this.hash(x, y)];
@@ -203,6 +209,9 @@
 
 	Player.prototype = {
 		update: function(game, level) {
+			if(events.move) {
+				this.move(events.move, game);
+			}
 			this.pos = this.pos.add(this.dir);
 			this.wrap(level);
 
@@ -210,10 +219,11 @@
 				console.log(game.tick, 'dead');
 			}
 		},
-		move: function(game, x, y) {
-			var dir = new Vec2(x, y);
+		move: function(dir, game) {
+			dir = new Vec2(dir[0], dir[1]);
 			if(!dir.isOppositeOf(this.dir) && !dir.isEqualTo(this.dir)) {
 				this.dir = dir;
+				game.emit('changedir', dir.x, dir.y);
 			}
 		},
 		wrap: function(level) {
