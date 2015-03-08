@@ -81,7 +81,7 @@
 			</style>
 
 			<!-- <duarte-socket socket="{{socket}}"></duarte-socket> -->
-			<duarte-user id="user" ip="{{ip}}"></duarte-user>
+			<duarte-user id="user"></duarte-user>
 
 			<duarte-header selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
 			<!-- 
@@ -111,7 +111,6 @@
 
 		<script type="text/javascript">
 			Polymer('duarte-app', {
-				ip: '192.168.1.87:8080',
 				onStateChanged: function(e, detail) {
 					setTimeout(function() {
 						this.selected = detail.path.match(/[\/#]*(.*)/)[1];
@@ -130,7 +129,6 @@
 					element.path = detail.path;
 					element.user = this.$.user;
 					element.socket = this.socket;
-					element.ip = this.ip;
 
 					if(element && element.onRouteEnter) {
 						element.onRouteEnter();

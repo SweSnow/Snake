@@ -1,6 +1,7 @@
 <link rel="import" href="../components/paper-input/paper-input.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
-<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<link rel="import" href="../duarte-components/duarte-ajax.html">
 
 <polymer-element name="duarte-login" attributes="user">
 	<template>
@@ -25,36 +26,14 @@
 
 		<paper-button affirmitive on-tap="{{submit}}" class="right">Log in</paper-button>
 
-		<core-ajax
-			id="submit"
-			method="post"
-			url="http://{{ip}}/user/login"
-			on-core-response="{{onResponse}}"
-			contentType="application/json"
-			withCredentials="true"
-			></core-ajax>
 	</template>
 	<script>
+	//TODO add user.login
 		Polymer('duarte-login', {
 			submit: function() {
-				var submit = this.$.submit;
-				submit.body = JSON.stringify({
-					username: this.username,
-					hash: this.user.generatePassword(this.username, this.password)
-				});
-				submit.go();
-
-				/*
-				extend(this.user, {
-					username: this.username,
-					loggedIn: true
-				});
-				this.fire('close');
-				*/
-			},
-			onResponse: function(e, detail) {
-				this.user.login(JSON.parse(detail.response));
-				this.fire('close');
+				this.user.login(this.username, this.password, function() {
+					this.fire('close');
+				}.bind(this));
 			}
 		});
 	</script>

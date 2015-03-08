@@ -1,26 +1,36 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 
+
 <polymer-element name="duarte-user" attributes="ip">
 	<template>
 
-		<core-ajax
+		<duarte-ajax
 			id="getUser"
 			auto="true"
 			method="get"
-			url="http://{{ip}}/user/me"
+			path="user/me"
 			on-core-response="{{onUserResponse}}"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 
-		<core-ajax
+		<duarte-ajax
+			id="login"
+			method="post"
+			path="user/login"
+			on-core-response="{{onLoginResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></duarte-ajax>
+
+		<duarte-ajax
 			id="logout"
 			method="get"
-			url="http://{{ip}}/user/logout"
+			path="user/logout"
 			on-core-response="{{onLogoutResponse}}"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 	</template>
 	<script>
 	(function() {'use strict';
@@ -28,14 +38,33 @@
 		var prototype = {
 			name: null, username: null, loggedIn: false,
 			onUserResponse: function(e, detail) {
-				this.login(JSON.parse(detail.response));
+				this._login(JSON.parse(detail.response));
+			},
+			onLoginResponse: function(e, detail) {
+				var response = JSON.parse(detail.response);
+
+				if(!response) return;
+
+				this._login(response);
+
+				if(this.loginCallback) {
+					this.loginCallback();
+					delete this.loginCallback;
+				}
 			},
 			onLogoutResponse: function() {
 				this.loggedIn = false;
 			},
-			login: function(response) {
-				if(!response) return;
-				
+			login: function(username, password, callback) {
+				var login = this.$.login;
+				login.body = JSON.stringify({
+					username: username,
+					hash: this.generatePassword(username, password)
+				});
+				login.go();
+				this.loginCallback = callback;
+			},
+			_login: function(response) {
 				extend(this, response);
 				this.loggedIn = true;
 			},
