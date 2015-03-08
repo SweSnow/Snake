@@ -37,6 +37,14 @@ LevelCreator.prototype = {
 			}
 		}
 	},
+	exportMap: function() {
+		for (var y = 0; y < this.height; y += this.tileSize){
+			for (var x = 0; x < this.width; x += this.tileSize) {
+				this.grid.push(this.get(x, y));
+			}
+		}
+		return this.grid;
+	},
 	copy: function() {
 		return new Level(this.grid.slice(), this.width, this.height);
 	},

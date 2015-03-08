@@ -1,9 +1,10 @@
 <link rel="import" href="../components/paper-dropdown/paper-dropdown-menu.html">
 <link rel="import" href="../components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../components/core-icons/av-icons.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
 <link rel="import" href="../duarte-components/duarte-ajax.html">
-<!-- <link rel="import" href="../duarte-components/duarte-maintainer.html"> -->
 
 <polymer-element name="duarte-browse">
   <template>
@@ -104,10 +105,12 @@
 		.subheader-dropdown-label  {
 			margin-top: 34px;
 			font-size: 0.8em;
+			float: left;
 		}
 
 		.subheader-dropdown {
 			width: 130px;
+			float: left;
 			margin-left: 32px;
 			margin-top: 10px;
 			color: #fff;
@@ -134,6 +137,11 @@
 
 		#header > div > paper-dropdown-menu > paper-item {
 			color: #333;
+		}
+
+		#subheaderRefresh {
+			margin-top: 14px;
+			padding-top: 18px;
 		}
 
 		::selection {
@@ -163,6 +171,10 @@
 					<paper-item data-sort="time">Oldest</paper-item>
 					
 				</paper-dropdown-menu>
+
+				<div flex></div>
+
+				<paper-icon-button id="subheaderRefresh" icon="refresh" title="Refresh" on-tap="{{refresh}}"></paper-icon-button>
 		  
 			</div>
 
@@ -174,7 +186,6 @@
 		<template repeat="{{map in levels}}">
 			<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
 				<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
-					<paper-shadow z="1"></paper-shadow>
 					<div class="thumbnail-container">
 						<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
 							<paper-ripple fit class="map-ripple"></paper-ripple>

@@ -38,13 +38,11 @@
 
 			<div hidden?="{{mode === 'normal'}}" >
 
-				<a id="exitCreateLink" is="pushstate-anchor" href="/profile">
-					<paper-button on-tap="{{exitCreate}}" id="exit" raised>Save and Exit</paper-button>
-				</a>
+				<paper-button on-tap="{{exitCreate}}" id="exit" raised>Save and Exit</paper-button>
 
 				<paper-button on-tap="{{clearMap}}" id="clear-map" raised>Clear map</paper-button>
 				
-				<paper-input floatingLabel class="light-floating-label" label="Map name" value="{{mapname}}"></paper-input>
+				<paper-input floatingLabel class="light-floating-label" label="Map name" value="{{mapTitle}}"></paper-input>
 			</div>
 
 		</paper-shadow>
@@ -83,6 +81,16 @@
 		on-core-response="{{onResponse}}"
 		contentType="application/json"
 		withCredentials="true"
+		></duarte-ajax>
+
+	<duarte-ajax
+		id="submit"
+		method="post"
+		handleAs="json"
+		path="level/submit"
+		contentType="application/json"
+		withCredentials="true"
+		on-core-response="{{onCreateResponse}}"
 		></duarte-ajax>
 		
 	</template>
@@ -189,7 +197,22 @@
 			}
 		},
 		exitCreate: function() {
+			var submit = this.$.submit;
+			
+			console.log(this.game.level.grid);
 
+			submit.body = JSON.stringify({
+				title: this.mapTitle,
+				grid: this.game.level.exportMap()
+			});
+
+			submit.go();
+		},
+		onCreateResponse: function(e, detail) {
+			var response = JSON.parse(detail.response);
+			if (response) {
+				this.router.go('/profile');
+			}
 		},
 		playerCount: 1,
 		gameOver: false,
