@@ -129,10 +129,10 @@
 			</div>
 		</core-toolbar>
 	</paper-shadow>
-	<paper-dialog transition="paper-dialog-transition-bottom" id="registerModal" heading="Sign up">
+	<paper-dialog transition="paper-dialog-transition-bottom" id="registerModal" heading="Sign up" backdrop>
 		<duarte-register user="{{user}}" on-close="{{closeModal}}" data-modal-id="registerModal"></duarte-register>
 	</paper-dialog>
-	<paper-dialog id="loginModal" heading="Log in">
+	<paper-dialog transition="paper-dialog-transition-bottom" id="loginModal" heading="Log in" backdrop>
 		<duarte-login user="{{user}}" on-close="{{closeModal}}" data-modal-id="loginModal"></duarte-login>
 	</paper-dialog>
 

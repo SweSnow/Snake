@@ -1,8 +1,8 @@
 <link rel="import" href="../components/paper-input/paper-input.html">
+<link rel="import" href="../components/paper-input/paper-input-decorator.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 
 <link rel="import" href="../duarte-components/duarte-ajax.html">
-
 
 <polymer-element name="duarte-register" attributes="user">
 	<template>
@@ -23,7 +23,10 @@
 		</style>
 
 		<paper-input floatingLabel label="Username" value="{{username}}"></paper-input>
-		<paper-input id="password-input" floatingLabel label="Password" type="password" value="{{password}}"></paper-input>
+
+		<paper-input-decorator label="Password">
+			<input id="password" is="core-input" type="password" value="{{password}}"/>
+		</paper-input-decorator>
 
 		<paper-button affirmitive on-tap="{{submit}}" class="right">Sign up</paper-button>
 
@@ -32,6 +35,7 @@
 	</template>
 	<script>
 		Polymer('duarte-register', {
+			username: '', password: '',
 			submit: function() {
 				var username = this.username.trim(), password = this.password.trim();
 				if(username && password) {
