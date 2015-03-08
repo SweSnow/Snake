@@ -30,12 +30,13 @@
 					roundedWidth = Math.round(width), roundedHeight = Math.round(height);
 				for(var y = 0, i = 0; y < this.gridHeight; y++) {
 					for(var x = 0; x < this.gridWidth; x++, i++) {
-						ctx.fillStyle = this.grid[i] ? '#000' : '#fff';
-						ctx.fillRect(
-							Math.round(x * width),
-							Math.round(y * height),
-							roundedWidth,
-							roundedHeight);
+						if(this.grid[i]) {
+							ctx.fillRect(
+								Math.round(x * width),
+								Math.round(y * height),
+								roundedWidth,
+								roundedHeight);
+						}
 					}
 				}
 			}
