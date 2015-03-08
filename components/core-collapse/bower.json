@@ -2,7 +2,8 @@
   "name": "core-collapse",
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#master"
+    "polymer": "Polymer/polymer#master",
+    "core-resizable": "Polymer/core-resizable#master"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^1.1.0"
