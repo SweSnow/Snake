@@ -1,0 +1,84 @@
+#gameContainer {
+	background-color: #ffffff;
+	position: relative;
+	width: 600px;
+	height: 600px;
+	margin-top: 42px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0;
+	color: #000000;
+	user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+}
+
+.canvas-container {
+	position: relative;
+}
+
+#startOverlay {
+	background-color: #fff;
+	display: block;
+	width: 650px;
+	height: 600px;
+	position: absolute;
+	box-sizing: border-box;
+	color: #000;
+	top: 0;
+	left: 0;
+	z-index: 2;
+	padding-left: 50px;
+}
+
+.jumpatron {
+	font-size: 70px;
+	font-weight: 100;
+	margin-top: 30px;
+}
+
+#title-duarte {
+	font-weight: 700;
+}
+
+#title-snake {
+	padding-left: 5px;
+	font-weight: 100;
+	font-size: 0.8em;
+}
+
+#game-overlay-text {
+	font-size: 1.28em;
+	width: 300px;
+}
+
+#play-now {
+	background-color: #009688;
+	color: #fff;
+	font-size: 1.6em;
+}
+
+#duarte {
+	z-index: -1;
+	background-size: cover;
+	position: absolute;
+	width: 350px;
+	height: 350px;
+	bottom: 0;
+	right: 50px;
+	background-image: url('../media/duarte.png');
+}
+
+paper-radio-group {
+	display: block;
+	margin-bottom: 24px;
+}
+
+paper-radio-button {
+	display: block;
+	font-size: 18px;
+}

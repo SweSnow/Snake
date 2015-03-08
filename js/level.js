@@ -2,7 +2,7 @@
 /*
 	level.js contains the master level objects
 	which houses all entities and children. It
-	alsomanages maps.
+	also manages maps.
 */
 
 /* Constructor for level
@@ -213,14 +213,6 @@ extend(Level, {
 			var height = _height / tileSize;
 
 			var max = width * height;
-
-			/*for (var i = 0; i < max; i++) {
-				if (Math.random() < 0.99) {
-					array[i] = 0;
-				} else {
-					array[i] = 1;
-				}
-			}*/
 
 			return array;
 

@@ -18,204 +18,7 @@
 <polymer-element name="duarte-game" attributes="levelId">
 	<template>
 
-	<style type="text/css">
-
-		:host {
-			display: block;
-			position: relative;
-			width: 600px;
-			height: 600px;
-			margin-bottom: 48px;
-			margin-top: 42px;
-			margin-left: auto;
-			margin-right: auto;
-			padding: 0;
-		}
-
-		.g_food {
-			position: absolute;
-			background-color: #4CAF50;
-			z-index: 1;
-		}
-
-		.g_obstacle {
-			position: absolute;
-			background-color: #444;
-			z-index: 1;
-		}
-
-		.g_bug {
-			position: absolute;
-			background-color: #03A9F4;
-			z-index: 1;
-		}
-
-		.g_player {
-			transition: all 50ms;
-			position: absolute;
-			z-index: 2;
-		}
-
-		.g_tail {
-			position: absolute;
-			z-index: 1;
-		}
-
-		.g_pointer {
-			outline: #009688 1px dotted;
-			position: absolute;
-			z-index: 1;
-		}
-
-		.game-ripple {
-			position: absolute;
-			display: block;
-			top: 100px;
-			left: 0;
-			width: 600px;
-			height: 500px;
-			z-index: 3;
-		}
-
-		#foodRipple {
-			color: #4CAF50;
-		}
-
-		#bugRipple {
-			color: #03A9F4;
-		}
-
-		#container {
-			position: relative;
-			background: #ffffff;
-			display: block;
-			width: 600px;
-			height: 600px;
-		}
-
-		#htmlCanvas {
-			position: absolute;
-			display: block;
-			top: 100px;
-			left: 0;
-			width: 600px;
-			height: 500px;
-		}
-
-		#gameOverlay {
-			position: absolute;
-			box-sizing: border-box;
-			padding: 16px;
-			color: #fff;
-			background: #009688;
-			width: 600px;
-			height: 100px;
-		}
-
-		#timeAttackText {
-			display: block;
-			float: right;
-		}
-
-		#scoreText {
-			display: block;
-			float: left;
-			font-size: 25px;
-		}
-
-		#pauseResume {
-			display: block;
-			float: right;
-		}
-
-		#gameOverOverlay {
-			color: #fff;
-			background-color: #009688;
-			box-sizing: border-box;
-			padding: 16px;
-			position: absolute;
-			z-index: 4;
-			left: 150px;
-			width: 300px;
-			height: 154px;
-			top: 245px; 
-		}
-
-		#label {
-			font-weight: 500;
-			font-size: 23px;
-		}
-
-		#gameOverOverlay paper-button {
-			float: right;
-			margin-top: 12px;
-			margin-right: -7px;
-		}
-
-		#gameOverScore {
-			padding-top: 6px;
-			font-size: 16px;
-		}
-
-		#gameOverMessage {
-			padding-top: 6px;
-			font-size: 16px;
-		}
-
-		#quit {
-			color: #fff;
-		}
-
-		#rate {
-			float: right;
-		}
-
-		#exit {
-			float: right;
-		}
-
-		#clear-map {
-			float: right;
-		}
-
-		#exitCreateLink {
-			color: #fff;
-		}
-
-		#rate-container {
-			box-sizing: border-box;
-			position: absolute;
-			width: 400px;
-			left: 100px;
-			top: 200px;
-			background-color: #fff;
-			padding-left: 20px;
-			padding-right: 20px;
-			z-index: 5;
-		}
-
-		.light-floating-label {
-			color: #fff;
-		}
-
-		.light-floating-label /deep/ ::-webkit-input-placeholder {
-	      color: #ddd;
-	    }
-
-	    .light-floating-label /deep/ ::-moz-placeholder {
-	      color: #ddd;
-	    }
-
-	    .light-floating-label /deep/ :-ms-input-placeholder {
-	      color: #ddd;
-	    }
-
-	    .light-floating-label /deep/ .unfocused-underline {
-		    background-color: #ddd;
-		}
-
-
-	</style>
+	<link rel="stylesheet" type="text/css" href="../style/game_style.css"/>
 
 	<div id="container">
 
@@ -230,7 +33,7 @@
 					<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
 				</paper-button>
 
-				<paper-button on-tap="{{rate}}" id="rate"  raised>Rate</paper-button>
+				<paper-button on-tap="{{rate}}" id="rate" raised>Rate</paper-button>
 			</div>
 
 			<div hidden?="{{mode === 'normal'}}" >
@@ -311,7 +114,7 @@
 			this.isPlaying = true;
 
 			if (this.mode === 'normal') {
-				this.game = new Game(htmlCanvas, this.mode, grid, this);
+				this.game = new Game(htmlCanvas, this.mode, grid, this, this.playerCount);
 				htmlCanvas[0].style.cursor = 'default';
 			} else if (this.mode === 'create') {
 				this.game = new GameCreator(htmlCanvas, this.mode, grid, this);
@@ -321,14 +124,14 @@
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 			this.game.onGameState = this.onGameState.bind(this);
 		},
-		onRouteEnter: function() {
-			if (this.path == '/play') {
+		onRouteEnter: function(master) {
+			if (master.path == '/play') {
 				this.mode = 'normal';
-			} else if (this.path = '/create') {
+			} else if (master.path = '/create') {
 				this.mode = 'create';
 			}
 
-			if(this.levelId) {
+			if(master.levelId) {
 				this.$.request.go();
 			} else {
 				this.startGame(new Level.createDefaultLevel(600, 500, 20));
@@ -388,6 +191,7 @@
 		exitCreate: function() {
 
 		},
+		playerCount: 1,
 		gameOver: false,
 		gameMode: 'normal',
 		isPlaying: false,

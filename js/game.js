@@ -1,11 +1,21 @@
 'use strict';
 
-function Game(container, gameMode, tiles, master) {
+/* Constructor for game
+	@param container	Container HTML element
+	@param gameMode		String indicating the used game mode, 'create' or 'normal'
+	@param tiles 		Array with the map obstacles
+	@param master		Master object, preferably duarte-game, useful for callbacks
+	@param playerCount	Number indication number of players, 1 or 2 for now
+*/
+
+function Game(container, gameMode, tiles, master, playerCount) {
 
 	this.master = master;
 	this.gameMode = gameMode;
 
 	this.gameOptions = GameOptions.Default;
+
+	var playerArray = [];
 
 	var player1 = new Player(20, 220, 20, 20, {
 		left: 37,
@@ -13,16 +23,23 @@ function Game(container, gameMode, tiles, master) {
 		right: 39,
 		down: 40,
 	}, '#009688', '#4DB6AC');
-//	var player2 = new Player(20, 300, 20, 20,{
-//		left: 65,
-//		up: 87,
-//		right: 68,
-//		down: 83,
-//	}, '#FF5722', '#FF8A65');
+
+	playerArray.push(player1);
+
+	if (playerCount == 2) {
+		var player2 = new Player(20, 300, 20, 20,{
+			left: 65,
+			up: 87,
+			right: 68,
+			down: 83,
+		}, '#FF5722', '#FF8A65');
+
+		playerArray.push(player2);
+	}
 
 	this.level = new Level(
 			tiles, 20, 600, 500,
-			Date.now(), -1, [player1/*, player2*/],
+			Date.now(), -1, playerArray,
 			this.gameOptions, this);
 		
 	this.level.end = this.end;

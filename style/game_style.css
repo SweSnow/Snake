@@ -1,150 +1,193 @@
-.game-container {
-	background-color: #ffffff;
+:host {
+	display: block;
 	position: relative;
 	width: 600px;
 	height: 600px;
+	margin-bottom: 48px;
 	margin-top: 42px;
 	margin-left: auto;
 	margin-right: auto;
 	padding: 0;
-	color: #000000;
-	user-select: none;
-    -ms-user-select: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-drag: none;
 }
 
-.canvas-container {
+.g_food {
+	position: absolute;
+	background-color: #4CAF50;
+	z-index: 1;
+}
+
+.g_obstacle {
+	position: absolute;
+	background-color: #444;
+	z-index: 1;
+}
+
+.g_bug {
+	position: absolute;
+	background-color: #03A9F4;
+	z-index: 1;
+}
+
+.g_player {
+	transition: all 50ms;
+	position: absolute;
+	z-index: 2;
+}
+
+.g_tail {
+	position: absolute;
+	z-index: 1;
+}
+
+.g_pointer {
+	outline: #009688 1px dotted;
+	position: absolute;
+	z-index: 1;
+}
+
+.game-ripple {
+	position: absolute;
+	display: block;
+	top: 100px;
+	left: 0;
+	width: 600px;
+	height: 500px;
+	z-index: 3;
+}
+
+#foodRipple {
+	color: #4CAF50;
+}
+
+#bugRipple {
+	color: #03A9F4;
+}
+
+#container {
 	position: relative;
-}
-
-#start-overlay {
+	background: #ffffff;
 	display: block;
 	width: 600px;
 	height: 600px;
+}
+
+#htmlCanvas {
 	position: absolute;
-	color: #000;
-	top: 0;
-	left: 0;
-	z-index: 2;
-	padding-left: 50px;
-}
-
-.jumpatron {
-	font-size: 70px;
-	font-weight: 100;
-	margin-top: 140px;
-}
-
-#title-duarte {
-	font-weight: 700;
-}
-
-#title-snake {
-	padding-left: 5px;
-	font-weight: 100;
-	font-size: 0.8em;
-}
-
-#game-overlay-text {
-	font-size: 1.28em;
-	width: 300px;
-}
-
-#play-now {
-	background-color: #009688;
-	color: #fff;
-	font-size: 1.6em;
-}
-
-#duarte {
-	z-index: -1;
-	background-size: cover;
-	position: absolute;
-	width: 350px;
-	height: 350px;
-	bottom: 0;
-	right: 50px;
-	background-image: url('../media/duarte.png');
-}
-
-#game-over-overlay {
-	z-index: 2;
-	position: absolute;
-	top: 0;
+	display: block;
+	top: 100px;
 	left: 0;
 	width: 600px;
-	height: 600px;
-	display: none;
+	height: 500px;
 }
 
-#game-over-restart {
+#gameOverlay {
+	position: absolute;
 	box-sizing: border-box;
-	padding-top: 14px;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	font-size: 20px;
-	cursor: pointer;
-	width: 240px;
-	border: 1px solid #fff;
-	height: 50px;
+	padding: 16px;
+	color: #fff;
+	background: #009688;
+	width: 600px;
+	height: 100px;
 }
 
-#game-over-restart:hover {
-	background-color: #000;
-	color: #000;
-	border: 1px solid #fff;
+#timeAttackText {
+	display: block;
+	float: right;
 }
 
-.game-over-text {
-
+#scoreText {
+	display: block;
+	float: left;
+	font-size: 25px;
 }
 
-#game-over-score {
-
+#pauseResume {
+	display: block;
+	float: right;
 }
 
-#reset-button {
-	display: none;
-	font-size: 17px;
-	text-align: center;
-	padding: 8px;
-	width: 100px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	background-color: #000;
-	border: 1px solid #fff;
-	cursor: pointer;
+#gameOverOverlay {
+	color: #fff;
+	background-color: #009688;
+	box-sizing: border-box;
+	padding: 16px;
+	position: absolute;
+	z-index: 4;
+	left: 150px;
+	width: 300px;
+	height: 154px;
+	top: 245px; 
 }
 
-#reset-button:hover {
-	transition: all 0.2s;
-	background-color: #000;
-	color: #000;
+#label {
+	font-weight: 500;
+	font-size: 23px;
 }
 
-#clear-button {
-	display: none;
-	font-size: 17px;
-	text-align: center;
-	padding: 8px;
-	width: 150px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	background-color: #000;
-	border: 1px solid #fff;
-	cursor: pointer;
+#gameOverOverlay paper-button {
+	float: right;
+	margin-top: 12px;
+	margin-right: -7px;
 }
 
-#clear-button:hover {
-	transition: all 0.2s;
-	background-color: #000;
-	color: #000;
+#gameOverScore {
+	padding-top: 6px;
+	font-size: 16px;
+}
+
+#gameOverMessage {
+	padding-top: 6px;
+	font-size: 16px;
+}
+
+#quit {
+	color: #fff;
+}
+
+#rate {
+	float: right;
+}
+
+#exit {
+	float: right;
+}
+
+#clear-map {
+	float: right;
+}
+
+#exitCreateLink {
+	color: #fff;
+}
+
+#rate-container {
+	box-sizing: border-box;
+	position: absolute;
+	width: 400px;
+	left: 100px;
+	top: 200px;
+	background-color: #fff;
+	padding-left: 20px;
+	padding-right: 20px;
+	z-index: 5;
+}
+
+.light-floating-label {
+	color: #fff;
+}
+
+.light-floating-label /deep/ ::-webkit-input-placeholder {
+  color: #ddd;
+}
+
+.light-floating-label /deep/ ::-moz-placeholder {
+  color: #ddd;
+}
+
+.light-floating-label /deep/ :-ms-input-placeholder {
+  color: #ddd;
+}
+
+.light-floating-label /deep/ .unfocused-underline {
+    background-color: #ddd;
 }
