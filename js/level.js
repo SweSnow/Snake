@@ -48,19 +48,6 @@ Level.prototype = {
 	update: function() {
 		this.time += this.gameOptions.updateInterval;
 
-		for (var i = 0; i < this.players.length; i++) {
-			if (!(	this.players[i].propsedDirection == this.players[i].directionLeft 
-					&& this.players[i].directionCurrent == this.players[i].directionRight
-				||	this.players[i].propsedDirection == this.players[i].directionUp 
-					&& this.players[i].directionCurrent == this.players[i].directionDown
-				||	this.players[i].propsedDirection == this.players[i].directionRight 
-					&& this.players[i].directionCurrent == this.players[i].directionLeft
-				||	this.players[i].propsedDirection == this.players[i].directionDown 
-					&& this.players[i].directionCurrent == this.players[i].directionUp)) {
-				this.players[i].directionCurrent = this.players[i].propsedDirection;
-			}
-		}
-
 		//Time based
 		if (this.timeLimit != -1) {
 			this.timeLimit -= this.gameOptions.updateInterval;

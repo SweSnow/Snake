@@ -109,34 +109,37 @@
 		</style>
 
 		<div class="container">
-			<div class="profile-name">{{user.username}}</div>
-
-			<div class="heading">My maps</div>
-
-				<template repeat="{{map in levels}}">
-					<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
-						<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
-							<div class="thumbnail-container">
-								<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
-									<paper-ripple fit class="map-ripple"></paper-ripple>
-								</duarte-map>
-								<paper-shadow z="1" class="rating-container">{{map.rating}}</paper-shadow>
-							</div>
-						</a>
-
-						<div horizontal layout>
-							<div flex class="map-title">{{map.title}}</div>
-							<paper-icon-button id="mapDelete" icon="delete" title="Delete" on-tap="{{deleteMap}}" data-id="{{map._id}}"></paper-icon-button>
-						</div>
-					</paper-shadow>
-				</template>
+			<div hidden?="{{user.loggedIn}}">
+				<div class="profile-name">Log in to see your profile</div>
 			</div>
 
+			<div hidden?="{{user.loggedOut}}">
+				<div class="profile-name">{{user.username}}</div>
+
+				<div class="heading">My maps</div>
+
+					<template repeat="{{map in levels}}">
+						<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
+							<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
+								<div class="thumbnail-container">
+									<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
+										<paper-ripple fit class="map-ripple"></paper-ripple>
+									</duarte-map>
+									<paper-shadow z="1" class="rating-container">{{map.rating}}</paper-shadow>
+								</div>
+							</a>
+							<div horizontal layout>
+								<div flex class="map-title">{{map.title}}</div>
+								<paper-icon-button id="mapDelete" icon="delete" title="Delete" on-tap="{{deleteMap}}" data-id="{{map._id}}"></paper-icon-button>
+							</div>
+						</paper-shadow>
+					</template>
+				</div>
+			</div>
 		</div>
 
 		<duarte-ajax
 			id="get"
-			auto="true"
 			method="get"
 			handleAs="json"
 			response="{{levels}}"
@@ -166,6 +169,14 @@
 			},
 			onDeletedResponse: function() {
 				this.$.get.go();
+			},
+			loggedInChanged: function() {
+				if(this.user.loggedIn) {
+					this.$.get.go();
+				}
+			},
+			observe: {
+				'user.loggedIn': 'loggedInChanged'
 			}
 		});
   </script>

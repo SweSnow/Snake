@@ -17,12 +17,14 @@ function Game(container, gameMode, tiles, master, playerCount) {
 
 	var playerArray = [];
 
-	var player1 = new Player(20, 220, 20, 20, {
-		left: 37,
-		up: 38,
-		right: 39,
-		down: 40,
-	}, '#009688', '#4DB6AC');
+	// var player1 = new Player(20, 220, 20, 20, {
+	// 	left: 37,
+	// 	up: 38,
+	// 	right: 39,
+	// 	down: 40,
+	// }, '#009688', '#4DB6AC');
+
+	var player1 = new AI(20, 300, 20, 20, '#FF5722', '#FF8A65');
 
 	playerArray.push(player1);
 
