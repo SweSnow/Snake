@@ -56,6 +56,13 @@ LevelCreator.prototype = {
 			this.set(pointerX, pointerY, 0);
 		}
 	},
+	toggleBlock: function() {
+		if (this.get(this.pointer.x, this.pointer.y) == 1) {
+			this.removeBlock();
+		} else {
+			this.placeBlock();
+		}
+	},
 	mouseMove: function(e) {
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
 
@@ -83,6 +90,43 @@ LevelCreator.prototype = {
 	},
 	mouseUp: function(e) {
 		this.mode = this.modeNone;
+	},
+	keyDown: function(e) {
+		switch (keyboard.mapKey(e.which)) {
+			case 'up':
+				if (this.pointer.y > 0) {
+					this.pointer.y -= this.tileSize;
+				}
+				e.preventDefault();
+				break;
+			case 'left':
+				if (this.pointer.x > 0) {
+					this.pointer.x -= this.tileSize;
+				}
+				e.preventDefault();
+				break;
+			case 'down':
+				if (this.pointer.y < (this.height - this.tileSize)) {
+					this.pointer.y += this.tileSize;
+				}
+				e.preventDefault();
+				break;
+			case 'right':
+				if (this.pointer.x < (this.width - this.tileSize)) {
+					this.pointer.x += this.tileSize;
+				}
+				e.preventDefault();
+				break;
+			case 'enter':
+				this.toggleBlock();
+				e.preventDefault();
+				break;
+			case 'space':
+				this.toggleBlock();
+				e.preventDefault();
+				break;
+		}
+		this.pointer.update();
 	},
 	insideCanvas: function(e) {
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();

@@ -2,7 +2,7 @@
 <link rel="import" href="../duarte-components/duarte-game.html">
 <link rel="import" href="../duarte-components/duarte-ajax.html">
 
-<polymer-element name="duarte-game-manager">
+<polymer-element name="duarte-game-manager" attributes="levelId">
 	<template>
 
 	<link rel="stylesheet" type="text/css" href="../style/game_manager_style.css"/>
@@ -19,7 +19,7 @@
 
 			<paper-radio-group class="blue" selected="1p" vertical>
 				<paper-radio-button name="1p" label="1 Player"></paper-radio-button>
-				<paper-radio-button name="2p" label="2 Players"></paper-radio-button>
+				<paper-radio-button id="radioButton2Players" name="2p" label="2 Players"></paper-radio-button>
 		    </paper-radio-group>
 
 			<paper-button raisedButton label="Play Now!" id="play-now" on-tap="{{startGame}}">Play Now!</paper-button>
@@ -37,15 +37,27 @@
 
 		},
 		startGame: function(event, wtf, button) {
+			this.started = true;
 			this.duarteGame = document.createElement('duarte-game');
+			this.duarteGame.levelId = this.levelId;
+			this.duarteGame.path = this.path;
+			if (this.$.radioButton2Players.checked) {
+				this.duarteGame.playerCount = 2;
+			} else {
+				this.duarteGame.playerCount = 1;
+			}
+
 			this.$.gameContainer.appendChild(this.duarteGame);
 			this.$.startOverlay.remove();
 
 			this.duarteGame.onRouteEnter(this);
 		},
 		onRouteLeave: function() {
-			this.duarteGame.onRouteLeave();
+			if (this.started) {
+				this.duarteGame.onRouteLeave();
+			}
 		},
+		started: false
 	});
 
 

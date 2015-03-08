@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../js/entities.js"></script>
 <script type="text/javascript" src="../js/keyboard.js"></script>
 
-<polymer-element name="duarte-game" attributes="levelId">
+<polymer-element name="duarte-game" attributes="levelId path playerCount">
 	<template>
 
 	<link rel="stylesheet" type="text/css" href="../style/game_style.css"/>
@@ -125,14 +125,14 @@
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
 			this.game.onGameState = this.onGameState.bind(this);
 		},
-		onRouteEnter: function(master) {
-			if (master.path == '/play') {
+		onRouteEnter: function() {
+			if (this.path == '/play') {
 				this.mode = 'normal';
-			} else if (master.path = '/create') {
+			} else if (this.path = '/create') {
 				this.mode = 'create';
 			}
 
-			if(master.levelId) {
+			if(this.levelId) {
 				this.$.request.go();
 			} else {
 				this.startGame(new Level.createDefaultLevel(600, 500, 20));
@@ -140,7 +140,6 @@
 		},
 		onRouteLeave: function() {
 			this.game.end();
-			// state = this.game.saveState();
 		},
 		retry: function() {
 			this.game.pause();

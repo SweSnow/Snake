@@ -16,21 +16,6 @@
 
 	<script src="components/webcomponentsjs/webcomponents.js"></script>
 
-	<link rel="import" href="components/font-roboto/roboto.html">
-
-	<link rel="import" href="components/paper-item/paper-item.html">
-	<link rel="import" href="components/paper-button/paper-button.html">
-	<link rel="import" href="components/paper-icon-button/paper-icon-button.html">
-	<link rel="import" href="components/paper-tabs/paper-tabs.html">
-	<link rel="import" href="components/paper-dialog/paper-dialog.html">
-	<link rel="import" href="components/paper-dialog/paper-dialog-transition.html">
-
-	<link rel="import" href="components/core-header-panel/core-header-panel.html">
-	<link rel="import" href="components/core-toolbar/core-toolbar.html">
-	<link rel="import" href="components/core-icons/core-icons.html">
-	<link rel="import" href="components/core-icons/core-icons.html">
-	<link rel="import" href="components/core-animated-pages/core-animated-pages.html">
-
 	<script type="text/javascript">
 		function extend(target, extension) {
 			for(var key in extension) {
@@ -46,7 +31,28 @@
 		// 	return Object.prototype.toString.call(a) === '[object Array]';
 		// }
 	</script>
+	
+	<link rel="import" href="components/font-roboto/roboto.html">
 
+	<link rel="import" href="components/paper-item/paper-item.html">
+	<link rel="import" href="components/paper-button/paper-button.html">
+	<link rel="import" href="components/paper-icon-button/paper-icon-button.html">
+	<link rel="import" href="components/paper-tabs/paper-tabs.html">
+	<link rel="import" href="components/paper-dialog/paper-dialog.html">
+	<link rel="import" href="components/paper-dialog/paper-dialog-transition.html">
+
+	<link rel="import" href="components/core-header-panel/core-header-panel.html">
+	<link rel="import" href="components/core-toolbar/core-toolbar.html">
+	<link rel="import" href="components/core-icons/core-icons.html">
+	<link rel="import" href="components/core-icons/core-icons.html">
+	<link rel="import" href="components/core-animated-pages/core-animated-pages.html">
+
+	<link rel="import" href="/duarte-components/duarte-about.html">
+	<link rel="import" href="/duarte-components/duarte-browse.html">
+	<link rel="import" href="/duarte-components/duarte-profile.html">
+	<link rel="import" href="/duarte-components/duarte-test.html">
+	<link rel="import" href="/duarte-components/duarte-game.html">
+	<link rel="import" href="/duarte-components/duarte-game-manager.html">
 
 	<link rel="import" href="library-components/app-router/app-router.html">
 
@@ -131,7 +137,7 @@
 					element.user = this.$.user;
 					element.socket = this.socket;
 
-					if(element && element.onRouteEnter) {
+					if (element && element.onRouteEnter) {
 						element.onRouteEnter();
 					}
 				}
