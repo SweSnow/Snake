@@ -94,7 +94,6 @@
 		}
 
 		#htmlCanvas {
-			cursor: none;
 			position: absolute;
 			display: block;
 			top: 100px;
@@ -313,8 +312,10 @@
 
 			if (this.mode === 'normal') {
 				this.game = new Game(htmlCanvas, this.mode, grid, this);
+				htmlCanvas[0].style.cursor = 'default';
 			} else if (this.mode === 'create') {
 				this.game = new GameCreator(htmlCanvas, this.mode, grid, this);
+				htmlCanvas[0].style.cursor = 'none';
 			}
 
 			this.game.gameStateChanged = this.onGameStateChanged.bind(this);
