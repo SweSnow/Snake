@@ -38,15 +38,14 @@
 		var prototype = {
 			name: null, username: null, loggedIn: false,
 			onUserResponse: function(e, detail) {
-				this.login(JSON.parse(detail.response));
+				this._login(JSON.parse(detail.response));
 			},
 			onLoginResponse: function(e, detail) {
 				var response = JSON.parse(detail.response);
 
 				if(!response) return;
 
-				extend(this, response);
-				this.loggedIn = true;
+				this._login(response);
 
 				if(this.loginCallback) {
 					this.loginCallback();
@@ -64,6 +63,10 @@
 				});
 				login.go();
 				this.loginCallback = callback;
+			},
+			_login: function(response) {
+				extend(this, response);
+				this.loggedIn = true;
 			},
 			logout: function() {
 				this.$.logout.go();
