@@ -77,6 +77,28 @@
 		.duarte-thumbnail {
 			width: 220px;
 			height: 220px;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		.rating-container {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 48px;
+			height: 48px;
+			text-align: center;
+			border-radius: 50%;
+			padding-top: 14px;
+			box-sizing: border-box;
+			color: #fff;
+			background-color: #009688;
+		}
+
+		.thumbnail-container {
+			position: relative;
+			height: 100%;
 		}
 
 		.subheader-dropdown-label  {
@@ -153,10 +175,12 @@
 			<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
 				<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
 					<paper-shadow z="1"></paper-shadow>
-					<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
-						<paper-ripple fit class="map-ripple"></paper-ripple>
-					</duarte-map>
-
+					<div class="thumbnail-container">
+						<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
+							<paper-ripple fit class="map-ripple"></paper-ripple>
+						</duarte-map>
+						<div class="rating-container">{{map.rating}}</div>
+					</div>
 					<div class="map-title">{{map.title}}</div>
 					<div class="map-creator">{{map.creator.username}}</div>
 				</paper-shadow>

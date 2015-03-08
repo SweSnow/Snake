@@ -63,7 +63,7 @@ Food.prototype = {
 		}
 
 		if (!hasFoundFood) {
-			level.spawnRandomFood(false, level);
+			level.spawnRandomFood(false);
 		}
 
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
@@ -78,6 +78,9 @@ Food.prototype = {
 		}, 200);
 
 
+	},
+	remove: function() {
+		this.element.remove();
 	},
 	duration: 5000,
 	template: $('<paper-shadow z="1" class="g_food"></paper-shadow>'),
@@ -113,6 +116,9 @@ Obstacle.prototype = {
 	 	}
 	},
 	die: function() {
+		this.element.remove();
+	},
+	remove: function() {
 		this.element.remove();
 	},
 	template: $('<div class="g_obstacle"></div>'),
@@ -164,7 +170,6 @@ Bug.prototype = {
 		setTimeout(function() {
 			element.remove();
 		}, 400);
-
 	},
 	eat: function(time, level, player) {
 		var scorePlus = Math.max(this.maxValue -
@@ -185,6 +190,9 @@ Bug.prototype = {
 		setTimeout(function() {
 			bugRipple[0].upAction();
 		}, 200);
+	},
+	remove: function() {
+		this.element.remove();
 	},
 	template: $('<paper-shadow z="1" class="g_bug"></paper-shadow>'),
 	duration: 7000,
@@ -299,6 +307,9 @@ Player.prototype = {
 		this.element.css('top', this.y + 'px');
 		this.element.css('left', this.x + 'px');
 	},
+	remove: function() {
+		this.element.remove();
+	},
 	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
 	directionCurrent: 39,
 	directionLastUsed: 39,
@@ -348,6 +359,9 @@ Tail.prototype = {
 		}, 150);
 		
 	},
+	remove: function() {
+		this.element.remove();
+	},
 	template: $('<paper-shadow z="1" class="g_tail"></paper-shadow>'),
 	value: 10,
 	width: 20,
@@ -372,6 +386,9 @@ Pointer.prototype = {
 	update: function(level) {
 		this.element.css('top', this.y + 'px');
 		this.element.css('left', this.x + 'px');
+	},
+	remove: function() {
+		this.element.remove();
 	},
 	template: $('<paper-shadow z="1" class="g_pointer"></paper-shadow>'),
 	width: 20,

@@ -13,16 +13,16 @@ function Game(container, gameMode, tiles, master) {
 		right: 39,
 		down: 40,
 	}, '#009688', '#4DB6AC');
-	var player2 = new Player(20, 300, 20, 20,{
-		left: 65,
-		up: 87,
-		right: 68,
-		down: 83,
-	}, '#FF5722', '#FF8A65');
+//	var player2 = new Player(20, 300, 20, 20,{
+//		left: 65,
+//		up: 87,
+//		right: 68,
+//		down: 83,
+//	}, '#FF5722', '#FF8A65');
 
 	this.level = new Level(
 			tiles, 20, 600, 500,
-			Date.now(), -1, [player1, player2],
+			Date.now(), -1, [player1/*, player2*/],
 			this.gameOptions, this);
 		
 	this.level.end = this.end;
@@ -62,5 +62,8 @@ Game.prototype = {
 	end: function(message) {
 		this.pause();
 		this.master.end(message);
+	},
+	die: function() {
+		this.level.die();
 	}
 }

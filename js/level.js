@@ -85,7 +85,7 @@ Level.prototype = {
 		
 		//Manage bug and food spawn
 		if (this.time - this.lastFoodSpawn > this.gameOptions.food.duration || this.lastFoodSpawn == null) {
-			this.spawnRandomFood(true, this);
+			this.spawnRandomFood(true);
 		}
 
 		if (this.lastBugSpawn == null) {
@@ -119,14 +119,14 @@ Level.prototype = {
    			}
    		}
 	},
-	spawnRandomFood: function(logLastSpawn, level) {
+	spawnRandomFood: function(logLastSpawn) {
 
 		if (logLastSpawn) {
-			this.lastFoodSpawn = level.time;
+			this.lastFoodSpawn = this.time;
 		}
 
-		var spot = this.getEmptySpot(level);
-		var food = new Food(spot.x, spot.y, level.time, level.gameOptions);
+		var spot = this.getEmptySpot(this);
+		var food = new Food(spot.x, spot.y, this.time, this.gameOptions);
 
 		this.entities.push(food);
 	},
@@ -186,6 +186,21 @@ Level.prototype = {
 
 		scoreTextElement.text(this.scoreAmount + ' Points');
 		gameOverScore.text('Score: ' + this.scoreAmount + ' Points');
+	},
+	die: function() {
+		function killAll(a) {
+			a.remove();
+		}
+
+		this.players.forEach(function(p) {
+			p.tailArray.forEach(killAll);
+			p.tailArray.splice(0, p.tailArray.length);
+		});
+		this.players.forEach(killAll);
+		this.entities.forEach(killAll);
+
+		this.players.splice(0, this.players.length);
+		this.entities.splice(0, this.entities.length);
 	}
 };
 

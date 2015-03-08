@@ -94,6 +94,7 @@
 		}
 
 		#htmlCanvas {
+			cursor: none;
 			position: absolute;
 			display: block;
 			top: 100px;
@@ -174,6 +175,10 @@
 			float: right;
 		}
 
+		#clear-map {
+			float: right;
+		}
+
 		#exitCreateLink {
 			color: #fff;
 		}
@@ -188,6 +193,26 @@
 			padding-left: 20px;
 			padding-right: 20px;
 			z-index: 5;
+		}
+
+		.light-floating-label {
+			color: #fff;
+		}
+
+		.light-floating-label /deep/ ::-webkit-input-placeholder {
+	      color: #ddd;
+	    }
+
+	    .light-floating-label /deep/ ::-moz-placeholder {
+	      color: #ddd;
+	    }
+
+	    .light-floating-label /deep/ :-ms-input-placeholder {
+	      color: #ddd;
+	    }
+
+	    .light-floating-label /deep/ .unfocused-underline {
+		    background-color: #ddd;
 		}
 
 
@@ -214,9 +239,10 @@
 				<a id="exitCreateLink" is="pushstate-anchor" href="/profile">
 					<paper-button on-tap="{{exitCreate}}" id="exit" raised>Save and Exit</paper-button>
 				</a>
-				
 
-				<paper-input floatingLabel label="Map name" value="{{mapname}}"></paper-input>
+				<paper-button on-tap="{{clearMap}}" id="clear-map" raised>Clear map</paper-button>
+				
+				<paper-input floatingLabel class="light-floating-label" label="Map name" value="{{mapname}}"></paper-input>
 			</div>
 
 		</paper-shadow>
@@ -229,7 +255,7 @@
 		</paper-shadow>
 
 		<paper-shadow id="rate-container" z="1" hidden?="{{!rating}}">
-			<duarte-rate levelId="{{levelId}}"></duarte-rate>
+			<duarte-rate levelId="{{levelId}}" on-exit="{{exitRate}}"></duarte-rate>
 		</paper-shadow>
 
 		<paper-shadow z="3" id="gameOverOverlay" hidden?="{{!gameOver}}">
@@ -308,11 +334,13 @@
 			}
 		},
 		onRouteLeave: function() {
+			this.game.end();
 			// state = this.game.saveState();
 		},
 		retry: function() {
-			gameOver = false;
-			isPlaying = true;
+			this.game.pause();
+			this.game.die();
+			this.gameOver = false;
 
 			if(this.levelId) {
 				this.$.request.go();
@@ -334,7 +362,17 @@
 			}
 		},
 		rate: function() {
+			this.isPlaying = false;
+			this.game.pause();
 			this.rating = true;
+		},
+		exitRate: function() {
+			this.rating = false;
+			this.isPlaying = true;
+			this.game.resume();
+		},
+		clearMap: function() {
+			this.game.clearMap();
 		},
 		onGameState: function(state) {
 

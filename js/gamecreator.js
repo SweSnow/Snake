@@ -10,8 +10,8 @@ function GameCreator(container, gameMode, tiles, master) {
 			Date.now(), this);
 
 	this._mousemove = this.level.mouseMove.bind(this.level);
-	this._mouseup = this.level.mouseDown.bind(this.level)
-	this._mousedown = this.level.mouseUp.bind(this.level);
+	this._mouseup = this.level.mouseUp.bind(this.level)
+	this._mousedown = this.level.mouseDown.bind(this.level);
 
 	window.addEventListener('mousemove', this._mousemove);
 	window.addEventListener('mouseup', this._mouseup);
@@ -29,7 +29,11 @@ GameCreator.prototype = {
 		window.removeEventListener('mouseup', this._mouseup);
 		window.removeEventListener('mousedown', this._mousedown);
 		},
-	end: function(message) {
-		
+	end: function() {
+		this.pause();
+		this.level.end();
+	},
+	clearMap: function() {
+		this.level.clearMap();
 	}
 }

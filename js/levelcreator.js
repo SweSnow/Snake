@@ -64,36 +64,49 @@ LevelCreator.prototype = {
 		
 		this.pointer.update();
 
-		if (this.lastMouse === 'down') {
+		if (this.mode == this.modeAdd) {
 			this.placeBlock();
-		} else if (this.lastMouse === 'up') {
+		} else if (this.mode == this.modeDelete) {
 			this.removeBlock();
 		}
 	},
 	mouseDown: function(e) {
-
-		this.lastMouse = 'down';
-
-
-
-		var canvasRect = htmlCanvas[0].getBoundingClientRect();
-		if (e.x > canvasRect.left && e.x < canvasRect.right && e.y > canvasRect.top && e.y < canvasRect.bottom) {
-			
+		if (this.insideCanvas(e)) {
+			if (this.get(this.pointer.x, this.pointer.y) == 1) {
+				this.mode = this.modeDelete;
+				this.removeBlock();
+			} else {
+				this.mode = this.modeAdd;
+				this.placeBlock();
+			}
 		}
 	},
 	mouseUp: function(e) {
-
-		this.lastMouse = 'up';
-
+		this.mode = this.modeNone;
+	},
+	insideCanvas: function(e) {
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
-		if (e.x > canvasRect.left && e.x < canvasRect.right && e.y > canvasRect.top && e.y < canvasRect.bottom) {
-			this.placeBlock();		
-		}
-
+		return (e.x > canvasRect.left && e.x < canvasRect.right && e.y > canvasRect.top && e.y < canvasRect.bottom);
+	},
+	end: function() {
+		this.entities.forEach(function(e) {
+			e.remove();
+		});
+		this.entities.splice(0, this.entities.length);
+	},
+	clearMap: function() {
+		this.entities.forEach(function(e) {
+			e.remove();
+		});
+		this.entities.splice(0, this.entities.length);
 	},
 	entities: [],
 	directionLeft: 37,
 	directionUp: 38,
 	directionRight: 39,
 	directionDown: 40,
+	modeNone: -1,
+	modeAdd: 1,
+	modeDelete: 0,
+	mode: this.modeNone,
 };

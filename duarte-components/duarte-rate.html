@@ -59,6 +59,7 @@
 	  	if(this.rating > 0) {
 		  	this.$.rate.go();
 	  	}
+	  	this.fire('exit');
 	  },
 	  onResponse: function(e, detail) {
 	  	console.log(detail.response);
