@@ -1,13 +1,13 @@
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 
-<polymer-element name="duarte-user">
+<polymer-element name="duarte-user" attributes="ip">
 	<template>
 
 		<core-ajax
 			id="getUser"
 			auto="true"
 			method="get"
-			url="http://78.68.39.230:8080/user/me"
+			url="http://{{ip}}/user/me"
 			on-core-response="{{onUserResponse}}"
 			contentType="application/json"
 			withCredentials="true"
@@ -16,7 +16,7 @@
 		<core-ajax
 			id="logout"
 			method="get"
-			url="http://78.68.39.230:8080/user/logout"
+			url="http://{{ip}}/user/logout"
 			on-core-response="{{onLogoutResponse}}"
 			contentType="application/json"
 			withCredentials="true"

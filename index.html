@@ -51,7 +51,7 @@
 	<link rel="import" href="library-components/app-router/app-router.html">
 
 	<link rel="import" href="duarte-components/duarte-user.html">
-	<link rel="import" href="duarte-components/duarte-socket.html">
+	<!-- <link rel="import" href="duarte-components/duarte-socket.html"> -->
 	<link rel="import" href="duarte-components/duarte-header.html">
 
 	<link rel="stylesheet" type="text/css" href="style/main_style.css"/>
@@ -80,8 +80,8 @@
 
 			</style>
 
-			<duarte-socket socket="{{socket}}"></duarte-socket>
-			<duarte-user id="user"></duarte-user>
+			<!-- <duarte-socket socket="{{socket}}"></duarte-socket> -->
+			<duarte-user id="user" ip="{{ip}}"></duarte-user>
 
 			<duarte-header selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
 			<!-- 
@@ -102,7 +102,7 @@
 				<app-route path="/test" import="/duarte-components/duarte-test.html"></app-route>
 				<app-route path="/create" import="/duarte-components/duarte-game.html"></app-route>
 				<app-route path="/play" import="/duarte-components/duarte-game.html"></app-route>
-				<app-route path="/testplay" import="/duarte-components/duarte-test-game.html"></app-route>
+				<!-- <app-route path="/testplay" import="/duarte-components/duarte-test-game.html"></app-route> -->
 				<app-route path="*" redirect="/about"></app-route>
 			</app-router>
 
@@ -111,11 +111,11 @@
 
 		<script type="text/javascript">
 			Polymer('duarte-app', {
+				ip: '192.168.1.87:8080',
 				onStateChanged: function(e, detail) {
-					var that = this;
 					setTimeout(function() {
-						that.selected = detail.path.match(/[\/#]*(.*)/)[1];
-					}, 200)
+						this.selected = detail.path.match(/[\/#]*(.*)/)[1];
+					}.bind(this), 200)
 				},
 				onRouteStart: function(e, detail) {
 					var element = detail.oldRoute && detail.oldRoute.firstChild;
@@ -130,6 +130,7 @@
 					element.path = detail.path;
 					element.user = this.$.user;
 					element.socket = this.socket;
+					element.ip = this.ip;
 
 					if(element && element.onRouteEnter) {
 						element.onRouteEnter();

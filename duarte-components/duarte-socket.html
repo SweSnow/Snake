@@ -1,4 +1,4 @@
-<script type="text/javascript" src="http://78.68.39.230:8080/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="http://192.168.1.87:8080/socket.io/socket.io.js"></script>
 
 <polymer-element name="duarte-socket" attributes="socket">
 	<template>
@@ -7,7 +7,7 @@
 	<script>
 		Polymer('duarte-socket', {
 			ready: function() {
-				this.socket = io('http://78.68.39.230:8080/');
+				this.socket = io('http://192.168.1.87:8080/');
 			}
 		});
 	</script>

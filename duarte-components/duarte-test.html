@@ -5,9 +5,7 @@
 <link rel="import" href="../library-components/pushstate-anchor/pushstate-anchor.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
-<link rel="import" href="../duarte-components/duarte-maintainer.html">
-
-<script type="text/javascript" src="http://78.68.39.230:8080/socket.io/socket.io.js"></script>
+<!-- <link rel="import" href="../duarte-components/duarte-maintainer.html"> -->
 
 <polymer-element name="duarte-test">
 	<template>
@@ -40,7 +38,7 @@
 			method="get"
 			handleAs="json"
 			response="{{levels}}"
-			url="http://78.68.39.230:8080/level/all"
+			url="http://{{ip}}/level/all"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -49,7 +47,7 @@
 			id="submit"
 			method="post"
 			handleAs="json"
-			url="http://78.68.39.230:8080/level/submit"
+			url="http://{{ip}}/level/submit"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -58,7 +56,7 @@
 			id="remove"
 			method="delete"
 			handleAs="json"
-			url="http://78.68.39.230:8080/level/byid"
+			url="http://{{ip}}/level/byid"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -68,12 +66,12 @@
 			method="post"
 			handleAs="json"
 			on-core-response="{{onRateResponse}}"
-			url="http://78.68.39.230:8080/level/rate"
+			url="http://{{ip}}/level/rate"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
 
-		<duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer>
+		<!-- <duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer> -->
 
 		<paper-button raised on-tap="{{regrid}}">Randomize</paper-button>
 		<paper-button raised on-tap="{{submit}}">Submit</paper-button>
