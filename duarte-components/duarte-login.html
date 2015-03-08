@@ -26,14 +26,25 @@
 
 		<paper-button affirmitive on-tap="{{submit}}" class="right">Log in</paper-button>
 
+		<div>{{message}}</div>
+
 	</template>
 	<script>
 	//TODO add user.login
 		Polymer('duarte-login', {
 			submit: function() {
-				this.user.login(this.username, this.password, function() {
-					this.fire('close');
-				}.bind(this));
+				var username = this.username.trim(), password = this.password.trim();
+				if(username && password) {
+					this.user.login(username, password, function(success) {
+						if(success) {
+							this.fire('close');
+						} else {
+							this.message = "Invalid username or password";
+						}
+					}.bind(this));
+				} else {
+					this.message = "Please enter a username and a password";
+				}
 			}
 		});
 	</script>

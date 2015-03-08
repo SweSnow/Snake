@@ -29,40 +29,21 @@
 
 		<div>{{message}}</div>
 
-		<duarte-ajax
-			id="submit"
-			method="post"
-			path="user/register"
-			on-core-response="{{onSuccess}}"
-			contentType="application/json"
-			withCredentials="true"
-			></duarte-ajax>
 	</template>
 	<script>
 		Polymer('duarte-register', {
 			submit: function() {
-				var submit = this.$.submit;
-				submit.body = JSON.stringify({
-					username: this.username,
-					hash: this.user.generatePassword(this.username, this.password)
-				});
-				submit.go();
-
-				/*
-				extend(this.user, {
-					username: this.username,
-					loggedIn: true
-				});
-				this.fire('close');
-				*/
-			},
-			onSuccess: function(e, detail) {
-				var response = JSON.parse(detail.response);
-				if(response && !response.message) {
-					this.user.login(response);
-					this.fire('close');
+				var username = this.username.trim(), password = this.password.trim();
+				if(username && password) {
+					this.user.register(username, password, function(response) {
+						if(!response.message) {
+							this.fire('close');
+						} else {
+							this.message = response.message;
+						}
+					}.bind(this));
 				} else {
-					this.message = response.message;
+					this.message = "Please enter a username and a password";
 				}
 			}
 		});

@@ -18,7 +18,16 @@
 			id="login"
 			method="post"
 			path="user/login"
-			on-core-response="{{onLoginResponse}}"
+			on-core-complete="{{onLoginResponse}}"
+			contentType="application/json"
+			withCredentials="true"
+			></duarte-ajax>
+
+		<duarte-ajax
+			id="register"
+			method="post"
+			path="user/register"
+			on-core-complete="{{onRegisterResponse}}"
 			contentType="application/json"
 			withCredentials="true"
 			></duarte-ajax>
@@ -38,18 +47,22 @@
 		var prototype = {
 			name: null, username: null, loggedIn: false,
 			onUserResponse: function(e, detail) {
-				this._login(JSON.parse(detail.response));
+				this._login(detail.response);
 			},
 			onLoginResponse: function(e, detail) {
-				var response = JSON.parse(detail.response);
-
-				if(!response) return;
-
-				this._login(response);
-
+				var response = this._login(detail.xhr.response);
+				
 				if(this.loginCallback) {
-					this.loginCallback();
+					this.loginCallback(response);
 					delete this.loginCallback;
+				}
+			},
+			onRegisterResponse: function(e, detail) {
+				var response = this._login(detail.xhr.response);
+
+				if(this.registerCallback) {
+					this.registerCallback(response);
+					delete this.registerCallback;
 				}
 			},
 			onLogoutResponse: function() {
@@ -64,9 +77,24 @@
 				login.go();
 				this.loginCallback = callback;
 			},
-			_login: function(response) {
-				extend(this, response);
-				this.loggedIn = true;
+			register: function(username, password, callback) {
+				var register = this.$.register;
+				register.body = JSON.stringify({
+					username: username,
+					hash: this.generatePassword(username, password)
+				});
+				register.go();
+				this.registerCallback = callback;
+			},
+			_login: function(json) {
+				var response = JSON.parse(json);
+
+				if(response && !response.message) {
+					extend(this, response);
+					this.loggedIn = true;
+				}
+
+				return response;
 			},
 			logout: function() {
 				this.$.logout.go();
