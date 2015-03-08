@@ -83,7 +83,7 @@
 			<!-- <duarte-socket socket="{{socket}}"></duarte-socket> -->
 			<duarte-user id="user"></duarte-user>
 
-			<duarte-header selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
+			<duarte-header id="header" selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
 			<!-- 
 			<core-animated-pages id="pages" selected="{{selected}}">
 				<duarte-about name="about"></duarte-about>
@@ -111,6 +111,7 @@
 
 		<script type="text/javascript">
 			Polymer('duarte-app', {
+
 				onStateChanged: function(e, detail) {
 					setTimeout(function() {
 						this.selected = detail.path.match(/[\/#]*(.*)/)[1];

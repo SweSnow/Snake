@@ -101,14 +101,14 @@
 			<div class="bottom fit header-bottom" horizontal layout hidden?="{{smaller}}">
 		
 				<paper-tabs id="tabs" selected="{{selected}}" flex>
-				
+
 					<paper-tab name="about">
 						<a is="pushstate-anchor" href="/about">About</a>
 					</paper-tab>
 					<paper-tab name="browse">
 						<a is="pushstate-anchor" href="/browse">Browse maps</a>
 					</paper-tab>
-					<paper-tab name="profile">
+					<paper-tab name="profile" hidden?="{{user.loggedOut}}">
 						<a is="pushstate-anchor" href="/profile">My profile</a>
 					</paper-tab>
 					<paper-tab name="test">
