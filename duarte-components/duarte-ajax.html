@@ -1,0 +1,15 @@
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<polymer-element name="duarte-ajax" extends="core-ajax" attributes="path">
+	<template>
+		
+	</template>
+	<script>
+		Polymer('duarte-ajax', {
+			ready: function() {
+				this.url = 'http://192.168.1.87:8080/' + this.path;
+				this.super();
+			}
+		});
+	</script>
+</polymer-element>

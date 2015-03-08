@@ -134,11 +134,11 @@
 			<div class="bottom fit" horizontal layout>
 
 				<div class="subheader-dropdown-label">Sort by:</div>
-				<paper-dropdown-menu class="subheader-dropdown" selected="Popularity" valueattr="label">
+				<paper-dropdown-menu class="subheader-dropdown" on-core-select="{{onSortSelected}}" selected="Rating" valueattr="textContent">
 
-					<paper-item label="Newest">Newest</paper-item>
-					<paper-item label="Popularity">Popularity</paper-item>
-					<paper-item label="Rating">Rating</paper-item>
+					<paper-item data-sort="-rating">Rating</paper-item>
+					<paper-item data-sort="-time">Newest</paper-item>
+					<paper-item data-sort="time">Oldest</paper-item>
 					
 				</paper-dropdown-menu>
 		  
@@ -166,11 +166,11 @@
 
 	<core-ajax
 		id="get"
-		auto="true"
 		method="get"
+		auto="true"
 		handleAs="json"
 		response="{{levels}}"
-		url="http://{{ip}}/level/all"
+		url="http://{{ip}}/level/all?sort={{sort}}"
 		contentType="application/json"
 		withCredentials="true"
 		></core-ajax>
@@ -180,8 +180,14 @@
   </template>
   <script>
 	Polymer('duarte-browse', {
+		sort: '-rating',
 	  	mapClick: function() {
 
+	  	},
+	  	onSortSelected: function(e, detail) {
+	  		if(detail.isSelected) {
+		  		this.sort = detail.item.dataset.sort;
+	  		}
 	  	}
 	  
 	  //http://www.polymer-project.org/docs/elements/paper-elements.html#paper-dropdown

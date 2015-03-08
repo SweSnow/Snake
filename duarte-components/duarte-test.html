@@ -5,6 +5,8 @@
 <link rel="import" href="../library-components/pushstate-anchor/pushstate-anchor.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
+
+<link rel="import" href="../duarte-components/duarte-ajax.html">
 <!-- <link rel="import" href="../duarte-components/duarte-maintainer.html"> -->
 
 <polymer-element name="duarte-test">
@@ -32,13 +34,13 @@
 
 	</style>
 
-		<core-ajax
+		<duarte-ajax
 			id="get"
 			auto="true"
 			method="get"
 			handleAs="json"
 			response="{{levels}}"
-			url="http://{{ip}}/level/all"
+			path="level/all"
 			contentType="application/json"
 			withCredentials="true"
 			></core-ajax>
@@ -88,7 +90,7 @@
 					<paper-button raised data-id="{{level._id}}" on-tap="{{remove}}">Remove</paper-button>
 					<div><duarte-map grid="{{level.grid}}"></duarte-map></div>
 						<div>{{level.ratings | displayRatings}}</div>
-						<div>Popularity: {{level.popularity}}</div>
+						<div>Rating: {{level.rating}}</div>
 				</div>
 				
 			</template>	
