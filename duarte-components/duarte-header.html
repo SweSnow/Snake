@@ -144,7 +144,9 @@
 			this.headerHeight = this.smaller ? '72px' : '142px';
 		},
 		openModal: function(event, detail, button) {
-			this.$[button.dataset.modalId].toggle();
+			var modal = this.$[button.dataset.modalId];
+			modal.querySelector('[data-modal-id]').reset();
+			modal.toggle();
 		},
 		closeModal: function(event, detail, content) {
 			this.$[content.dataset.modalId].close();

@@ -24,31 +24,37 @@
 
 		<paper-input floatingLabel label="Username" value="{{username}}"></paper-input>
 
-		<paper-input-decorator label="Password">
+		<paper-input-decorator floatingLabel label="Password">
 			<input id="password" is="core-input" type="password" value="{{password}}"/>
 		</paper-input-decorator>
 
-		<paper-button affirmitive on-tap="{{submit}}" class="right">Log in</paper-button>
+		<paper-button affirmitive disabled?="{{!valid}}" on-tap="{{submit}}" class="right">Log in</paper-button>
 
 		<div>{{message}}</div>
 
 	</template>
 	<script>
 		Polymer('duarte-login', {
-			username: '', password: '',
+			username: '', password: '', valid: false,
 			submit: function() {
-				var username = this.username.trim(), password = this.password.trim();
-				if(username && password) {
-					this.user.login(username, password, function(success) {
-						if(success) {
-							this.fire('close');
-						} else {
-							this.message = "Invalid username or password";
-						}
-					}.bind(this));
-				} else {
-					this.message = "Please enter a username and a password";
-				}
+				this.user.login(this.username.trim(), this.password.trim(), function(success) {
+					if(success) {
+						this.fire('close');
+					} else {
+						this.message = "Invalid username or password";
+					}
+				}.bind(this));
+			},
+			validate: function() {
+				this.valid = this.username.trim() && this.password.trim();
+			},
+			reset: function() {
+				this.username = this.password = '';
+				this.valid = false;
+			},
+			observe: {
+				'username': 'validate',
+				'password': 'validate'
 			}
 		});
 	</script>
