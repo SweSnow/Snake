@@ -46,7 +46,6 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, players, gam
 
 Level.prototype = {
 	update: function() {
-
 		this.time += this.gameOptions.updateInterval;
 
 		for (var i = 0; i < this.players.length; i++) {
@@ -76,6 +75,7 @@ Level.prototype = {
 		//We update player first separately, it renders itself
 		for (var i = 0; i < this.players.length; i++) {
 			this.players[i].update(this.time, this);
+			this.players[i].render();
 		}
 
 		//Update all entites (food, bug, obstacles)
@@ -158,7 +158,7 @@ Level.prototype = {
 	},
 	isEmptySpot: function(proposedX, proposedY) {
 		for (var i = 0; i < this.entities.length; i++) {
-			if (this.entities[i].x == proposedX && this.entities.y == proposedY) {
+			if (this.entities[i].x == proposedX && this.entities[i].y == proposedY) {
 				return false;
 			}
 		}

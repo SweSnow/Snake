@@ -23,7 +23,7 @@
 	<div id="container">
 
 		<paper-shadow z="2" id="gameOverlay">
-				
+			
 			<div id="timeAttackText"></div>
 			<div id="scoreText"></div>
 
@@ -38,11 +38,11 @@
 
 			<div hidden?="{{mode === 'normal'}}" >
 
-				<paper-button on-tap="{{exitCreate}}" id="exit" raised>Save and Exit</paper-button>
+				<paper-button on-tap="{{exitCreate}}" id="exit" disabled?="{{!valid}}" raised>Save and Exit</paper-button>
 
 				<paper-button on-tap="{{clearMap}}" id="clear-map" raised>Clear map</paper-button>
-				
-				<paper-input floatingLabel class="light-floating-label" label="Map name" value="{{mapTitle}}"></paper-input>
+
+				<paper-input on-change="labelFocusChange" label="Map name" class="light-floating-label" value="{{mapTitle}}" on-keydown="{{inputChange}}"></paper-input>
 			</div>
 
 		</paper-shadow>
@@ -105,6 +105,9 @@
 		onResponse: function(e, detail) {
 			var level = JSON.parse(detail.response);
 			this.startGame(level.grid);
+		},
+		mapTitleChanged: function() {
+			this.valid = this.mapTitle.trim() != '';
 		},
 		startGame: function(grid) {
 
@@ -213,6 +216,9 @@
 			if (response) {
 				this.router.go('/profile');
 			}
+		},
+		labelFocusChange: function() {
+			alert("change");
 		},
 		playerCount: 1,
 		gameOver: false,

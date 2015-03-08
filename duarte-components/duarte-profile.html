@@ -1,5 +1,7 @@
 <link rel="import" href="../components/paper-dropdown/paper-dropdown-menu.html">
 <link rel="import" href="../components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../components/core-icons/av-icons.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
 <link rel="import" href="../duarte-components/duarte-ajax.html">
@@ -34,6 +36,11 @@
 				margin-top: 32px;
 				margin-left: auto;
 				margin-right: auto;
+			}
+
+			.thumbnail-container {
+				position: relative;
+				height: 100%;
 			}
 
 			.map {
@@ -78,29 +85,54 @@
 				width: 220px;
 				height: 220px;
 			}
+
+			.rating-container {
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 48px;
+				height: 48px;
+				text-align: center;
+				border-radius: 50%;
+				padding-top: 14px;
+				box-sizing: border-box;
+				color: #fff;
+				background-color: #009688;
+			}
+
+			#mapDelete {
+				height: 100%;
+				margin-top: 14px;
+				color: #333;
+			}
 			
 		</style>
 
-			<div class="container">
-				<div class="profile-name">{{user.username}}</div>
+		<div class="container">
+			<div class="profile-name">{{user.username}}</div>
 
-				<div class="heading">My maps</div>
+			<div class="heading">My maps</div>
 
-					<template repeat="{{map in levels}}">
+				<template repeat="{{map in levels}}">
+					<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
 						<a is="pushstate-anchor" href="/play?levelId={{map._id}}">
-							<paper-shadow z="1" vertical layout class="map" on-tap="{{mapClick}}">
-								<paper-shadow z="1"></paper-shadow>
+							<div class="thumbnail-container">
 								<duarte-map grid="{{map.grid}}" class="duarte-thumbnail">
 									<paper-ripple fit class="map-ripple"></paper-ripple>
 								</duarte-map>
-
-								<div class="map-title">{{map.title}}</div>
-							</paper-shadow>
+								<paper-shadow z="1" class="rating-container">{{map.rating}}</paper-shadow>
+							</div>
 						</a>
-					</template>
-				</div>
 
+						<div horizontal layout>
+							<div flex class="map-title">{{map.title}}</div>
+							<paper-icon-button id="mapDelete" icon="delete" title="Delete" on-tap="{{deleteMap}}" data-id="{{map._id}}"></paper-icon-button>
+						</div>
+					</paper-shadow>
+				</template>
 			</div>
+
+		</div>
 
 		<duarte-ajax
 			id="get"
@@ -110,15 +142,31 @@
 			response="{{levels}}"
 			path="level/my"
 			contentType="application/json"
-			withCredentials="true"
-			></duarte-ajax>
+			withCredentials="true"/>
+
+		<duarte-ajax
+			id="remove"
+			method="delete"
+			handleAs="json"
+			path="level/byid"
+			contentType="application/json"
+			on-core-response="{{onDeletedResponse}}"
+			withCredentials="true"/>
 
 		<!-- <duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer> -->
 
 	</template>
 	<script>
 		Polymer('duarte-profile', {
-			
+			deleteMap: function(e, detail, button) {
+				var remove = this.$.remove;
+				remove.body = JSON.stringify({id: button.dataset.id});
+				remove.go();
+				
+			},
+			onDeletedResponse: function() {
+				this.$.get.go();
+			}
 		});
   </script>
 </polymer-element>
