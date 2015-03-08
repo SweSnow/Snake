@@ -1,10 +1,10 @@
-<link rel="import" href="../components/core-ajax/core-ajax.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 <link rel="import" href="../components/core-icons/av-icons.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
 <link rel="import" href="../duarte-components/duarte-rate.html">
+<link rel="import" href="../duarte-components/duarte-ajax.html">
 
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/gameoptions.js"></script>
@@ -272,14 +272,15 @@
 		
 	</div>
 
-	<core-ajax
+	<duarte-ajax
 		id="request"
 		method="get"
-		url="http://{{ip}}/level/byid?id={{levelId}}"
+		path="level/byid"
+		params='{"id": "{{levelId}}"}'
 		on-core-response="{{onResponse}}"
 		contentType="application/json"
 		withCredentials="true"
-		></core-ajax>
+		></duarte-ajax>
 		
 	</template>
 	<script>

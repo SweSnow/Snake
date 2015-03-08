@@ -4,6 +4,8 @@
 
 <link rel="import" href="../components/core-icons/core-icons.html">
 
+<link rel="import" href="../duarte-components/duarte-ajax.html">
+
 <polymer-element name="duarte-rate" attributes="levelId">
   <template>
 	<style>
@@ -40,16 +42,16 @@
 
 	<paper-button class="submit" on-tap="{{submitRating}}">Submit</paper-button>
 
-	<core-ajax
+	<duarte-ajax
 		id="rate"
 		method="post"
+		path="level/rate"
 		handleAs="json"
 		body='{"id": "{{levelId}}", "rating": "{{rating}}"}'
 		on-core-response="{{onRateResponse}}"
-		url="http://{{ip}}/level/rate"
 		contentType="application/json"
 		withCredentials="true"
-		></core-ajax>
+		></duarte-ajax>
 
 
   </template>
@@ -60,9 +62,6 @@
 		  	this.$.rate.go();
 	  	}
 	  	this.fire('exit');
-	  },
-	  onResponse: function(e, detail) {
-	  	console.log(detail.response);
 	  }
 	});
   </script>

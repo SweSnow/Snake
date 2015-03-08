@@ -1,8 +1,8 @@
 <link rel="import" href="../components/paper-dropdown/paper-dropdown-menu.html">
 <link rel="import" href="../components/paper-ripple/paper-ripple.html">
-<link rel="import" href="../components/core-ajax/core-ajax.html">
 
 <link rel="import" href="../duarte-components/duarte-map.html">
+<link rel="import" href="../duarte-components/duarte-ajax.html">
 <!-- <link rel="import" href="../duarte-components/duarte-maintainer.html"> -->
 
 <polymer-element name="duarte-profile">
@@ -102,16 +102,16 @@
 
 			</div>
 
-		<core-ajax
+		<duarte-ajax
 			id="get"
 			auto="true"
 			method="get"
 			handleAs="json"
 			response="{{levels}}"
-			url="http://{{ip}}/level/my"
+			path="level/my"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 
 		<!-- <duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer> -->
 

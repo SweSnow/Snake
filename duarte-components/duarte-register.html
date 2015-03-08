@@ -1,6 +1,8 @@
 <link rel="import" href="../components/paper-input/paper-input.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
-<link rel="import" href="../components/core-ajax/core-ajax.html">
+
+<link rel="import" href="../duarte-components/duarte-ajax.html">
+
 
 <polymer-element name="duarte-register" attributes="user">
 	<template>
@@ -27,14 +29,14 @@
 
 		<div>{{message}}</div>
 
-		<core-ajax
+		<duarte-ajax
 			id="submit"
 			method="post"
-			url="http://{{ip}}/user/register"
+			path="user/register"
 			on-core-response="{{onSuccess}}"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 	</template>
 	<script>
 		Polymer('duarte-register', {

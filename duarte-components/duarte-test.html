@@ -1,4 +1,3 @@
-<link rel="import" href="../components/core-ajax/core-ajax.html">
 <link rel="import" href="../components/paper-input/paper-input.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
 
@@ -43,35 +42,35 @@
 			path="level/all"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 
-		<core-ajax
+		<duarte-ajax
 			id="submit"
 			method="post"
 			handleAs="json"
-			url="http://{{ip}}/level/submit"
+			path="level/submit"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 
-		<core-ajax
+		<duarte-ajax
 			id="remove"
 			method="delete"
 			handleAs="json"
-			url="http://{{ip}}/level/byid"
+			path="level/byid"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 
-		<core-ajax
+		<duarte-ajax
 			id="rate"
 			method="post"
 			handleAs="json"
 			on-core-response="{{onRateResponse}}"
-			url="http://{{ip}}/level/rate"
+			path="level/rate"
 			contentType="application/json"
 			withCredentials="true"
-			></core-ajax>
+			></duarte-ajax>
 
 		<!-- <duarte-maintainer socket="{{socket}}" namespace="level" collection="{{levels}}"></duarte-maintainer> -->
 
