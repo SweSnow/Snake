@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../js/entities.js"></script>
 <script type="text/javascript" src="../js/keyboard.js"></script>
 
-<polymer-element name="duarte-game" attributes="levelId path playerCount">
+<polymer-element name="duarte-game" attributes="levelId path playerCount ai timeLimit">
 	<template>
 
 	<link rel="stylesheet" type="text/css" href="../style/game_style.css"/>
@@ -24,8 +24,8 @@
 
 		<paper-shadow z="2" id="gameOverlay">
 			
-			<div id="timeAttackText"></div>
 			<div id="scoreText"></div>
+			<div id="timeAttackText"></div>
 
 			<div hidden?="{{mode === 'create'}}" >
 				<paper-button on-tap="{{pauseResume}}" hidden?="{{gameOver}}" raised id="pauseResume">
@@ -33,7 +33,7 @@
 					<core-icon hidden?="{{isPlaying}}" icon="av:play-arrow"></core-icon>
 				</paper-button>
 
-				<paper-button on-tap="{{rate}}" id="rate" raised>Rate</paper-button>
+				<paper-button hidden?="{{normalMap}}" on-tap="{{rate}}" id="rate" raised>Rate</paper-button>
 			</div>
 
 			<div hidden?="{{mode === 'normal'}}" >
@@ -42,7 +42,7 @@
 
 				<paper-button on-tap="{{clearMap}}" id="clear-map" raised>Clear map</paper-button>
 
-				<paper-input on-change="labelFocusChange" label="Map name" class="light-floating-label" value="{{mapTitle}}" on-keydown="{{inputChange}}"></paper-input>
+				<paper-input on-tap="{{inputTap}}" label="Map name" class="light-floating-label" value="{{mapTitle}}" on-keydown="{{inputChange}}"></paper-input>
 			</div>
 
 		</paper-shadow>
@@ -50,7 +50,7 @@
 		<paper-ripple class="game-ripple" id="foodRipple" style="pointer-events: none;"></paper-ripple>
 		<paper-ripple class="game-ripple" id="bugRipple" style="pointer-events: none;"></paper-ripple>
 			
-		<paper-shadow z="2" id="htmlCanvas">
+		<paper-shadow z="2" id="htmlCanvas" on-tap="{{gameTap}}">
 			
 		</paper-shadow>
 
@@ -126,7 +126,7 @@
 			this.isPlaying = true;
 
 			if (this.mode === 'normal') {
-				this.game = new Game(htmlCanvas, this.mode, grid, this, this.playerCount);
+				this.game = new Game(htmlCanvas, this.mode, grid, this, this.playerCount, this.ai, this.timeLimit);
 				htmlCanvas[0].style.cursor = 'default';
 			} else if (this.mode === 'create') {
 				this.game = new GameCreator(htmlCanvas, this.mode, grid, this);
@@ -143,14 +143,16 @@
 				this.mode = 'create';
 			}
 
-			if(this.levelId) {
+			if (this.levelId) {
 				this.$.request.go();
+				this.normalMap = false;
 			} else {
 				this.startGame(new Level.createDefaultLevel(600, 500, 20));
+				this.normalMap = true;
 			}
 		},
 		onRouteLeave: function() {
-			this.game.end();
+			this.game.level.die();
 		},
 		retry: function() {
 			this.game.pause();
@@ -159,8 +161,10 @@
 
 			if(this.levelId) {
 				this.$.request.go();
+				this.normalMap = false;
 			} else {
 				this.startGame(new Level.createDefaultLevel(600, 500, 20));
+				this.normalMap = true;
 			}
 		},
 		end: function(message) {
@@ -202,8 +206,6 @@
 		exitCreate: function() {
 			var submit = this.$.submit;
 			
-			console.log(this.game.level.grid);
-
 			submit.body = JSON.stringify({
 				title: this.mapTitle,
 				grid: this.game.level.exportMap()
@@ -217,12 +219,19 @@
 				this.router.go('/profile');
 			}
 		},
-		labelFocusChange: function() {
-			alert("change");
+		inputTap: function() {
+			if (this.mode == 'create') {
+				this.game.disableGameInput();
+			}
 		},
+		gameTap: function() {
+			if (this.mode == 'create') {
+				this.game.enableGameInput();
+			}
+		},
+		normalMap: true,
 		playerCount: 1,
 		gameOver: false,
-		gameMode: 'normal',
 		isPlaying: false,
 		rating: false,
 		mode: 'normal'

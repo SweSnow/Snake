@@ -37,6 +37,12 @@ GameCreator.prototype = {
 		this.pause();
 		this.level.end();
 	},
+	enableGameInput: function() {
+		window.addEventListener('keydown', this._keydown);
+	},
+	disableGameInput: function() {
+		window.removeEventListener('keydown', this._keydown);
+	},
 	clearMap: function() {
 		this.level.clearMap();
 	}

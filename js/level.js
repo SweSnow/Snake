@@ -29,6 +29,7 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, players, gam
 	this.game = game;
 
 	this.time = startTime;
+	this.timeRemaining = timeLimit;
 	this.score(0, true);
 	for (var i = 0; i < this.players.length; i++) {
 		this.players[i].propsedDirection = this.players[i].directionRight;
@@ -50,9 +51,9 @@ Level.prototype = {
 
 		//Time based
 		if (this.timeLimit != -1) {
-			this.timeLimit -= this.gameOptions.updateInterval;
-			if (timeRemaining > 0) {
-				this.timeLimit.text(Math.floor(this.timeLimit / 1000) + 's');
+			this.timeRemaining -= this.gameOptions.updateInterval;
+			if (this.timeRemaining > 0) {
+				this.game.master.$.timeAttackText.innerText = (Math.floor(this.timeRemaining / 1000) + 's');
 			} else {
 				this.game.end('Ran out of time', this.scoreAmount);
 			}

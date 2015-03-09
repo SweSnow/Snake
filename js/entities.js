@@ -485,6 +485,7 @@ AI.prototype = {
 			||	propsedDirection == this.directionDown 
 				&& this.directionCurrent == this.directionUp);
 	},
+	acceptedKeys: [],
 	template: $('<paper-shadow z="1" class="g_player"></paper-shadow>'),
 	directionCurrent: 39,
 	directionLastUsed: 39,
