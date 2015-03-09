@@ -37,7 +37,7 @@ function Level(grid, tileSize, width, height, startTime, timeLimit, players, gam
 
 	for(var y = 0, i = 0; y < height / tileSize; y++) {
 		for(var x = 0; x < width / tileSize; x++, i++) {
-			if (grid[i] == 1) {
+			if (this.grid[i] == 1) {
 				this.entities.push(new Obstacle(x * tileSize, y * tileSize));
 			}
 		}

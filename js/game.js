@@ -83,9 +83,9 @@ Game.prototype = {
 
 		window.removeEventListener('keydown', this._keydown);
 	},
-	end: function(message) {
+	end: function(message, score) {
 		this.pause();
-		this.master.end(message);
+		this.master.end(message, score);
 	},
 	die: function() {
 		this.level.die();

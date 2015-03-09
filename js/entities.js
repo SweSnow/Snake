@@ -110,7 +110,7 @@ Obstacle.prototype = {
 	 	for (var i = 0; i < level.players.length; i++) {
 			if (level.players[i].x == this.x &&
 				level.players[i].y == this.y) {
-				level.game.end('Collided with obstacle');
+				level.game.end('Collided with obstacle', level.scoreAmount);
 			}
 	 		
 	 	}
@@ -304,7 +304,7 @@ Player.prototype = {
 			if (level.players[i] != this) {
 				if (this.x == level.players[i].x &&
 					this.y == level.players[i].y) {
-					level.game.end('Collided with other player');
+					level.game.end('Collided with other player', level.scoreAmount);
 				}
 			}
 		}
@@ -452,7 +452,7 @@ AI.prototype = {
 			if (level.players[i] != this) {
 				if (this.x == level.players[i].x &&
 					this.y == level.players[i].y) {
-					level.game.end('Collided with other player');
+					level.game.end('Collided with other player', level.scoreAmount);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 <link rel="import" href="../components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../duarte-components/duarte-game.html">
+<link rel="import" href="../duarte-components/duarte-highscores.html">
 <link rel="import" href="../duarte-components/duarte-ajax.html">
 
 <polymer-element name="duarte-game-manager" attributes="levelId">
@@ -13,9 +14,15 @@
 
 			<div class="jumpatron"><span id="title-duarte">Duarte</span><span id="title-snake">snake</span></div>
 
-			<p id="game-overlay-text">
-				For the love of Duarte and all that is Lollipop you need to win this Snake game.
-			</p>
+			<div horizontal layout>
+
+				<p id="game-overlay-text">
+					For the love of Duarte and all that is Lollipop you need to win this Snake game.
+				</p>
+
+				<paper-button raised id="viewHighscoresButton" label="Highscores" on-tap="{{viewHighscores}}">Highscores</paper-button>
+
+			</div>
 
 			<paper-radio-group selected="1p" vertical>
 				<paper-radio-button id="radioButton1Players" name="1p" label="1 Player"></paper-radio-button>
@@ -29,13 +36,15 @@
 				<paper-radio-button id="timeattack120" name="timeattack120" label="Time Attack (120 sec)"></paper-radio-button>
 			</paper-radio-group>
 
-			<paper-button raisedButton label="Play Now!" id="play-now" on-tap="{{startGame}}">Play Now!</paper-button>
+			<paper-button raised label="Play Now!" id="play-now" on-tap="{{startGame}}">Play Now!</paper-button>
 
 			<div id="duarte"></div>
 
 		</paper-shadow>
 
 	</div>
+
+	<duarte-highscores levelId="{{levelId}}" id="highscores"></duarte-highscores>
 
 	</template>
 	<script>
@@ -53,6 +62,8 @@
 			this.duarteGame = document.createElement('duarte-game');
 			this.duarteGame.levelId = this.levelId;
 			this.duarteGame.path = this.path;
+			this.duarteGame.user = this.user;
+			this.duarteGame.router = this.router;
 			if (this.$.radioButton2Players.checked) {
 				this.duarteGame.playerCount = 2;
 			} else if (this.$.radioButtonVSAI.checked) {
@@ -78,6 +89,9 @@
 			if (this.started) {
 				this.duarteGame.onRouteLeave();
 			}
+		},
+		viewHighscores: function() {
+			this.$.highscores.show();
 		},
 		started: false
 	});

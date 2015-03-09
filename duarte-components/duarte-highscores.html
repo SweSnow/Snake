@@ -1,0 +1,48 @@
+<link rel="import" href="../duarte-components/duarte-ajax.html">
+
+<polymer-element name="duarte-highscores" attributes="levelId">
+	<template>
+		<style>
+
+
+
+		</style>
+
+		<paper-dialog id="dialog" transition="paper-dialog-transition-bottom" backdrop>
+			
+			<h1>Highscores</h1>
+
+			<table>
+				<template repeat="{{score, index in highscores}}">
+					<tr>
+						<td>{{index + 1}}</td>
+						<td>{{score.owner.username}}</td>
+						<td>{{score.score}}</td>
+					</tr>
+				</template>
+			</table>
+		</paper-dialog>
+
+		<duarte-ajax
+			id="request"
+			method="get"
+			path="scores/all"
+			handleAs="json"
+			response="{{highscores}}"
+			on-core-response="{{onResponse}}"
+			contentType="application/json"
+			withCredentials="true"></duarte-ajax>
+
+	</template>
+	<script>
+		Polymer('duarte-highscores', {
+			show: function() {
+				this.$.request.params = this.levelId ? {id: this.levelId} : '';
+				this.$.request.go();
+				this.$.dialog.toggle();
+			},
+			onResponse: function() {
+			}
+		});
+	</script>
+</polymer-element>
