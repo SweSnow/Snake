@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../js/entities.js"></script>
 <script type="text/javascript" src="../js/keyboard.js"></script>
 
-<polymer-element name="duarte-game" attributes="levelId path playerCount ai timeLimit">
+<polymer-element name="duarte-game" attributes="levelId path playerCount ai timeLimit user router">
 	<template>
 
 	<link rel="stylesheet" type="text/css" href="../style/game_style.css"/>
@@ -34,6 +34,8 @@
 				</paper-button>
 
 				<paper-button hidden?="{{normalMap}}" on-tap="{{rate}}" id="rate" raised>Rate</paper-button>
+
+				<paper-button raised id="viewHighscoresButton" label="Highscores" on-tap="{{viewHighscores}}">Highscores</paper-button>
 			</div>
 
 			<div hidden?="{{mode === 'normal'}}" >
@@ -73,6 +75,8 @@
 		
 	</div>
 
+	<duarte-highscores levelId="{{levelId}}" id="highscores"></duarte-highscores>
+
 	<duarte-ajax
 		id="request"
 		method="get"
@@ -80,18 +84,24 @@
 		params='{"id": "{{levelId}}"}'
 		on-core-response="{{onResponse}}"
 		contentType="application/json"
-		withCredentials="true"
-		></duarte-ajax>
+		withCredentials="true"></duarte-ajax>
 
 	<duarte-ajax
-		id="submit"
+		id="submitLevel"
 		method="post"
 		handleAs="json"
 		path="level/submit"
 		contentType="application/json"
 		withCredentials="true"
-		on-core-response="{{onCreateResponse}}"
-		></duarte-ajax>
+		on-core-response="{{onCreateResponse}}"></duarte-ajax>
+
+	<duarte-ajax
+		id="postScore"
+		method="post"
+		handleAs="json"
+		path="scores/submit"
+		contentType="application/json"
+		withCredentials="true"></duarte-ajax>
 		
 	</template>
 	<script>
@@ -99,9 +109,6 @@
 
 	Polymer('duarte-game', {
 		mode: false,
-		ready: function() {
-			
-		},
 		onResponse: function(e, detail) {
 			var level = JSON.parse(detail.response);
 			this.startGame(level.grid);
@@ -152,6 +159,7 @@
 			}
 		},
 		onRouteLeave: function() {
+			this.game.pause();
 			this.game.level.die();
 		},
 		retry: function() {
@@ -167,10 +175,25 @@
 				this.normalMap = true;
 			}
 		},
-		end: function(message) {
+		end: function(message, score) {
 			this.gameOver = true;
 			this.isPlaying = false;
 			this.message = message;
+
+			if (this.user.loggedOut || score < 1 || score > 75000) return;
+
+			var body = {
+				score: score
+			};
+
+			if (this.levelId) {
+				body.level = this.levelId;
+			}
+
+			var postScore = this.$.postScore;
+			postScore.body = JSON.stringify(body);
+			postScore.go();
+
 		},
 		pauseResume: function() {
 			this.isPlaying = !this.isPlaying;
@@ -204,7 +227,7 @@
 			}
 		},
 		exitCreate: function() {
-			var submit = this.$.submit;
+			var submit = this.$.submitLevel;
 			
 			submit.body = JSON.stringify({
 				title: this.mapTitle,
@@ -215,7 +238,7 @@
 		},
 		onCreateResponse: function(e, detail) {
 			var response = JSON.parse(detail.response);
-			if (response) {
+			if (detail.response) {
 				this.router.go('/profile');
 			}
 		},
@@ -228,6 +251,11 @@
 			if (this.mode == 'create') {
 				this.game.enableGameInput();
 			}
+		},
+		viewHighscores: function() {
+			this.game.pause();
+			this.isPlaying = false;
+			this.$.highscores.show();
 		},
 		normalMap: true,
 		playerCount: 1,
