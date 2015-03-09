@@ -26,14 +26,14 @@ function Game(container, gameMode, tiles, master, playerCount, ai, timeLimit) {
 		down: 40,
 	}, '#009688', '#4DB6AC');
 
-	if(ai) {
+	if (ai) {
 		var aiPlayer = new AI(20, 300, 20, 20, '#FF5722', '#FF8A65');
 		playerArray.push(aiPlayer);
 	}
 
 	playerArray.push(player1);
 
-	if(playerCount == 2) {
+	if (playerCount == 2) {
 		var player2 = new Player(20, 300, 20, 20,{
 			left: 65,
 			up: 87,
