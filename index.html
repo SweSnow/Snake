@@ -49,7 +49,6 @@
 	<link rel="import" href="library-components/app-router/app-router.html">
 
 	<link rel="import" href="duarte-components/duarte-user.html">
-	<!-- <link rel="import" href="duarte-components/duarte-socket.html"> -->
 	<link rel="import" href="duarte-components/duarte-header.html">
 
 	<link rel="stylesheet" type="text/css" href="style/main_style.css"/>
@@ -78,29 +77,16 @@
 
 			</style>
 
-			<!-- <duarte-socket socket="{{socket}}"></duarte-socket> -->
 			<duarte-user id="user"></duarte-user>
 
 			<duarte-header id="header" selected="{{selected}}" user="{{$.user}}" smaller="false"></duarte-header>
-			<!-- 
-			<core-animated-pages id="pages" selected="{{selected}}">
-				<duarte-about name="about"></duarte-about>
-				<duarte-browse name="browse"></duarte-browse>
-				<duarte-profile name="profile"></duarte-profile>
-				<duarte-game-manager name="create"></duarte-game-manager>
-
-				<duarte-game name="play"></duarte-game>
-			</core-animated-pages>
-			-->
 
 			<app-router id="router" mode="pushstate" on-state-change="{{onStateChanged}}" on-activate-route-start="{{onRouteStart}}" on-activate-route-end="{{onRouteEnd}}">
 				<app-route path="/about" import="/duarte-components/duarte-about.html"></app-route>
 				<app-route path="/browse" import="/duarte-components/duarte-browse.html"></app-route>
 				<app-route path="/profile" import="/duarte-components/duarte-profile.html"></app-route>
-				<app-route path="/test" import="/duarte-components/duarte-test.html"></app-route>
 				<app-route path="/create" import="/duarte-components/duarte-game.html" bindRouter></app-route>
 				<app-route path="/play" import="/duarte-components/duarte-game-manager.html" bindRouter></app-route>
-				<!-- <app-route path="/testplay" import="/duarte-components/duarte-test-game.html"></app-route> -->
 				<app-route path="*" redirect="/about"></app-route>
 			</app-router>
 
@@ -132,35 +118,13 @@
 					if (element && element.onRouteEnter) {
 						element.onRouteEnter();
 					}
-				}
-				/*
-				defaultPage: 'about',
-				attached: function() {
-					this.pages = [].map.call(this.$.pages.querySelectorAll('[name]'),
-						function(element) {
-							return element.getAttribute('name');
-						}
-					);
-
-					this.router();
-
-					var self = this;
-					window.addEventListener('popstate', this.router.bind(this));
 				},
-				router: function() {
-					var page = location.pathname.substring(1);
-
-					this.selected = this.pages.indexOf(page) === -1 ? this.defaultPage : page;
-				},
-				onSelect: function(event) {
-					history.pushState(null, null, this.selected);
-				}/*,
 				prettify: function(value) {
 					return value.toString()
 					  .split('').reverse().join('')
 					  .replace(/\d{3}(?!$)/g, '$& ')
 					  .split('').reverse().join('');
-				}*/
+				}
 		});
 		</script>
 	</polymer-element>

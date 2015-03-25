@@ -140,6 +140,9 @@ LevelCreator.prototype = {
 		var canvasRect = htmlCanvas[0].getBoundingClientRect();
 		return (e.x > canvasRect.left && e.x < canvasRect.right && e.y > canvasRect.top && e.y < canvasRect.bottom);
 	},
+	die: function() {
+		this.end();
+	},
 	end: function() {
 		this.entities.forEach(function(e) {
 			e.remove();

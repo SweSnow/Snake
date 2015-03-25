@@ -111,18 +111,12 @@
 					<paper-tab name="profile" hidden?="{{user.loggedOut}}">
 						<a is="pushstate-anchor" href="/profile">My profile</a>
 					</paper-tab>
-					<paper-tab name="test">
-						<a is="pushstate-anchor" href="/test">Test</a>
-					</paper-tab>
-					<paper-tab name="create">
+					<paper-tab name="create" hidden?="{{user.loggedOut}}">
 						<a is="pushstate-anchor" href="/create">Create map</a>
 					</paper-tab>
 					<paper-tab name="play">
 						<a is="pushstate-anchor" href="/play">Play</a>
 					</paper-tab>
-					<!-- <paper-tab name="play"> -->
-						<!-- <a is="pushstate-anchor" href="/testplay">Test Play</a> -->
-					<!-- </paper-tab> -->
 			
 				</paper-tabs>
 		  
