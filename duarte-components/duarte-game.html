@@ -210,8 +210,8 @@
 		},
 		exitRate: function() {
 			this.rating = false;
-			this.isPlaying = true;
-			this.game.resume();
+			this.isPlaying = false;
+			this.game.pause();
 		},
 		clearMap: function() {
 			this.game.clearMap();
