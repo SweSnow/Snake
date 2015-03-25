@@ -37,7 +37,7 @@
 	<script>
 		Polymer('duarte-highscores', {
 			show: function() {
-				this.$.request.params = this.levelId ? {id: this.levelId} : '';
+				this.$.request.params = this.levelId ? {level: this.levelId} : '';
 				this.$.request.go();
 				this.$.dialog.toggle();
 			},

@@ -15,7 +15,7 @@ function Game(container, gameMode, tiles, master, playerCount, ai, timeLimit) {
 	this.master = master;
 	this.gameMode = gameMode;
 
-	this.gameOptions = GameOptions.Default;
+	this.gameOptions = Object.create(GameOptions.Default);
 
 	var playerArray = [];
 
